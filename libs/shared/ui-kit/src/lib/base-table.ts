@@ -1,4 +1,4 @@
-import { Component, Input, ContentChild, TemplateRef } from '@angular/common';
+import { Component, Input, ContentChild, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({

@@ -1,0 +1,32 @@
+<div class="dashboard-header">
+  <div class="title-section">
+    <h2 class="page-title">Real-time Tracking</h2>
+    <p class="page-subtitle">Live orbital telemetry for all active assets.</p>
+  </div>
+</div>
+
+<div class="map-container">
+  <div class="grid-lines"></div>
+  
+  <!-- Simulated Satellites -->
+  <div class="satellite-dot" style="top: 30%; left: 40%;"></div>
+  <div class="satellite-dot" style="top: 50%; left: 60%;"></div>
+  <div class="satellite-dot" style="top: 20%; left: 80%;"></div>
+
+  <!-- Detail Panel (Glassmorphism) -->
+  <div class="detail-panel">
+    <h3 class="panel-title">Satellite {{ selectedSat.id }}</h3>
+    <div class="stat-row">
+      <span class="stat-label">Velocity</span>
+      <span>{{ selectedSat.velocity }}</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Altitude</span>
+      <span>{{ selectedSat.altitude }}</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Status</span>
+      <span style="color: #00ff88;">{{ selectedSat.status }}</span>
+    </div>
+  </div>
+</div>

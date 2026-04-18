@@ -1,0 +1,9 @@
+{
+  "name": "tracking-e2e",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/micro-ui/tracking-e2e/src",
+  "implicitDependencies": ["tracking"],
+  "// targets": "to see all targets run: nx show project tracking-e2e --web",
+  "targets": {}
+}

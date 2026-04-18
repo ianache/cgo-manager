@@ -1,0 +1,24 @@
+<div class="sidebar">
+  <div class="brand">
+    <span class="brand-dot"></span>
+    <h1 class="brand-name">C-GO</h1>
+    <span class="brand-tag">MANAGER</span>
+  </div>
+
+  <nav class="nav-list">
+    <a *ngFor="let item of navItems" 
+       [routerLink]="item.path" 
+       routerLinkActive="active"
+       class="nav-item">
+      <span class="nav-icon">{{ item.icon }}</span>
+      <span class="nav-label">{{ item.label }}</span>
+    </a>
+  </nav>
+
+  <div class="footer">
+    <div class="status">
+      <span class="status-dot"></span>
+      SYSTEM ONLINE
+    </div>
+  </div>
+</div>

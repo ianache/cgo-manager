@@ -1,0 +1,35 @@
+.btn {
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-family);
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn:active {
+  opacity: 0.8;
+}
+
+/* Primary - The Precision Instrument Feel */
+.btn-primary {
+  background-color: var(--primary-red);
+  color: white;
+  border-radius: var(--radius-xs); /* Sharp technical look */
+}
+
+/* Secondary - No border, surface container */
+.btn-secondary {
+  background-color: var(--surface-highest);
+  color: var(--inverse-surface);
+  border-radius: var(--radius-xs);
+}
+
+/* Tertiary - Ghost */
+.btn-tertiary {
+  background-color: transparent;
+  color: var(--primary-red);
+}

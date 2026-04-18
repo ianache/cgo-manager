@@ -1,0 +1,78 @@
+<div class="designer-container">
+  <header>
+    <h1>Report Designer</h1>
+    <div class="stepper">
+      <div [class.active]="currentStep() >= 1">1. Concept</div>
+      <div [class.active]="currentStep() >= 2">2. Data</div>
+      <div [class.active]="currentStep() >= 3">3. Delivery</div>
+    </div>
+  </header>
+
+  <main [formGroup]="reportForm">
+    <!-- Step 1: Concept -->
+    <section *ngIf="currentStep() === 1" class="step-content">
+      <div class="form-group">
+        <label>Report Name</label>
+        <input type="text" formControlName="name" placeholder="e.g. Monthly Fuel Usage">
+      </div>
+      <div class="form-group">
+        <label>Data Cube</label>
+        <select formControlName="cubeName">
+          <option value="">Select a Cube</option>
+          <option *ngFor="let cube of cubes()" [value]="cube">{{cube}}</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Step 2: Data -->
+    <section *ngIf="currentStep() === 2" class="step-content">
+      <h3>Select Metrics (Measures)</h3>
+      <div class="chip-grid">
+        <button *ngFor="let m of availableMeasures()" 
+                [class.selected]="selectedMeasures().includes(m)"
+                (click)="toggleMeasure(m)">
+          {{m}}
+        </button>
+      </div>
+
+      <h3>Select Dimensions</h3>
+      <div class="chip-grid">
+        <button *ngFor="let d of availableDimensions()" 
+                [class.selected]="selectedDimensions().includes(d)"
+                (click)="toggleDimension(d)">
+          {{d}}
+        </button>
+      </div>
+    </section>
+
+    <!-- Step 3: Delivery -->
+    <section *ngIf="currentStep() === 3" class="step-content">
+      <div class="form-group">
+        <label>Format</label>
+        <div class="radio-group">
+          <label><input type="radio" formControlName="format" value="xlsx"> Excel (.xlsx)</label>
+          <label><input type="radio" formControlName="format" value="csv"> CSV</label>
+          <label><input type="radio" formControlName="format" value="parquet"> Parquet</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Delivery Channel</label>
+        <select formControlName="deliveryChannel">
+          <option value="email">Email</option>
+          <option value="ftp">FTP</option>
+          <option value="whatsapp">WhatsApp</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Destination</label>
+        <input type="text" formControlName="destination" [placeholder]="reportForm.value.deliveryChannel === 'email' ? 'email@example.com' : 'Destination path/number'">
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <button (click)="prevStep()" [disabled]="currentStep() === 1" class="btn-secondary">Back</button>
+    <button (click)="nextStep()" *ngIf="currentStep() < 3" class="btn-primary" [disabled]="currentStep() === 1 && !reportForm.get('name')?.valid">Next</button>
+    <button (click)="saveReport()" *ngIf="currentStep() === 3" class="btn-success" [disabled]="!reportForm.valid">Finish & Save</button>
+  </footer>
+</div>

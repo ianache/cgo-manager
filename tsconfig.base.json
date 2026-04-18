@@ -1,0 +1,42 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@cgomanager/shared-ui-kit": ["libs/shared/ui-kit/src/index.ts"],
+      "@cgomanager/shared-data-access": [
+        "libs/shared/data-access/src/index.ts"
+      ],
+      "dashboard/Routes": [
+        "apps/micro-ui/dashboard/src/app/remote-entry/entry.routes.ts"
+      ],
+      "tenants/Routes": [
+        "apps/micro-ui/tenants/src/app/remote-entry/entry.routes.ts"
+      ],
+      "tracking/Routes": [
+        "apps/micro-ui/tracking/src/app/remote-entry/entry.routes.ts"
+      ],
+      "config/Routes": [
+        "apps/micro-ui/config/src/app/remote-entry/entry.routes.ts"
+      ],
+      "reporting/Routes": [
+        "apps/micro-ui/reporting/src/app/remote-entry/entry.routes.ts"
+      ]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

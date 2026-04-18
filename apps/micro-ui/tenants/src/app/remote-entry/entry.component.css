@@ -1,0 +1,28 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 32px;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--inverse-surface);
+}
+
+.page-subtitle {
+  margin: 8px 0 0 0;
+  color: var(--secondary-grey);
+  font-size: 0.875rem;
+}
+
+.content-body {
+  margin-top: 32px;
+}
+
+.table-actions {
+  display: flex;
+  gap: 8px;
+}

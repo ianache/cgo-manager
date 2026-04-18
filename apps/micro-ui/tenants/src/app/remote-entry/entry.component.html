@@ -1,0 +1,16 @@
+<div class="page-header">
+  <div class="title-section">
+    <h2 class="page-title">Tenant Management</h2>
+    <p class="page-subtitle">Manage satellite tracking permissions and white-label branding for your clients.</p>
+  </div>
+  <cgo-button variant="primary">+ ADD NEW TENANT</cgo-button>
+</div>
+
+<div class="content-body">
+  <cgo-table [columns]="columns" [data]="tenants">
+    <div actions class="table-actions">
+      <cgo-button variant="tertiary">View</cgo-button>
+      <cgo-button variant="secondary">Branding</cgo-button>
+    </div>
+  </cgo-table>
+</div>

@@ -1,0 +1,44 @@
+<div class="dashboard-header">
+  <div class="title-section">
+    <h2 class="page-title">White-Label Configuration</h2>
+    <p class="page-subtitle">Customize the interface for <strong>{{ branding.tenantName }}</strong>.</p>
+  </div>
+</div>
+
+<div class="config-container">
+  <div class="form-section">
+    <div class="config-card">
+      <h3 class="section-title">Visual Identity</h3>
+      
+      <div class="input-group">
+        <label>Primary Brand Color</label>
+        <div class="color-picker-wrapper">
+          <input type="color" [value]="branding.primaryColor">
+          <span>{{ branding.primaryColor }}</span>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Company Logo</label>
+        <div class="upload-box">
+          <span>Drag & drop logo here or browse</span>
+        </div>
+      </div>
+
+      <cgo-button variant="primary">Save Changes</cgo-button>
+    </div>
+  </div>
+
+  <div class="preview-section">
+    <h3 class="section-title">Live Preview</h3>
+    <div class="preview-frame">
+      <div class="preview-header" [style.background]="branding.primaryColor">
+        <span>LOGO</span>
+      </div>
+      <div class="preview-body">
+        <div class="preview-line"></div>
+        <div class="preview-line" style="width: 60%"></div>
+      </div>
+    </div>
+  </div>
+</div>

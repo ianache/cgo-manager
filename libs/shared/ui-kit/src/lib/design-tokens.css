@@ -1,0 +1,45 @@
+/* libs/shared/ui-kit/src/lib/design-tokens.css */
+:root {
+  /* Colors - Core Tokens */
+  --primary-red: #bb0012;
+  --surface-light: #f8f9fa;
+  --inverse-surface: #2e3132;
+  --secondary-grey: #506169;
+  
+  /* Surface Tiers - Layering Principle */
+  --surface-lowest: #ffffff;
+  --surface-low: #f3f4f5;
+  --surface-container: #edeeef;
+  --surface-highest: #e1e3e4;
+
+  /* Typography - Inter */
+  --font-family: 'Inter', sans-serif;
+  --line-height-body: 1.5;
+
+  /* Shadows - Cloud Shadow */
+  --shadow-cloud: 0 12px 32px rgba(25, 28, 29, 0.04), 0 4px 8px rgba(25, 28, 29, 0.02);
+  
+  /* Roundness - Precision instrument feel */
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+}
+
+/* Global Styles based on Design System */
+body {
+  font-family: var(--font-family);
+  background-color: var(--surface-light);
+  color: var(--inverse-surface);
+  margin: 0;
+  line-height: var(--line-height-body);
+}
+
+/* Editorial Hierarchy */
+h1 { font-size: 2.5rem; font-weight: 700; letter-spacing: -0.02em; }
+h2 { font-size: 2rem; font-weight: 600; }
+.label-sm { 
+  font-size: 0.75rem; 
+  text-transform: uppercase; 
+  letter-spacing: 0.05rem; 
+  color: var(--secondary-grey);
+}

@@ -49,6 +49,13 @@
     <div class="section-header">
       <h3 class="section-title">Recent System Logs</h3>
     </div>
-    <cgo-table [columns]="logColumns" [data]="recentLogs"></cgo-table>
+    <cgo-base-table [columns]="logColumns" [data]="recentLogs">
+      <ng-template #statusTemplate let-status>
+        <div class="status-cell">
+          <span class="status-dot" [class.active]="status === 'Active'"></span>
+          {{ status }}
+        </div>
+      </ng-template>
+    </cgo-base-table>
   </div>
 </div>

@@ -26,7 +26,7 @@ tbody tr {
 }
 
 tbody tr:nth-child(even) {
-  background: var(--surface-low); /* Tonal shift instead of lines */
+  background: var(--surface-low);
 }
 
 tbody tr:hover {

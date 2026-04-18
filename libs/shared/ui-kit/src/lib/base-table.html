@@ -1,0 +1,36 @@
+<div class="table-container">
+  <table class="cgo-table">
+    <thead>
+      <tr>
+        @for (col of columns; track col.key) {
+          <th>{{ col.label }}</th>
+        }
+        @if (showActions) {
+          <th>Actions</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of data; track row) {
+        <tr>
+          @for (col of columns; track col.key) {
+            <td>
+              @if (col.key === 'status' && statusTemplate) {
+                <ng-container [ngTemplateOutlet]="statusTemplate" [ngTemplateOutletContext]="{ $implicit: row[col.key], row: row }"></ng-container>
+              } @else {
+                {{ row[col.key] }}
+              }
+            </td>
+          }
+          @if (showActions) {
+            <td class="actions-cell">
+              @if (actionsTemplate) {
+                <ng-container [ngTemplateOutlet]="actionsTemplate" [ngTemplateOutletContext]="{ $implicit: row }"></ng-container>
+              }
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

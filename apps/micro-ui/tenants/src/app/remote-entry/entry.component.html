@@ -7,10 +7,19 @@
 </div>
 
 <div class="content-body">
-  <cgo-table [columns]="columns" [data]="tenants">
-    <div actions class="table-actions">
-      <cgo-button variant="tertiary">View</cgo-button>
-      <cgo-button variant="secondary">Branding</cgo-button>
-    </div>
-  </cgo-table>
+  <cgo-base-table [columns]="columns" [data]="tenants" [showActions]="true">
+    <ng-template #statusTemplate let-status>
+      <div class="status-cell">
+        <span class="status-dot" [class.active]="status === 'Active'"></span>
+        {{ status }}
+      </div>
+    </ng-template>
+    
+    <ng-template #actionsTemplate let-row>
+      <div class="table-actions">
+        <cgo-button variant="tertiary">View</cgo-button>
+        <cgo-button variant="secondary">Branding</cgo-button>
+      </div>
+    </ng-template>
+  </cgo-base-table>
 </div>

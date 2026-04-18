@@ -1,11 +1,11 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ButtonComponent, TableComponent } from '@cgomanager/shared-ui-kit';
+import { ButtonComponent, BaseTableComponent } from '@cgomanager/shared-ui-kit';
 import { ApiService, Tenant } from '@cgomanager/shared-data-access';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, ButtonComponent, TableComponent],
+  imports: [CommonModule, ButtonComponent, BaseTableComponent],
   selector: 'app-tenants-entry',
   templateUrl: './entry.component.html',
   styleUrl: './entry.component.css'

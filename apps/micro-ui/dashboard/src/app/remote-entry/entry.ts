@@ -1,11 +1,11 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MetricCardComponent, TableComponent, KpiCardComponent } from '@cgomanager/shared-ui-kit';
+import { MetricCardComponent, KpiCardComponent, BaseTableComponent } from '@cgomanager/shared-ui-kit';
 import { ApiService, Metric } from '@cgomanager/shared-data-access';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, MetricCardComponent, TableComponent, KpiCardComponent],
+  imports: [CommonModule, MetricCardComponent, KpiCardComponent, BaseTableComponent],
   selector: 'app-dashboard-entry',
   templateUrl: './entry.component.html',
   styleUrl: './entry.component.css'

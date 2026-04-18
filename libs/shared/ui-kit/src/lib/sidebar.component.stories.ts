@@ -1,10 +1,15 @@
-import type { Meta, StoryObj } from '@storybook/angular';
+import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
 import { SidebarComponent } from './sidebar.component';
-import { expect } from 'storybook/test';
+import { provideRouter } from '@angular/router';
 
 const meta: Meta<SidebarComponent> = {
   component: SidebarComponent,
-  title: 'SidebarComponent',
+  title: 'CGO/Sidebar',
+  decorators: [
+    applicationConfig({
+      providers: [provideRouter([])],
+    }),
+  ],
 };
 export default meta;
 

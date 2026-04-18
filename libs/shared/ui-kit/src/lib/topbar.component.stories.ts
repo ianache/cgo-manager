@@ -1,10 +1,15 @@
-import type { Meta, StoryObj } from '@storybook/angular';
+import { moduleMetadata, type Meta, type StoryObj, applicationConfig } from '@storybook/angular';
 import { TopbarComponent } from './topbar.component';
-import { expect } from 'storybook/test';
+import { provideRouter } from '@angular/router';
 
 const meta: Meta<TopbarComponent> = {
   component: TopbarComponent,
-  title: 'TopbarComponent',
+  title: 'CGO/Topbar',
+  decorators: [
+    applicationConfig({
+      providers: [provideRouter([])],
+    }),
+  ],
 };
 export default meta;
 

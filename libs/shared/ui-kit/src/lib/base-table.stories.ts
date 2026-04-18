@@ -1,9 +1,15 @@
-import type { Meta, StoryObj } from '@storybook/angular';
+import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
 import { BaseTableComponent } from './base-table';
+import { provideRouter } from '@angular/router';
 
 const meta: Meta<BaseTableComponent> = {
   component: BaseTableComponent,
   title: 'CGO/BaseTable',
+  decorators: [
+    applicationConfig({
+      providers: [provideRouter([])],
+    }),
+  ],
 };
 export default meta;
 

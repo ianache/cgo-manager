@@ -1,11 +1,11 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MetricCardComponent, TableComponent } from '@cgomanager/shared-ui-kit';
+import { MetricCardComponent, TableComponent, KpiCardComponent } from '@cgomanager/shared-ui-kit';
 import { ApiService, Metric } from '@cgomanager/shared-data-access';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, MetricCardComponent, TableComponent],
+  imports: [CommonModule, MetricCardComponent, TableComponent, KpiCardComponent],
   selector: 'app-dashboard-entry',
   templateUrl: './entry.component.html',
   styleUrl: './entry.component.css'
@@ -27,5 +27,15 @@ export class RemoteEntryComponent implements OnInit {
 
   ngOnInit() {
     this.api.getMetrics().subscribe(data => this.metrics = data);
+  }
+
+  getIcon(label: string): string {
+    switch (label) {
+      case 'Total Tenants': return '🏢';
+      case 'Active Satellites': return '🛰️';
+      case 'Platform Uptime': return '🛡️';
+      case 'System Alerts': return '⚠️';
+      default: return '📊';
+    }
   }
 }

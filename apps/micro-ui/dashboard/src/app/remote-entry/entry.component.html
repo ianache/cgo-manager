@@ -6,12 +6,14 @@
 </div>
 
 <div class="metrics-grid">
-  <cgo-metric-card 
-    *ngFor="let m of metrics" 
-    [label]="m.label" 
-    [value]="m.value" 
-    [trend]="m.trend">
-  </cgo-metric-card>
+  @for (m of metrics; track m.label) {
+    <cgo-kpi-card 
+      [label]="m.label" 
+      [value]="m.value" 
+      [trend]="m.trend"
+      [icon]="getIcon(m.label)">
+    </cgo-kpi-card>
+  }
 </div>
 
 <div class="dashboard-body">

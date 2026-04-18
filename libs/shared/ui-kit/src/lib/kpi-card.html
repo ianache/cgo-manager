@@ -1,0 +1,17 @@
+<div class="kpi-card">
+  <div class="kpi-header">
+    <span class="kpi-label">{{ label }}</span>
+    @if (icon) {
+      <span class="kpi-icon">{{ icon }}</span>
+    }
+  </div>
+  <div class="kpi-content">
+    <h3 class="kpi-value">{{ value }}</h3>
+    @if (trend !== undefined) {
+      <div class="kpi-trend" [class.up]="trend > 0" [class.down]="trend < 0">
+        <span class="trend-icon">{{ trend > 0 ? '↑' : '↓' }}</span>
+        <span class="trend-value">{{ trend }}%</span>
+      </div>
+    }
+  </div>
+</div>

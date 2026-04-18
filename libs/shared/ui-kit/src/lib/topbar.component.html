@@ -1,8 +1,27 @@
 <div class="topbar">
+  <div class="left-section">
+    <a routerLink="/" class="home-link" title="Home">
+      <span class="home-icon">🏠</span>
+    </a>
+    <nav class="breadcrumbs" aria-label="breadcrumb">
+      @for (breadcrumb of breadcrumbs$ | async; track breadcrumb.url; let last = $last) {
+        <span class="breadcrumb-item">
+          <span class="separator">/</span>
+          @if (last) {
+            <span class="label active">{{ breadcrumb.label }}</span>
+          } @else {
+            <a [routerLink]="breadcrumb.url" class="label">{{ breadcrumb.label }}</a>
+          }
+        </span>
+      }
+    </nav>
+  </div>
+
   <div class="search-container">
     <span class="search-icon">🔍</span>
     <input type="text" placeholder="Search satellites, tenants or logs..." class="search-input">
   </div>
+
   <div class="actions">
     <div class="user-profile">
       <div class="avatar">JS</div>

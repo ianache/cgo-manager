@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start:all": "nx run-many --target=serve --projects=bff,shell --devRemotes=dashboard,tenants,tracking,config,reporting",
+    "start:all": "nx run-many --target=serve --projects=bff,shell --devRemotes=dashboard,tenants,tracking,config,reporting,protocols",
     "storybook": "nx storybook shared-ui-kit",
     "test": "nx run-many --target=test --all"
   },

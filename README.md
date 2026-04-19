@@ -24,12 +24,16 @@ Para iniciar todo el ecosistema de cgomanager de forma simultánea, utilizaremos
 
   Terminal 1: Backend (BFF)
 
-   1 npx nx serve bff
+```
+npx nx serve bff
+```
   Puerto por defecto: http://localhost:3000
 
   Terminal 2: Frontend (Shell + Micro UIs)
 
-   1 npx nx serve shell --devRemotes=dashboard,tenants,tracking,config
+```
+npx nx serve shell --devRemotes=dashboard,tenants,tracking,config
+```
   Puerto por defecto: http://localhost:4200
 
   ---
@@ -66,4 +70,6 @@ Para iniciar todo el ecosistema de cgomanager de forma simultánea, utilizaremos
 
   Ahora solo tienes que ejecutar:
 
-   1 npm run start:all
+```
+npm run start:all
+```

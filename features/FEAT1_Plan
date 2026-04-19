@@ -1,0 +1,58 @@
+# Protocols Micro-UI Implementation Plan
+
+This plan outlines the steps to complete the telemetry protocols management system, including the visual protocol designer and the management of manufacturers, brands, and models.
+
+## User Review Required
+
+> [!IMPORTANT]
+> The visual designer will use a simplified connection logic where users click on an output port and then an input port to create connections.
+> Node types (Root, Service, Frame, Field) will have strict connection rules as specified in the requirements.
+
+## Proposed Changes
+
+### [Component] Protocols Micro-UI
+
+#### [MODIFY] [entry.ts](file:///c:/Users/ianache/Desktop/DATA/01-DOCUMENTOS/02-PROYECTOS/04-CL2/cgomanager/apps/micro-ui/protocols/src/app/remote-entry/entry.ts)
+- Fix missing imports for `Brand` and `DeviceModel`.
+- Implement full CRUD interaction logic for Manufacturers, Brands, and Models.
+- Add tabs or navigation for Protocol Versions.
+
+#### [MODIFY] [entry.component.html](file:///c:/Users/ianache/Desktop/DATA/01-DOCUMENTOS/02-PROYECTOS/04-CL2/cgomanager/apps/micro-ui/protocols/src/app/remote-entry/entry.component.html)
+- Update the UI to support the nested management of Manufacturers, Brands, and Models.
+- Ensure the "Premium" look and feel using consistent `shared-ui-kit` components.
+
+#### [MODIFY] [protocol-designer.ts](file:///c:/Users/ianache/Desktop/DATA/01-DOCUMENTOS/02-PROYECTOS/04-CL2/cgomanager/apps/micro-ui/protocols/src/app/protocol-designer.ts)
+- Implement `Connection` creation logic.
+- Implement connection validation rules:
+    - `Root` -> `Service` (Only connection for Service).
+    - `Service` -> `Frame`.
+    - `Frame` -> `Frame` (Subframes).
+    - `Frame` -> `Field`.
+    - `Field` is a terminal node.
+- Enhance the `DesignerNode` interface to include specific types and properties.
+- Add "MODIFIED" state syncing and "Save" button behavior.
+
+#### [MODIFY] [protocol-designer.html](file:///c:/Users/ianache/Desktop/DATA/01-DOCUMENTOS/02-PROYECTOS/04-CL2/cgomanager/apps/micro-ui/protocols/src/app/protocol-designer.html)
+- Update node templates to visually distinguish between types (Root, Service, Frame, Field).
+- Add SVG connection paths with arrows or different styles.
+- Improve the Properties Editor UI.
+
+#### [MODIFY] [protocol-designer.css](file:///c:/Users/ianache/Desktop/DATA/01-DOCUMENTOS/02-PROYECTOS/04-CL2/cgomanager/apps/micro-ui/protocols/src/app/protocol-designer.css)
+- Apply "Premium" aesthetics: vibrant colors, smooth transitions, glassmorphism for panels, and refined typography.
+
+## Open Questions
+
+- Should we support "curved" lines for connections to make it look more premium?
+- Do we need to support deleting connections? (Assumed yes for a designer).
+
+## Verification Plan
+
+### Automated Tests
+- `npx nx test protocols` to ensure component stability.
+- `npx nx lint protocols` to check for code quality.
+
+### Manual Verification
+- Verify the "Manufacturers -> Brands -> Models" navigation flow.
+- Test dragging and dropping all node types.
+- Test connection rules (e.g., trying to connect a Field to a Root should fail).
+- Verify the "MODIFIED" badge and save confirmation logic.

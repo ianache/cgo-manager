@@ -35,6 +35,9 @@
       ],
       "reporting/Routes": [
         "apps/micro-ui/reporting/src/app/remote-entry/entry.routes.ts"
+      ],
+      "protocols/Routes": [
+        "apps/micro-ui/protocols/src/app/remote-entry/entry.routes.ts"
       ]
     }
   },

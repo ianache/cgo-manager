@@ -15,6 +15,7 @@ export class SidebarComponent {
     { label: 'Tenants', path: '/tenants', icon: '🏢' },
     { label: 'Tracking', path: '/tracking', icon: '🛰️' },
     { label: 'Reporting', path: '/reporting', icon: '📈' },
+    { label: 'Protocols', path: '/protocols', icon: '📝' },
     { label: 'Configuration', path: '/config', icon: '⚙️' },
   ];
 }

@@ -1,0 +1,453 @@
+<div class="designer-container">
+  <!-- Main Designer Toolbar -->
+  <div class="designer-toolbar">
+    <div class="toolbar-left">
+      <button class="btn-back" (click)="exitDesigner()">← Exit</button>
+      <span class="protocol-name">{{ protocolName }} - v{{ version }}</span>
+      @if (isModified) {
+        <span class="badge-modified">MODIFIED</span>
+      }
+    </div>
+    <div class="toolbar-right">
+      <span class="zoom-display">{{ getZoomPercentage() }}%</span>
+      @if (selectedNode?.type === 'Service' || selectedNode?.type === 'Frame') {
+        <button class="btn btn-execute" (click)="runTest()" title="Execute / Test Frame">
+          <span class="icon">▶️</span> Run Test
+        </button>
+      }
+      <button class="btn btn-secondary" (click)="importProtocol()" title="Import Protocol">
+        <span class="icon">📥</span> Import
+      </button>
+      <button class="btn btn-secondary" (click)="exportProtocol()" title="Export Protocol">
+        <span class="icon">📤</span> Export
+      </button>
+      <button class="btn btn-primary" [disabled]="!isModified" (click)="saveChanges()">Save</button>
+      <button class="btn btn-secondary">Publish</button>
+    </div>
+  </div>
+
+  <div class="designer-body">
+    <!-- Tools Palette -->
+    <div class="designer-palette" [class.collapsed]="isPaletteCollapsed">
+      <button class="btn-toggle-panel left" (click)="isPaletteCollapsed = !isPaletteCollapsed" [title]="isPaletteCollapsed ? 'Expand Toolbox' : 'Collapse Toolbox'">
+        {{ isPaletteCollapsed ? '→' : '←' }}
+      </button>
+      <div class="panel-content">
+        <h3 class="palette-title">Toolbox</h3>
+        <div class="tool-item" draggable="true" (dragstart)="onDragStart('Root')">
+          <span class="tool-icon">💠</span> Root
+        </div>
+        <div class="tool-item" draggable="true" (dragstart)="onDragStart('Service')">
+          <span class="tool-icon">⚙️</span> Service
+        </div>
+        <div class="tool-item" draggable="true" (dragstart)="onDragStart('Frame')">
+          <span class="tool-icon">📦</span> Frame / Subframe
+        </div>
+        <div class="tool-item" draggable="true" (dragstart)="onDragStart('Field')">
+          <span class="tool-icon">📝</span> Field
+        </div>
+        <div class="tool-item" draggable="true" (dragstart)="onDragStart('Ack Field')">
+          <span class="tool-icon">✅</span> Ack Field
+        </div>
+      </div>
+    </div>
+
+    <!-- Designer Canvas -->
+    <div class="designer-canvas" 
+         (dragover)="onDragOver($event)" 
+         (drop)="onDrop($event)"
+         (mousedown)="startPanning($event)"
+         [class.panning]="isPanning">
+      
+      <div class="canvas-content-wrapper" 
+           [style.transform]="'translate(' + canvasOffset.x + 'px, ' + canvasOffset.y + 'px) scale(' + zoomLevel + ')'">
+        
+        <!-- Grid Background -->
+        <div class="canvas-grid" *ngIf="isSnapGridEnabled"></div>
+
+        <svg class="connections-layer">
+          <defs>
+            <marker id="arrowhead" markerWidth="6" markerHeight="4" refX="6" refY="2" orientation="auto">
+              <polygon points="0 0, 6 2, 0 4" fill="var(--primary-red)" />
+            </marker>
+          </defs>
+
+          @for (conn of connections; track conn.id) {
+            @if (isConnectionVisible(conn)) {
+              @let coords = getConnectionCoords(conn);
+              <path [attr.d]="'M' + coords.x1 + ',' + coords.y1 + ' C' + (coords.x1 + 40) + ',' + coords.y1 + ' ' + (coords.x2 - 40) + ',' + coords.y2 + ' ' + coords.x2 + ',' + coords.y2" 
+                    class="connection-line"
+                    marker-end="url(#arrowhead)"
+                    (click)="deleteConnection(conn.id)"
+                    role="button" tabindex="0"/>
+            }
+          }
+
+          @if (getTempConnectionCoords(); as temp) {
+            <line [attr.x1]="temp.x1" [attr.y1]="temp.y1" [attr.x2]="temp.x2" [attr.y2]="temp.y2" 
+                  class="temp-connection-line" stroke-dasharray="5,5" />
+          }
+        </svg>
+
+        @for (node of nodes; track node.id) {
+          @if (isNodeVisible(node)) {
+            <div class="node" 
+                 [style.left.px]="node.x" 
+                 [style.top.px]="node.y"
+                 [class.selected]="selectedNode?.id === node.id"
+                 [class.connecting]="connectingSourceNodeId === node.id"
+                 (mousedown)="startNodeDrag($event, node)"
+                 (click)="selectNode(node)"
+                 role="button" tabindex="0">
+              
+              <!-- Input Port -->
+              @if (node.type !== 'Root') {
+                <div class="port port-in" (click)="completeConnection(node); $event.stopPropagation()" role="button" tabindex="0"></div>
+              }
+
+              <div class="node-header" [attr.data-type]="node.type">
+                <span class="node-type-icon">
+                  @if (node.type === 'Root') { 💠 }
+                  @else if (node.type === 'Service') { ⚙️ }
+                  @else if (node.type === 'Frame') { 📦 }
+                  @else if (node.type === 'Ack Field') { ✅ }
+                  @else { 📝 }
+                </span>
+                @if (node.type === 'Service') { {{ node.syncMode || 'Service' }} }
+                @else if (node.type === 'Frame') { {{ node.frameRole === 'Default' ? 'FRAME' : node.frameRole | uppercase }} }
+                @else { {{ node.type }} }
+                <div class="header-actions">
+                  @if (node.type === 'Frame') {
+                    <button class="btn-toggle-children" (click)="toggleChildren(node); $event.stopPropagation()" [title]="node.isCollapsed ? 'Show Children' : 'Hide Children'">
+                      {{ node.isCollapsed ? '▶' : '▼' }}
+                    </button>
+                  }
+                  <button class="btn-delete-node" (click)="deleteNode(node.id); $event.stopPropagation()">×</button>
+                </div>
+              </div>
+              <div class="node-content">
+                @if (node.type === 'Frame') {
+                  <div class="frame-stats">
+                    <span class="stat-item" title="Subframes">📂 {{ getChildCount(node.id, 'Frame') }}</span>
+                    <span class="stat-item" title="Fields">📝 {{ getChildCount(node.id, 'Field') }}</span>
+                    <span class="format-badge" [title]="getFormatLabel(node.format)">
+                      {{ getFormatIcon(node.format) }}
+                    </span>
+                  </div>
+                } @else if (node.type === 'Ack Field') {
+                  <div class="ack-field-info">
+                    {{ node.name }}
+                    <span class="source-tag">{{ node.ackSource }}</span>
+                  </div>
+                } @else {
+                  {{ node.name }}
+                }
+              </div>
+              <!-- Output Ports -->
+              @if (node.type === 'Service') {
+                <div class="port port-out port-req" (click)="startConnection(node, 'Request'); $event.stopPropagation()" title="Connect Request Frame" role="button" tabindex="0">REQ</div>
+                <div class="port port-out port-ack" (click)="startConnection(node, 'Ack'); $event.stopPropagation()" title="Connect Ack Frame" role="button" tabindex="0">ACK</div>
+              } @else if (node.type !== 'Field' && node.type !== 'Ack Field') {
+                <div class="port port-out" (click)="startConnection(node); $event.stopPropagation()" role="button" tabindex="0"></div>
+              }
+            </div>
+          }
+        }
+      </div>
+
+      <!-- Floating Controls -->
+      <div class="floating-controls">
+        <button class="fab" (click)="zoomIn()" title="Zoom In">+</button>
+        <button class="fab" (click)="zoomOut()" title="Zoom Out">-</button>
+        <button class="fab" (click)="fitScreen()" title="Fit Screen">⛶</button>
+        <div class="fab-separator"></div>
+        <button class="fab" (click)="toggleGrid()" [class.active]="isSnapGridEnabled" title="Toggle Grid">
+          {{ isSnapGridEnabled ? '▦' : '▢' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Properties Editor -->
+    <div class="designer-properties" [class.collapsed]="isPropertiesCollapsed">
+      <button class="btn-toggle-panel right" (click)="isPropertiesCollapsed = !isPropertiesCollapsed" [title]="isPropertiesCollapsed ? 'Expand Properties' : 'Collapse Properties'">
+        {{ isPropertiesCollapsed ? '←' : '→' }}
+      </button>
+      <div class="panel-content">
+        @if (selectedNode) {
+          <h3 class="palette-title">Node Properties ({{ selectedNode.type }})</h3>
+          
+          <div class="property-group">
+            <label>Name</label>
+            <input type="text" [(ngModel)]="selectedNode.name" (ngModelChange)="markModified()">
+          </div>
+
+          <div class="property-group">
+            <label>Description</label>
+            <textarea [(ngModel)]="selectedNode.description" (ngModelChange)="markModified()"></textarea>
+          </div>
+
+          <!-- Specific attributes for Service -->
+          @if (selectedNode.type === 'Service') {
+            <div class="property-group">
+              <label>Synchrony</label>
+              <select [(ngModel)]="selectedNode.syncMode" (ngModelChange)="markModified()">
+                <option value="Sync">Sync</option>
+                <option value="Async">Async</option>
+              </select>
+            </div>
+          }
+
+          <!-- Specific attributes for Service and Frame -->
+          @if (selectedNode.type === 'Service' || selectedNode.type === 'Frame') {
+            <div class="property-group">
+              <label>Example Frame (for testing)</label>
+              <textarea [(ngModel)]="selectedNode.frame" placeholder="e.g. 7E 01 00 05 ..." (ngModelChange)="markModified()"></textarea>
+            </div>
+          }
+
+          <!-- Specific attributes for Frame Role -->
+          @if (selectedNode.type === 'Frame' && selectedNode.frameRole !== 'Default') {
+            <div class="property-group">
+              <label>Frame Role (Auto-assigned)</label>
+              <input type="text" [value]="selectedNode.frameRole" disabled class="disabled-input">
+            </div>
+          }
+
+          <!-- Specific attributes for Field -->
+          @if (selectedNode.type === 'Field') {
+            <div class="property-row">
+              <div class="property-group half">
+                <label>Data Type</label>
+                <select [(ngModel)]="selectedNode.dataType" (ngModelChange)="markModified()">
+                  <option value="INT">Integer</option>
+                  <option value="STR">String</option>
+                  <option value="FLOAT">Float</option>
+                  <option value="BOOL">Boolean</option>
+                  <option value="HEX">Hexadecimal</option>
+                </select>
+              </div>
+              <div class="property-group half">
+                <label>Length (bits)</label>
+                <input type="number" [(ngModel)]="selectedNode.length" (ngModelChange)="markModified()">
+              </div>
+            </div>
+
+            <div class="property-group">
+              <label>Standard Field</label>
+              <select [(ngModel)]="selectedNode.standardFieldId" 
+                      (mousedown)="capturePreviousStandardFieldId()"
+                      (change)="onStandardFieldSelect($event); markModified()">
+                <option [value]="undefined">None</option>
+                @for (field of standardFields; track field.id) {
+                  <option [value]="field.id">{{ field.name }}</option>
+                }
+                <option value="NEW">+ Add New Standard Field...</option>
+              </select>
+            </div>
+
+            <div class="property-group">
+              <label>Function</label>
+              <div class="function-select-container">
+                <select [(ngModel)]="selectedNode.functionId" 
+                        (mousedown)="capturePreviousFunctionId()"
+                        (change)="onFunctionSelect($event); markModified()">
+                  <option [value]="undefined">None</option>
+                  @for (cat of functionCategories; track cat) {
+                    <optgroup [label]="cat">
+                      @for (func of getFunctionsByCategory(cat); track func.id) {
+                        <option [value]="func.id">{{ func.name }}</option>
+                      }
+                    </optgroup>
+                  }
+                  <option value="NEW">+ Create New Function...</option>
+                </select>
+                @if (selectedNode.functionId) {
+                  <button class="btn-icon" (click)="openFunctionEditor(selectedNode.functionId)" title="Edit Function">✏️</button>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- Specific attributes for Ack Field -->
+          @if (selectedNode.type === 'Ack Field') {
+            <div class="property-group">
+              <label>Source</label>
+              <select [(ngModel)]="selectedNode.ackSource" (ngModelChange)="markModified()">
+                <option value="Manual">Manual</option>
+                <option value="Trama">Trama</option>
+                <option value="Function">Function</option>
+              </select>
+            </div>
+
+            <div class="property-group">
+              <label>Value</label>
+              
+              <!-- Manual Value -->
+              @if (selectedNode.ackSource === 'Manual') {
+                <input type="text" [(ngModel)]="selectedNode.ackValue" placeholder="Enter manual value" (ngModelChange)="markModified()">
+              }
+
+              <!-- Trama Name Selection (Combo) -->
+              @if (selectedNode.ackSource === 'Trama') {
+                <select [(ngModel)]="selectedNode.ackValue" (ngModelChange)="markModified()">
+                  <option [value]="undefined">Select Trama...</option>
+                  <option value="Header">Header</option>
+                  <option value="Payload">Payload</option>
+                  <option value="Footer">Footer</option>
+                </select>
+              }
+
+              <!-- Function Selection -->
+              @if (selectedNode.ackSource === 'Function') {
+                <div class="function-select-container">
+                  <select [(ngModel)]="selectedNode.functionId" 
+                          (mousedown)="capturePreviousFunctionId()"
+                          (change)="onFunctionSelect($event); markModified()">
+                    <option [value]="undefined">Select Function...</option>
+                    @for (cat of functionCategories; track cat) {
+                      <optgroup [label]="cat">
+                        @for (func of getFunctionsByCategory(cat); track func.id) {
+                          <option [value]="func.id">{{ func.name }}</option>
+                        }
+                      </optgroup>
+                    }
+                    <option value="NEW">+ Create New Function...</option>
+                  </select>
+                  @if (selectedNode.functionId) {
+                    <button class="btn-icon" (click)="openFunctionEditor(selectedNode.functionId)" title="Edit Function">✏️</button>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="property-group">
+              <label>Length (bits)</label>
+              <input type="number" [(ngModel)]="selectedNode.length" (ngModelChange)="markModified()">
+            </div>
+
+            <div class="property-row">
+              <div class="property-group checkbox-group">
+                <input type="checkbox" id="includeSeparator" [(ngModel)]="selectedNode.includeSeparator" (ngModelChange)="markModified()">
+                <label for="includeSeparator">Incluir Separador</label>
+              </div>
+              <div class="property-group checkbox-group">
+                <input type="checkbox" id="isFunction" [(ngModel)]="selectedNode.isFunction" (ngModelChange)="markModified()">
+                <label for="isFunction">Es Función</label>
+              </div>
+            </div>
+          }
+
+          @if (selectedNode.type === 'Frame') {
+            <div class="property-group">
+              <label>Frame Format</label>
+              <select [(ngModel)]="selectedNode.format" (ngModelChange)="markModified()">
+                <option value="BIN">Binary</option>
+                <option value="HEX">Hexadecimal</option>
+                <option value="TXT">Plain Text</option>
+              </select>
+            </div>
+          }
+        } @else {
+          <div class="no-selection">
+            <span class="icon">🖱️</span>
+            <p>Select a node to edit its properties</p>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Function Editor Modal -->
+  @if (showFunctionEditor && editingFunction) {
+    <div class="modal-overlay">
+      <div class="modal-content function-editor">
+        <div class="modal-header">
+          <h2>{{ editingFunction.id ? 'Edit' : 'Create' }} Function</h2>
+          <button class="btn-close" (click)="closeFunctionEditor()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="property-row">
+            <div class="property-group">
+              <label>Function Name</label>
+              <input type="text" [(ngModel)]="editingFunction.name">
+            </div>
+            <div class="property-group">
+              <label>Category</label>
+              <select [(ngModel)]="editingFunction.category">
+                @for (cat of functionCategories; track cat) {
+                  <option [value]="cat">{{ cat }}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <div class="property-group">
+            <label>Parameters</label>
+            <div class="parameters-list">
+              @for (param of editingFunction.parameters; track $index) {
+                <div class="parameter-item">
+                  <input type="text" [(ngModel)]="param.name" placeholder="Name">
+                  <select [(ngModel)]="param.type">
+                    <option value="String">String</option>
+                    <option value="int">int</option>
+                    <option value="long">long</option>
+                    <option value="byte[]">byte[]</option>
+                    <option value="boolean">boolean</option>
+                    <option value="double">double</option>
+                  </select>
+                  <button class="btn-remove" (click)="removeParameter($index)">×</button>
+                </div>
+              }
+              <button class="btn-add-param" (click)="addParameter()">+ Add Parameter</button>
+            </div>
+          </div>
+
+          <div class="property-group">
+            <label>Java Code Implementation</label>
+            <textarea class="code-editor" [(ngModel)]="editingFunction.code" rows="10" spellcheck="false"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeFunctionEditor()">Cancel</button>
+          <button class="btn btn-primary" (click)="saveFunction()">Save Function</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Test Runner Modal -->
+  @if (showTestRunner && testResult) {
+    <div class="modal-overlay">
+      <div class="modal-content test-runner">
+        <div class="modal-header">
+          <h2>Test Execution: {{ testResult.nodeName }}</h2>
+          <button class="btn-close" (click)="closeTestRunner()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="test-section">
+            <label class="section-label">Example Frame</label>
+            <div class="frame-preview">{{ testResult.rawFrame }}</div>
+          </div>
+          
+          <div class="test-columns">
+            <div class="column">
+              <label class="section-label">Execution Log</label>
+              <div class="log-viewer">
+                @for (log of testResult.executionLog; track $index) {
+                  <div class="log-entry">> {{ log }}</div>
+                }
+              </div>
+            </div>
+            <div class="column">
+              <label class="section-label">Parsed Result (JSON)</label>
+              <pre class="json-viewer">{{ testResult | json }}</pre>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" (click)="closeTestRunner()">Close</button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

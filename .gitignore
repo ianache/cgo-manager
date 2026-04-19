@@ -41,3 +41,6 @@ graph.json
 .claude/
 
 .nx/polygraph
+.angular
+
+vitest.config.*.timestamp*

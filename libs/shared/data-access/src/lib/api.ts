@@ -43,6 +43,47 @@ export interface ExecutionLog {
   errorMessage?: string;
 }
 
+export interface Manufacturer {
+  id: string;
+  name: string;
+  website: string;
+  logo: string;
+}
+
+export interface Brand {
+  id: string;
+  manufacturerId: string;
+  name: string;
+  description: string;
+  image: string;
+  tags: string[];
+}
+
+export interface DeviceModel {
+  id: string;
+  brandId: string;
+  name: string;
+  description: string;
+  tags: string[];
+}
+
+export interface Protocol {
+  id: string;
+  name: string;
+}
+
+export interface ProtocolVersion {
+  id: string;
+  protocolId: string;
+  name: string;
+  description: string;
+  version: string;
+  createdAt: string;
+  updatedAt: string;
+  status: 'DRAFT' | 'APPROVED' | 'PUBLISHED';
+  designerData?: any;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -69,6 +110,27 @@ export class ApiService {
 
   getExecutionLogs(): Observable<ExecutionLog[]> {
     return this.http.get<ExecutionLog[]>(`${this.baseUrl}/reports/logs`, { withCredentials: true });
+  }
+
+  // Protocol Management Methods
+  getManufacturers(): Observable<Manufacturer[]> {
+    return this.http.get<Manufacturer[]>(`${this.baseUrl}/manufacturers`, { withCredentials: true });
+  }
+
+  getBrands(manufacturerId: string): Observable<Brand[]> {
+    return this.http.get<Brand[]>(`${this.baseUrl}/manufacturers/${manufacturerId}/brands`, { withCredentials: true });
+  }
+
+  getModels(brandId: string): Observable<DeviceModel[]> {
+    return this.http.get<DeviceModel[]>(`${this.baseUrl}/brands/${brandId}/models`, { withCredentials: true });
+  }
+
+  getProtocols(): Observable<Protocol[]> {
+    return this.http.get<Protocol[]>(`${this.baseUrl}/protocols`, { withCredentials: true });
+  }
+
+  getProtocolVersions(protocolId: string): Observable<ProtocolVersion[]> {
+    return this.http.get<ProtocolVersion[]>(`${this.baseUrl}/protocols/${protocolId}/versions`, { withCredentials: true });
   }
 
   checkAuth(): Observable<{ authenticated: boolean; user?: any }> {

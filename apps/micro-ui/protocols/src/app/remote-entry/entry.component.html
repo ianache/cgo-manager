@@ -1,0 +1,87 @@
+<cgo-form-header 
+  title="Protocols & Devices" 
+  description="Manage manufacturers, GPS device models, and telemetry protocol specifications.">
+</cgo-form-header>
+
+@if (!showDesigner) {
+  <div class="protocols-body">
+  <div class="tabs">
+    <button (click)="activeTab = 'manufacturers'" [class.active]="activeTab === 'manufacturers'">Manufacturers & Brands</button>
+    <button (click)="activeTab = 'protocols'" [class.active]="activeTab === 'protocols'">Protocols Designer</button>
+  </div>
+
+  <div class="tab-content">
+    @if (activeTab === 'manufacturers') {
+      <div class="manufacturers-view">
+        <div class="view-actions">
+          <div class="breadcrumb">
+            <span class="crumb" (click)="backToManufacturers()" (keydown.enter)="backToManufacturers()" [class.link]="selectedManufacturer" role="link" tabindex="0">Manufacturers</span>
+            @if (selectedManufacturer) {
+              <span class="separator">/</span>
+              <span class="crumb" (click)="backToBrands()" (keydown.enter)="backToBrands()" [class.link]="selectedBrand" role="link" tabindex="0">{{ selectedManufacturer.name }}</span>
+            }
+            @if (selectedBrand) {
+              <span class="separator">/</span>
+              <span class="crumb">{{ selectedBrand.name }}</span>
+            }
+          </div>
+          <button class="btn btn-primary">
+            {{ selectedBrand ? '+ New Model' : (selectedManufacturer ? '+ New Brand' : '+ New Manufacturer') }}
+          </button>
+        </div>
+
+        @if (!selectedManufacturer) {
+          <cgo-base-table [columns]="manufacturerColumns" [data]="manufacturers" [showActions]="true">
+            <ng-template #actionsTemplate let-row>
+              <div class="table-actions">
+                <button class="btn btn-secondary" (click)="viewBrands(row)">View Brands</button>
+                <button class="btn btn-tertiary">Edit</button>
+              </div>
+            </ng-template>
+          </cgo-base-table>
+        } @else if (!selectedBrand) {
+          <cgo-base-table [columns]="brandColumns" [data]="brands" [showActions]="true">
+            <ng-template #actionsTemplate let-row>
+              <div class="table-actions">
+                <button class="btn btn-secondary" (click)="viewModels(row)">View Models</button>
+                <button class="btn btn-tertiary">Edit</button>
+              </div>
+            </ng-template>
+          </cgo-base-table>
+        } @else {
+          <cgo-base-table [columns]="modelColumns" [data]="models" [showActions]="true">
+            <ng-template #actionsTemplate let-row>
+              <div class="table-actions">
+                <button class="btn btn-secondary">Edit Model</button>
+                <button class="btn btn-tertiary">Delete</button>
+              </div>
+            </ng-template>
+          </cgo-base-table>
+        }
+      </div>
+    } @else {
+      <div class="protocols-view">
+        <div class="view-actions">
+          <h3>Telemetry Protocols</h3>
+          <button class="btn btn-primary">+ New Protocol</button>
+        </div>
+         <cgo-base-table [columns]="protocolColumns" [data]="protocols" [showActions]="true">
+          <ng-template #actionsTemplate let-row>
+            <div class="table-actions">
+              <button class="btn btn-primary" (click)="viewDesigner(row)">Open Designer</button>
+              <button class="btn btn-secondary">Versions</button>
+            </div>
+          </ng-template>
+        </cgo-base-table>
+      </div>
+    }
+  </div>
+</div>
+}
+
+@if (showDesigner && selectedProtocol) {
+  <app-protocol-designer 
+    [protocolName]="selectedProtocol.name" 
+    (designerClose)="onDesignerClose()">
+  </app-protocol-designer>
+}

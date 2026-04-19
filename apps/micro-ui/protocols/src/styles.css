@@ -1,0 +1,7 @@
+@import '../../../../libs/shared/ui-kit/src/lib/design-tokens.css';
+
+/* Protocols Micro-UI Global Styles */
+body {
+  margin: 0;
+  overflow: hidden;
+}

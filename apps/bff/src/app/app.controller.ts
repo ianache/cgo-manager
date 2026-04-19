@@ -24,4 +24,35 @@ export class AppController {
       { name: 'Zenith Meridian', status: 'Active', plan: 'Enterprise Pro', vehicles: 89 },
     ];
   }
+
+  @Get('manufacturers')
+  getManufacturers() {
+    return [
+      { id: 'm1', name: 'Teltonika', website: 'https://teltonika-gps.com', logo: 'teltonika.png' },
+      { id: 'm2', name: 'Queclink', website: 'https://queclink.com', logo: 'queclink.png' },
+      { id: 'm3', name: 'Suntech', website: 'https://suntech.com', logo: 'suntech.png' },
+    ];
+  }
+
+  @Get('manufacturers/m1/brands')
+  getTeltonikaBrands() {
+    return [{ id: 'b1', manufacturerId: 'm1', name: 'Teltonika Telematics', description: 'Advanced GPS trackers', image: 'telt.png', tags: ['Professional', 'Industrial'] }];
+  }
+
+  @Get('brands/b1/models')
+  getTeltonikaModels() {
+    return [
+      { id: 'mod1', brandId: 'b1', name: 'FMB920', description: 'Small and smart tracker', tags: ['Bluetooth', 'Internal Battery'] },
+      { id: 'mod2', brandId: 'b1', name: 'FMB120', description: 'Advanced tracker with internal high gain GNSS', tags: ['RS232', 'RS485'] },
+    ];
+  }
+
+  @Get('protocols')
+  getProtocols() {
+    return [
+      { id: 'p1', name: 'Teltonika Codec 8' },
+      { id: 'p2', name: 'Teltonika Codec 8 Extended' },
+      { id: 'p3', name: 'Wialon IPS' },
+    ];
+  }
 }

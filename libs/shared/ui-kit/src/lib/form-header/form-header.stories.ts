@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { FormHeaderComponent } from './form-header';
-import { ButtonComponent } from './button.component';
+import { ButtonComponent } from '../button/button.component';
 
 const meta: Meta<FormHeaderComponent> = {
   component: FormHeaderComponent,

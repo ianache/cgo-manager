@@ -133,7 +133,7 @@
   padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 25px;
   position: relative;
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: visible;
@@ -151,6 +151,9 @@
 }
 
 .panel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   transition: opacity 0.2s ease-in-out;
   min-width: 212px; /* 260 - 48 */
 }
@@ -199,16 +202,16 @@
 }
 
 .tool-item {
-  padding: 12px 16px;
+  padding: 16px 20px;
   background: white;
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 20px;
   cursor: grab;
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-weight: 600;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  gap: 16px;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 

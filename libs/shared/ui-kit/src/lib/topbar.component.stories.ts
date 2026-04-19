@@ -1,6 +1,12 @@
-import { moduleMetadata, type Meta, type StoryObj, applicationConfig } from '@storybook/angular';
+import {
+  moduleMetadata,
+  type Meta,
+  type StoryObj,
+  applicationConfig,
+} from '@storybook/angular';
 import { TopbarComponent } from './topbar.component';
 import { provideRouter } from '@angular/router';
+import { expect } from 'storybook/test';
 
 const meta: Meta<TopbarComponent> = {
   component: TopbarComponent,

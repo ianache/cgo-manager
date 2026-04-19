@@ -1,9 +1,7 @@
-<div class="dashboard-header">
-  <div class="title-section">
-    <h2 class="page-title">White-Label Configuration</h2>
-    <p class="page-subtitle">Customize the interface for <strong>{{ branding.tenantName }}</strong>.</p>
-  </div>
-</div>
+<cgo-form-header 
+  title="White-Label Configuration" 
+  [description]="'Customize the interface for <strong>' + branding.tenantName + '</strong>.'">
+</cgo-form-header>
 
 <div class="config-container">
   <div class="form-section">

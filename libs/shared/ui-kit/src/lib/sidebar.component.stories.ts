@@ -1,6 +1,11 @@
-import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
+import {
+  applicationConfig,
+  type Meta,
+  type StoryObj,
+} from '@storybook/angular';
 import { SidebarComponent } from './sidebar.component';
 import { provideRouter } from '@angular/router';
+import { expect } from 'storybook/test';
 
 const meta: Meta<SidebarComponent> = {
   component: SidebarComponent,

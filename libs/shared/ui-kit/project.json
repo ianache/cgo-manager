@@ -21,7 +21,7 @@
       "options": {
         "port": 4400,
         "configDir": "libs/shared/ui-kit/.storybook",
-        "browserTarget": "shared-ui-kit:build-storybook",
+        "browserTarget": "shell:build",
         "compodoc": false,
         "styles": ["libs/shared/ui-kit/src/lib/design-tokens.css"]
       },
@@ -37,7 +37,7 @@
       "options": {
         "outputDir": "dist/storybook/shared-ui-kit",
         "configDir": "libs/shared/ui-kit/.storybook",
-        "browserTarget": "shared-ui-kit:build-storybook",
+        "browserTarget": "shell:build",
         "compodoc": false,
         "styles": ["libs/shared/ui-kit/src/lib/design-tokens.css"]
       },

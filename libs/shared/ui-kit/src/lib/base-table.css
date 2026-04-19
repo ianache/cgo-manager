@@ -17,7 +17,7 @@ thead th {
   text-transform: uppercase;
   letter-spacing: 0.05rem;
   color: var(--secondary-grey);
-  background: var(--surface-low);
+  background: var(--surface-highest);
   font-weight: 700;
 }
 

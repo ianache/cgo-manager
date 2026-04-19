@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormHeaderComponent } from '@cgomanager/shared-ui-kit';
 
 @Component({
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormHeaderComponent],
   selector: 'app-tracking-entry',
   templateUrl: './entry.component.html',
   styles: [`

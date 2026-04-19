@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ButtonComponent } from '@cgomanager/shared-ui-kit';
+import { ButtonComponent, FormHeaderComponent } from '@cgomanager/shared-ui-kit';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, ButtonComponent],
+  imports: [CommonModule, ButtonComponent, FormHeaderComponent],
   selector: 'app-config-entry',
   templateUrl: './entry.component.html',
   styleUrl: './entry.component.css'

@@ -4,3 +4,5 @@ export * from './lib/topbar.component';
 export * from './lib/base-table';
 export * from './lib/metric-card.component';
 export * from './lib/kpi-card';
+
+export * from './lib/form-header';

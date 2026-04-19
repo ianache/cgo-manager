@@ -1,0 +1,9 @@
+<div class="form-header">
+  <div class="title-section">
+    <h2 class="form-title">{{ title }}</h2>
+    <p class="form-description" [innerHTML]="description"></p>
+  </div>
+  <div class="actions-section">
+    <ng-content select="[actions]"></ng-content>
+  </div>
+</div>

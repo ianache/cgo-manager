@@ -1,0 +1,31 @@
+<div class="paginated-table-wrapper">
+  <cgo-base-table
+    [columns]="columns"
+    [data]="paginatedData"
+    [showActions]="showActions"
+    [actionsTemplateInput]="actionsTemplate"
+    [statusTemplateInput]="statusTemplate">
+  </cgo-base-table>
+
+  <div class="pagination-footer">
+    <div class="pagination-info">
+      Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, data.length) }} of {{ data.length }} entries
+    </div>
+    <div class="pagination-controls">
+      <button class="page-btn" [disabled]="currentPage === 1" (click)="prevPage()">Previous</button>
+
+      <div class="page-numbers">
+        @for (page of pages; track page) {
+          <button
+            class="page-number"
+            [class.active]="currentPage === page"
+            (click)="goToPage(page)">
+            {{ page }}
+          </button>
+        }
+      </div>
+
+      <button class="page-btn" [disabled]="currentPage === totalPages" (click)="nextPage()">Next</button>
+    </div>
+  </div>
+</div>

@@ -63,9 +63,11 @@
            [style.transform]="'translate(' + canvasOffset.x + 'px, ' + canvasOffset.y + 'px) scale(' + zoomLevel + ')'">
         
         <!-- Grid Background -->
-        <div class="canvas-grid" *ngIf="isSnapGridEnabled"></div>
+        @if (isSnapGridEnabled) {
+          <div class="canvas-grid"></div>
+        }
 
-        <svg class="connections-layer">
+        <svg class="connections-layer" aria-hidden="true">
           <defs>
             <marker id="arrowhead" markerWidth="6" markerHeight="4" refX="6" refY="2" orientation="auto">
               <polygon points="0 0, 6 2, 0 4" fill="var(--primary-red)" />
@@ -79,7 +81,10 @@
                     class="connection-line"
                     marker-end="url(#arrowhead)"
                     (click)="deleteConnection(conn.id)"
-                    role="button" tabindex="0"/>
+                    (keydown.delete)="deleteConnection(conn.id)"
+                    (keydown.backspace)="deleteConnection(conn.id)"
+                    role="button" tabindex="0"
+                    aria-label="Delete connection"/>
             }
           }
 
@@ -92,17 +97,18 @@
         @for (node of nodes; track node.id) {
           @if (isNodeVisible(node)) {
             <div class="node" 
-                 [style.left.px]="node.x" 
-                 [style.top.px]="node.y"
+                 [style.left.px]="node.visual.x" 
+                 [style.top.px]="node.visual.y"
                  [class.selected]="selectedNode?.id === node.id"
                  [class.connecting]="connectingSourceNodeId === node.id"
                  (mousedown)="startNodeDrag($event, node)"
                  (click)="selectNode(node)"
+                 (keydown.enter)="selectNode(node)"
                  role="button" tabindex="0">
               
               <!-- Input Port -->
               @if (node.type !== 'Root') {
-                <div class="port port-in" (click)="completeConnection(node); $event.stopPropagation()" role="button" tabindex="0"></div>
+                <div class="port port-in" (click)="completeConnection(node); $event.stopPropagation()" (keydown.enter)="completeConnection(node); $event.stopPropagation()" role="button" tabindex="0" aria-label="Input port"></div>
               }
 
               <div class="node-header" [attr.data-type]="node.type">
@@ -113,13 +119,13 @@
                   @else if (node.type === 'Ack Field') { ✅ }
                   @else { 📝 }
                 </span>
-                @if (node.type === 'Service') { {{ node.syncMode || 'Service' }} }
-                @else if (node.type === 'Frame') { {{ node.frameRole === 'Default' ? 'FRAME' : node.frameRole | uppercase }} }
+                @if (node.type === 'Service') { {{ node.data.syncMode || 'Service' }} }
+                @else if (node.type === 'Frame') { {{ node.data.frameRole === 'Default' ? 'FRAME' : node.data.frameRole | uppercase }} }
                 @else { {{ node.type }} }
                 <div class="header-actions">
                   @if (node.type === 'Frame') {
-                    <button class="btn-toggle-children" (click)="toggleChildren(node); $event.stopPropagation()" [title]="node.isCollapsed ? 'Show Children' : 'Hide Children'">
-                      {{ node.isCollapsed ? '▶' : '▼' }}
+                    <button class="btn-toggle-children" (click)="toggleChildren(node); $event.stopPropagation()" [title]="node.visual.isCollapsed ? 'Show Children' : 'Hide Children'">
+                      {{ node.visual.isCollapsed ? '▶' : '▼' }}
                     </button>
                   }
                   <button class="btn-delete-node" (click)="deleteNode(node.id); $event.stopPropagation()">×</button>
@@ -130,25 +136,25 @@
                   <div class="frame-stats">
                     <span class="stat-item" title="Subframes">📂 {{ getChildCount(node.id, 'Frame') }}</span>
                     <span class="stat-item" title="Fields">📝 {{ getChildCount(node.id, 'Field') }}</span>
-                    <span class="format-badge" [title]="getFormatLabel(node.format)">
-                      {{ getFormatIcon(node.format) }}
+                    <span class="format-badge" [title]="getFormatLabel(node.data.format)">
+                      {{ getFormatIcon(node.data.format) }}
                     </span>
                   </div>
                 } @else if (node.type === 'Ack Field') {
                   <div class="ack-field-info">
-                    {{ node.name }}
-                    <span class="source-tag">{{ node.ackSource }}</span>
+                    {{ node.data.name }}
+                    <span class="source-tag">{{ node.data.ackSource }}</span>
                   </div>
                 } @else {
-                  {{ node.name }}
+                  {{ node.data.name }}
                 }
               </div>
               <!-- Output Ports -->
               @if (node.type === 'Service') {
-                <div class="port port-out port-req" (click)="startConnection(node, 'Request'); $event.stopPropagation()" title="Connect Request Frame" role="button" tabindex="0">REQ</div>
-                <div class="port port-out port-ack" (click)="startConnection(node, 'Ack'); $event.stopPropagation()" title="Connect Ack Frame" role="button" tabindex="0">ACK</div>
+                <div class="port port-out port-req" (click)="startConnection(node, 'Request'); $event.stopPropagation()" (keydown.enter)="startConnection(node, 'Request'); $event.stopPropagation()" title="Connect Request Frame" role="button" tabindex="0">REQ</div>
+                <div class="port port-out port-ack" (click)="startConnection(node, 'Ack'); $event.stopPropagation()" (keydown.enter)="startConnection(node, 'Ack'); $event.stopPropagation()" title="Connect Ack Frame" role="button" tabindex="0">ACK</div>
               } @else if (node.type !== 'Field' && node.type !== 'Ack Field') {
-                <div class="port port-out" (click)="startConnection(node); $event.stopPropagation()" role="button" tabindex="0"></div>
+                <div class="port port-out" (click)="startConnection(node); $event.stopPropagation()" (keydown.enter)="startConnection(node); $event.stopPropagation()" role="button" tabindex="0" aria-label="Output port"></div>
               }
             </div>
           }
@@ -177,20 +183,27 @@
           <h3 class="palette-title">Node Properties ({{ selectedNode.type }})</h3>
           
           <div class="property-group">
-            <label>Name</label>
-            <input type="text" [(ngModel)]="selectedNode.name" (ngModelChange)="markModified()">
+            <label [for]="'node-name-' + selectedNode.id">Name</label>
+            <input [id]="'node-name-' + selectedNode.id" type="text" [(ngModel)]="selectedNode.data.name" (ngModelChange)="markModified()">
           </div>
 
           <div class="property-group">
-            <label>Description</label>
-            <textarea [(ngModel)]="selectedNode.description" (ngModelChange)="markModified()"></textarea>
+            <label [for]="'node-desc-' + selectedNode.id">Description</label>
+            <textarea [id]="'node-desc-' + selectedNode.id" [(ngModel)]="selectedNode.data.description" (ngModelChange)="markModified()"></textarea>
           </div>
+
+          @if (selectedNode.type === 'Service') {
+            <div class="property-group">
+              <label [for]="'node-filter-' + selectedNode.id">Filter (Java Expression)</label>
+              <textarea [id]="'node-filter-' + selectedNode.id" [(ngModel)]="selectedNode.data.filter" placeholder="e.g. data.value > 10" (ngModelChange)="markModified()"></textarea>
+            </div>
+          }
 
           <!-- Specific attributes for Service -->
           @if (selectedNode.type === 'Service') {
             <div class="property-group">
-              <label>Synchrony</label>
-              <select [(ngModel)]="selectedNode.syncMode" (ngModelChange)="markModified()">
+              <label [for]="'node-sync-' + selectedNode.id">Synchrony</label>
+              <select [id]="'node-sync-' + selectedNode.id" [(ngModel)]="selectedNode.data.syncMode" (ngModelChange)="markModified()">
                 <option value="Sync">Sync</option>
                 <option value="Async">Async</option>
               </select>
@@ -200,16 +213,16 @@
           <!-- Specific attributes for Service and Frame -->
           @if (selectedNode.type === 'Service' || selectedNode.type === 'Frame') {
             <div class="property-group">
-              <label>Example Frame (for testing)</label>
-              <textarea [(ngModel)]="selectedNode.frame" placeholder="e.g. 7E 01 00 05 ..." (ngModelChange)="markModified()"></textarea>
+              <label [for]="'node-frame-' + selectedNode.id">Example Frame (for testing)</label>
+              <textarea [id]="'node-frame-' + selectedNode.id" [(ngModel)]="selectedNode.data.frame" placeholder="e.g. 7E 01 00 05 ..." (ngModelChange)="markModified()"></textarea>
             </div>
           }
 
           <!-- Specific attributes for Frame Role -->
-          @if (selectedNode.type === 'Frame' && selectedNode.frameRole !== 'Default') {
+          @if (selectedNode.type === 'Frame' && selectedNode.data.frameRole !== 'Default') {
             <div class="property-group">
-              <label>Frame Role (Auto-assigned)</label>
-              <input type="text" [value]="selectedNode.frameRole" disabled class="disabled-input">
+              <label [for]="'node-role-' + selectedNode.id">Frame Role (Auto-assigned)</label>
+              <input [id]="'node-role-' + selectedNode.id" type="text" [value]="selectedNode.data.frameRole" disabled class="disabled-input">
             </div>
           }
 
@@ -217,8 +230,8 @@
           @if (selectedNode.type === 'Field') {
             <div class="property-row">
               <div class="property-group half">
-                <label>Data Type</label>
-                <select [(ngModel)]="selectedNode.dataType" (ngModelChange)="markModified()">
+                <label [for]="'node-datatype-' + selectedNode.id">Data Type</label>
+                <select [id]="'node-datatype-' + selectedNode.id" [(ngModel)]="selectedNode.data.dataType" (ngModelChange)="markModified()">
                   <option value="INT">Integer</option>
                   <option value="STR">String</option>
                   <option value="FLOAT">Float</option>
@@ -227,14 +240,14 @@
                 </select>
               </div>
               <div class="property-group half">
-                <label>Length (bits)</label>
-                <input type="number" [(ngModel)]="selectedNode.length" (ngModelChange)="markModified()">
+                <label [for]="'node-len-' + selectedNode.id">Length (bits)</label>
+                <input [id]="'node-len-' + selectedNode.id" type="number" [(ngModel)]="selectedNode.data.length" (ngModelChange)="markModified()">
               </div>
             </div>
 
             <div class="property-group">
-              <label>Standard Field</label>
-              <select [(ngModel)]="selectedNode.standardFieldId" 
+              <label [for]="'node-stdfield-' + selectedNode.id">Standard Field</label>
+              <select [id]="'node-stdfield-' + selectedNode.id" [(ngModel)]="selectedNode.data.standardFieldId" 
                       (mousedown)="capturePreviousStandardFieldId()"
                       (change)="onStandardFieldSelect($event); markModified()">
                 <option [value]="undefined">None</option>
@@ -246,9 +259,9 @@
             </div>
 
             <div class="property-group">
-              <label>Function</label>
+              <label [for]="'node-func-' + selectedNode.id">Function</label>
               <div class="function-select-container">
-                <select [(ngModel)]="selectedNode.functionId" 
+                <select [id]="'node-func-' + selectedNode.id" [(ngModel)]="selectedNode.data.functionId" 
                         (mousedown)="capturePreviousFunctionId()"
                         (change)="onFunctionSelect($event); markModified()">
                   <option [value]="undefined">None</option>
@@ -261,8 +274,8 @@
                   }
                   <option value="NEW">+ Create New Function...</option>
                 </select>
-                @if (selectedNode.functionId) {
-                  <button class="btn-icon" (click)="openFunctionEditor(selectedNode.functionId)" title="Edit Function">✏️</button>
+                @if (selectedNode.data.functionId) {
+                  <button class="btn-icon" (click)="openFunctionEditor(selectedNode.data.functionId)" title="Edit Function">✏️</button>
                 }
               </div>
             </div>
@@ -271,8 +284,8 @@
           <!-- Specific attributes for Ack Field -->
           @if (selectedNode.type === 'Ack Field') {
             <div class="property-group">
-              <label>Source</label>
-              <select [(ngModel)]="selectedNode.ackSource" (ngModelChange)="markModified()">
+              <label [for]="'node-ack-source-' + selectedNode.id">Source</label>
+              <select [id]="'node-ack-source-' + selectedNode.id" [(ngModel)]="selectedNode.data.ackSource" (ngModelChange)="markModified()">
                 <option value="Manual">Manual</option>
                 <option value="Trama">Trama</option>
                 <option value="Function">Function</option>
@@ -280,16 +293,16 @@
             </div>
 
             <div class="property-group">
-              <label>Value</label>
+              <label [for]="'node-ack-val-' + selectedNode.id">Value</label>
               
               <!-- Manual Value -->
-              @if (selectedNode.ackSource === 'Manual') {
-                <input type="text" [(ngModel)]="selectedNode.ackValue" placeholder="Enter manual value" (ngModelChange)="markModified()">
+              @if (selectedNode.data.ackSource === 'Manual') {
+                <input [id]="'node-ack-val-' + selectedNode.id" type="text" [(ngModel)]="selectedNode.data.ackValue" placeholder="Enter manual value" (ngModelChange)="markModified()">
               }
 
               <!-- Trama Name Selection (Combo) -->
-              @if (selectedNode.ackSource === 'Trama') {
-                <select [(ngModel)]="selectedNode.ackValue" (ngModelChange)="markModified()">
+              @if (selectedNode.data.ackSource === 'Trama') {
+                <select [id]="'node-ack-val-' + selectedNode.id" [(ngModel)]="selectedNode.data.ackValue" (ngModelChange)="markModified()">
                   <option [value]="undefined">Select Trama...</option>
                   <option value="Header">Header</option>
                   <option value="Payload">Payload</option>
@@ -298,9 +311,9 @@
               }
 
               <!-- Function Selection -->
-              @if (selectedNode.ackSource === 'Function') {
+              @if (selectedNode.data.ackSource === 'Function') {
                 <div class="function-select-container">
-                  <select [(ngModel)]="selectedNode.functionId" 
+                  <select [id]="'node-ack-val-' + selectedNode.id" [(ngModel)]="selectedNode.data.functionId" 
                           (mousedown)="capturePreviousFunctionId()"
                           (change)="onFunctionSelect($event); markModified()">
                     <option [value]="undefined">Select Function...</option>
@@ -313,25 +326,25 @@
                     }
                     <option value="NEW">+ Create New Function...</option>
                   </select>
-                  @if (selectedNode.functionId) {
-                    <button class="btn-icon" (click)="openFunctionEditor(selectedNode.functionId)" title="Edit Function">✏️</button>
+                  @if (selectedNode.data.functionId) {
+                    <button class="btn-icon" (click)="openFunctionEditor(selectedNode.data.functionId)" title="Edit Function">✏️</button>
                   }
                 </div>
               }
             </div>
 
             <div class="property-group">
-              <label>Length (bits)</label>
-              <input type="number" [(ngModel)]="selectedNode.length" (ngModelChange)="markModified()">
+              <label [for]="'node-ack-len-' + selectedNode.id">Length (bits)</label>
+              <input [id]="'node-ack-len-' + selectedNode.id" type="number" [(ngModel)]="selectedNode.data.length" (ngModelChange)="markModified()">
             </div>
 
             <div class="property-row">
               <div class="property-group checkbox-group">
-                <input type="checkbox" id="includeSeparator" [(ngModel)]="selectedNode.includeSeparator" (ngModelChange)="markModified()">
+                <input type="checkbox" id="includeSeparator" [(ngModel)]="selectedNode.data.includeSeparator" (ngModelChange)="markModified()">
                 <label for="includeSeparator">Incluir Separador</label>
               </div>
               <div class="property-group checkbox-group">
-                <input type="checkbox" id="isFunction" [(ngModel)]="selectedNode.isFunction" (ngModelChange)="markModified()">
+                <input type="checkbox" id="isFunction" [(ngModel)]="selectedNode.data.isFunction" (ngModelChange)="markModified()">
                 <label for="isFunction">Es Función</label>
               </div>
             </div>
@@ -339,8 +352,8 @@
 
           @if (selectedNode.type === 'Frame') {
             <div class="property-group">
-              <label>Frame Format</label>
-              <select [(ngModel)]="selectedNode.format" (ngModelChange)="markModified()">
+              <label [for]="'node-fmt-' + selectedNode.id">Frame Format</label>
+              <select [id]="'node-fmt-' + selectedNode.id" [(ngModel)]="selectedNode.data.format" (ngModelChange)="markModified()">
                 <option value="BIN">Binary</option>
                 <option value="HEX">Hexadecimal</option>
                 <option value="TXT">Plain Text</option>
@@ -368,12 +381,12 @@
         <div class="modal-body">
           <div class="property-row">
             <div class="property-group">
-              <label>Function Name</label>
-              <input type="text" [(ngModel)]="editingFunction.name">
+              <label for="func-name">Function Name</label>
+              <input id="func-name" type="text" [(ngModel)]="editingFunction.name">
             </div>
             <div class="property-group">
-              <label>Category</label>
-              <select [(ngModel)]="editingFunction.category">
+              <label for="func-cat">Category</label>
+              <select id="func-cat" [(ngModel)]="editingFunction.category">
                 @for (cat of functionCategories; track cat) {
                   <option [value]="cat">{{ cat }}</option>
                 }
@@ -382,12 +395,12 @@
           </div>
 
           <div class="property-group">
-            <label>Parameters</label>
-            <div class="parameters-list">
+            <label for="func-params">Parameters</label>
+            <div id="func-params" class="parameters-list">
               @for (param of editingFunction.parameters; track $index) {
                 <div class="parameter-item">
-                  <input type="text" [(ngModel)]="param.name" placeholder="Name">
-                  <select [(ngModel)]="param.type">
+                  <input type="text" [(ngModel)]="param.name" placeholder="Name" aria-label="Parameter name">
+                  <select [(ngModel)]="param.type" aria-label="Parameter type">
                     <option value="String">String</option>
                     <option value="int">int</option>
                     <option value="long">long</option>
@@ -403,8 +416,8 @@
           </div>
 
           <div class="property-group">
-            <label>Java Code Implementation</label>
-            <textarea class="code-editor" [(ngModel)]="editingFunction.code" rows="10" spellcheck="false"></textarea>
+            <label for="func-code">Java Code Implementation</label>
+            <textarea id="func-code" class="code-editor" [(ngModel)]="editingFunction.code" rows="10" spellcheck="false"></textarea>
           </div>
         </div>
         <div class="modal-footer">
@@ -424,23 +437,23 @@
           <button class="btn-close" (click)="closeTestRunner()">×</button>
         </div>
         <div class="modal-body">
-          <div class="test-section">
-            <label class="section-label">Example Frame</label>
-            <div class="frame-preview">{{ testResult.rawFrame }}</div>
+          <div class="property-group">
+            <label for="test-frame">Example Frame</label>
+            <div id="test-frame" class="frame-preview">{{ testResult.rawFrame }}</div>
           </div>
           
           <div class="test-columns">
             <div class="column">
-              <label class="section-label">Execution Log</label>
-              <div class="log-viewer">
+              <label for="test-log">Execution Log</label>
+              <div id="test-log" class="log-viewer">
                 @for (log of testResult.executionLog; track $index) {
                   <div class="log-entry">> {{ log }}</div>
                 }
               </div>
             </div>
             <div class="column">
-              <label class="section-label">Parsed Result (JSON)</label>
-              <pre class="json-viewer">{{ testResult | json }}</pre>
+              <label for="test-json">Parsed Result (JSON)</label>
+              <pre id="test-json" class="json-viewer">{{ testResult | json }}</pre>
             </div>
           </div>
         </div>

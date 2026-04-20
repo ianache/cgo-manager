@@ -1,0 +1,20 @@
+<div class="cgo-card" [class.clickable]="clickable">
+  <div class="card-image-wrapper">
+    <ng-content select="[card-image]"></ng-content>
+  </div>
+  
+  <div class="card-content">
+    <div class="card-header">
+      <ng-content select="[card-title]"></ng-content>
+      <ng-content select="[card-subtitle]"></ng-content>
+    </div>
+    
+    <div class="card-body">
+      <ng-content></ng-content>
+    </div>
+
+    <div class="card-footer">
+      <ng-content select="[card-footer]"></ng-content>
+    </div>
+  </div>
+</div>

@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BaseTableComponent } from './base-table';
+import { PaginatedTableComponent } from './paginated-table';
 
-describe('BaseTableComponent', () => {
-  let component: BaseTableComponent;
-  let fixture: ComponentFixture<BaseTableComponent>;
+describe('PaginatedTableComponent', () => {
+  let component: PaginatedTableComponent;
+  let fixture: ComponentFixture<PaginatedTableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BaseTableComponent],
+      imports: [PaginatedTableComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(BaseTableComponent);
+    fixture = TestBed.createComponent(PaginatedTableComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

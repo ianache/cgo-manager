@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Manufacturer {
+  id        String   @id @default(uuid())
+  name      String
+  website   String?
+  logo      String?
+  brands    Brand[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Brand {
+  id             String        @id @default(uuid())
+  name           String
+  description    String?       @db.Text
+  image          String?
+  tags           String?       @db.VarChar(500)
+  manufacturerId String
+  manufacturer   Manufacturer  @relation(fields: [manufacturerId], references: [id])
+  deviceModels   DeviceModel[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model DeviceModel {
+  id          String     @id @default(uuid())
+  name        String
+  description String?    @db.Text
+  brandId     String
+  brand       Brand      @relation(fields: [brandId], references: [id])
+  protocolId  String?
+  protocol    Protocol?  @relation(fields: [protocolId], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Protocol {
+  id            String            @id @default(uuid())
+  name          String
+  description   String?           @db.Text
+  deviceModels  DeviceModel[]
+  versions      ProtocolVersion[]
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+}
+
+model ProtocolVersion {
+  id                 String              @id @default(uuid())
+  version            String
+  description        String?             @db.Text
+  status             String              @default("DRAFT") // DRAFT, APPROVED, PUBLISHED
+  protocolId         String
+  protocol           Protocol            @relation(fields: [protocolId], references: [id])
+  visualModels       ProtocolFrameModel[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+}
+
+model ProtocolFrameModel {
+  id                String          @id @default(uuid())
+  protocolVersionId String
+  protocolVersion   ProtocolVersion @relation(fields: [protocolVersionId], references: [id])
+  
+  // Stored as text for MySQL 5.6 compatibility
+  designJson        String          @db.LongText
+  
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+}
+
+model Tenant {
+  id               Int      @id @default(autoincrement())
+  name             String
+  status           String   @default("ACTIVE")
+  subscriptionPlan String
+  brandingJson     String?  @db.LongText
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  createdBy        String?
+  modifiedBy       String?
+}

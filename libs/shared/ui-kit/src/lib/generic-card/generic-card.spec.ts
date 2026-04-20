@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BaseTableComponent } from './base-table';
+import { GenericCard } from './generic-card';
 
-describe('BaseTableComponent', () => {
-  let component: BaseTableComponent;
-  let fixture: ComponentFixture<BaseTableComponent>;
+describe('GenericCard', () => {
+  let component: GenericCard;
+  let fixture: ComponentFixture<GenericCard>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BaseTableComponent],
+      imports: [GenericCard],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(BaseTableComponent);
+    fixture = TestBed.createComponent(GenericCard);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

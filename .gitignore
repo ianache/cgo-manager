@@ -44,3 +44,4 @@ graph.json
 .angular
 
 vitest.config.*.timestamp*
+/generated/prisma

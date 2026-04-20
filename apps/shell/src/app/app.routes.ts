@@ -38,6 +38,7 @@ export const appRoutes: Route[] = [
   },
   {
     path: '',
-    component: NxWelcome,
+    redirectTo: 'dashboard',
+    pathMatch: 'full',
   },
 ];

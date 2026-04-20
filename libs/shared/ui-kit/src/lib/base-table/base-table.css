@@ -17,7 +17,8 @@ thead th {
   text-transform: uppercase;
   letter-spacing: 0.05rem;
   color: var(--secondary-grey);
-  background: var(--surface-highest);
+  background: var(--surface-lowest);
+  border-bottom: 2px solid var(--surface-highest);
   font-weight: 700;
 }
 
@@ -60,4 +61,56 @@ td {
 .actions-cell {
   display: flex;
   gap: 8px;
+}
+
+.cell-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: var(--radius-sm, 4px);
+  background: var(--surface-low);
+  padding: 2px;
+}
+
+.cell-icon-muted {
+  color: var(--secondary-grey);
+  opacity: 0.5;
+  display: block;
+}
+
+.cell-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--primary-blue, #5b8dee);
+  transition: color 0.2s, opacity 0.2s;
+}
+
+.cell-link:hover {
+  opacity: 0.75;
+}
+
+.cell-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: var(--surface-container, #2a2f3a);
+  color: var(--secondary-grey, #8a94a6);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.actions-header-center {
+  text-align: center !important;
+}
+
+.actions-cell-center {
+  justify-content: center !important;
 }

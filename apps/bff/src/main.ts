@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
@@ -12,14 +13,14 @@ async function bootstrap() {
   app.use(cookieParser());
   app.use(
     session({
-      secret: 'cgo-manager-secret-key', // En producción, usar variable de entorno
+      secret: 'cgo-manager-secret-key',
       resave: false,
       saveUninitialized: false,
       cookie: {
         httpOnly: true,
-        secure: false, // Set to true in production with HTTPS
+        secure: false,
         sameSite: 'strict',
-        maxAge: 3600000, // 1 hour
+        maxAge: 3600000,
       },
     }),
   );

@@ -9,10 +9,32 @@ import { CommonModule } from '@angular/common';
   styleUrl: './base-table.css',
 })
 export class BaseTableComponent {
-  @Input() columns: { key: string; label: string }[] = [];
+  @Input() columns: { key: string; label: string; type?: 'image' | 'link' | 'badges' }[] = [];
   @Input() data: any[] = [];
   @Input() showActions = false;
-  
-  @ContentChild('actionsTemplate') actionsTemplate?: TemplateRef<any>;
-  @ContentChild('statusTemplate') statusTemplate?: TemplateRef<any>;
+
+  @Input() actionsTemplateInput?: TemplateRef<any>;
+  @Input() statusTemplateInput?: TemplateRef<any>;
+
+  @ContentChild('actionsTemplate') actionsTemplateContent?: TemplateRef<any>;
+  @ContentChild('statusTemplate') statusTemplateContent?: TemplateRef<any>;
+
+  get actionsTemplate(): TemplateRef<any> | undefined {
+    return this.actionsTemplateInput ?? this.actionsTemplateContent;
+  }
+
+  get statusTemplate(): TemplateRef<any> | undefined {
+    return this.statusTemplateInput ?? this.statusTemplateContent;
+  }
+
+  toBadges(value: any): string[] {
+    if (!value) return [];
+    if (Array.isArray(value)) return value.filter(Boolean);
+    return String(value).split(',').map(s => s.trim()).filter(Boolean);
+  }
+
+  getCellValue(row: any, key: string): any {
+    if (!key.includes('.')) return row[key];
+    return key.split('.').reduce((obj, part) => obj && obj[part], row);
+  }
 }

@@ -1,29 +1,51 @@
-import { Component, HostListener, Input, Output, EventEmitter } from '@angular/core';
+import { Component, HostListener, Input, Output, EventEmitter, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ApiService } from '@cgomanager/shared-data-access';
+
+export interface NodeVisualInfo {
+  x: number;
+  y: number;
+  isCollapsed?: boolean;
+}
+
+export interface ServiceData {
+  name: string;
+  description: string;
+  filter?: string;
+  syncMode: 'Sync' | 'Async';
+  frame?: string;
+}
+
+export interface FrameData {
+  name: string;
+  description: string;
+  format: 'BIN' | 'HEX' | 'TXT';
+  frame?: string;
+  frameRole: 'Request' | 'Ack' | 'Default';
+}
+
+export interface FieldData {
+  name: string;
+  description: string;
+  length: number;
+  dataType: string;
+  standardFieldId?: string;
+  functionId?: string;
+}
+
+export interface AckFieldData extends FieldData {
+  ackSource: 'Manual' | 'Trama' | 'Function';
+  ackValue: string;
+  includeSeparator: boolean;
+  isFunction: boolean;
+}
 
 export interface DesignerNode {
   id: string;
   type: 'Root' | 'Service' | 'Frame' | 'Field' | 'Ack Field';
-  name: string;
-  description: string;
-  x: number;
-  y: number;
-  dataType?: string;
-  format?: 'BIN' | 'HEX' | 'TXT';
-  // New attributes
-  frame?: string; // For Service and Frame
-  length?: number; // For Field and Ack Field
-  standardFieldId?: string; // For Field
-  functionId?: string; // For Field and Ack Field (when source is Function)
-  isCollapsed?: boolean; 
-  syncMode?: 'Sync' | 'Async'; // For Service
-  frameRole?: 'Request' | 'Ack' | 'Default'; // For Frame
-  // Ack Field Specific
-  ackSource?: 'Manual' | 'Trama' | 'Function';
-  ackValue?: string;
-  includeSeparator?: boolean;
-  isFunction?: boolean;
+  visual: NodeVisualInfo;
+  data: any; // Using any for data as it's a polymorphic property, but in a real app we'd use a discriminated union.
 }
 
 export interface StandardField {
@@ -51,6 +73,15 @@ export interface Connection {
   fromPort?: 'Request' | 'Ack' | 'Default';
 }
 
+export interface TestResult {
+  timestamp: string;
+  nodeName: string;
+  nodeType: string;
+  rawFrame: string;
+  parsedFields: Array<{ name: string; value: string; status: string }>;
+  executionLog: string[];
+}
+
 @Component({
   selector: 'app-protocol-designer',
   standalone: true,
@@ -58,10 +89,34 @@ export interface Connection {
   templateUrl: './protocol-designer.html',
   styleUrl: './protocol-designer.css'
 })
-export class ProtocolDesignerComponent {
+export class ProtocolDesignerComponent implements OnInit {
+  private apiService = inject(ApiService);
+
   @Input() protocolName = 'New Protocol';
   @Input() version = '1.0.0';
+  @Input() versionId = '';
   @Output() designerClose = new EventEmitter<void>();
+
+  ngOnInit(): void {
+    this.loadDesign();
+  }
+
+  loadDesign(): void {
+    if (this.versionId) {
+      this.apiService.getProtocolDesign(this.versionId).subscribe({
+        next: (result) => {
+          if (result && result.designJson) {
+            this.nodes = result.designJson.nodes || [];
+            this.connections = result.designJson.connections || [];
+            this.isModified = false;
+          }
+        },
+        error: (err) => {
+          console.error('Error loading protocol design:', err);
+        }
+      });
+    }
+  }
 
   isModified = false;
   nodes: DesignerNode[] = [];
@@ -77,11 +132,9 @@ export class ProtocolDesignerComponent {
   connectingSourcePort: 'Request' | 'Ack' = 'Request';
   mousePosition = { x: 0, y: 0 };
 
-  // Designer View State
   isPaletteCollapsed = false;
   isPropertiesCollapsed = false;
   
-  // New Data for fields and functions
   standardFields: StandardField[] = [
     { id: '1', name: 'Header' },
     { id: '2', name: 'Checksum' },
@@ -107,13 +160,12 @@ export class ProtocolDesignerComponent {
     }
   ];
 
-  // Modals/Editors state
   showFunctionEditor = false;
   editingFunction: ProtocolFunction | null = null;
   previousFunctionId?: string;
   previousStandardFieldId?: string;
   showTestRunner = false;
-  testResult: any = null;
+  testResult: TestResult | null = null;
 
   zoomLevel = 1.0;
   canvasOffset = { x: 0, y: 0 };
@@ -122,34 +174,33 @@ export class ProtocolDesignerComponent {
   panStart = { x: 0, y: 0 };
   gridSize = 20;
 
-  // Helper methods for new features
-  getFunctionsByCategory(category: string) {
+  getFunctionsByCategory(category: string): ProtocolFunction[] {
     return this.availableFunctions.filter(f => f.category === category);
   }
 
-  getFunctionName(id?: string) {
+  getFunctionName(id?: string): string {
     return this.availableFunctions.find(f => f.id === id)?.name || 'None';
   }
 
-  addStandardField() {
+  addStandardField(): void {
     const name = prompt('Enter new Standard Field name:');
     if (name) {
-      const newField = { id: Math.random().toString(36).substr(2, 9), name };
+      const newField = { id: Math.random().toString(36).substring(2, 9), name };
       this.standardFields.push(newField);
-      if (this.selectedNode) this.selectedNode.standardFieldId = newField.id;
+      if (this.selectedNode) this.selectedNode.data.standardFieldId = newField.id;
       this.markModified();
     }
   }
 
-  openFunctionEditor(functionId?: string) {
+  openFunctionEditor(functionId?: string): void {
     if (functionId) {
       const func = this.availableFunctions.find(f => f.id === functionId);
       if (func) {
-        this.editingFunction = JSON.parse(JSON.stringify(func)); // Deep clone
+        this.editingFunction = JSON.parse(JSON.stringify(func));
       }
     } else {
       this.editingFunction = {
-        id: Math.random().toString(36).substr(2, 9),
+        id: Math.random().toString(36).substring(2, 9),
         name: 'NewFunction',
         category: this.functionCategories[0],
         parameters: [],
@@ -159,50 +210,49 @@ export class ProtocolDesignerComponent {
     this.showFunctionEditor = true;
   }
 
-  addParameter() {
+  addParameter(): void {
     if (this.editingFunction) {
       this.editingFunction.parameters.push({ name: '', type: 'String' });
     }
   }
 
-  removeParameter(index: number) {
+  removeParameter(index: number): void {
     if (this.editingFunction) {
       this.editingFunction.parameters.splice(index, 1);
     }
   }
 
-  saveFunction() {
+  saveFunction(): void {
     if (this.editingFunction) {
-      const index = this.availableFunctions.findIndex(f => f.id === this.editingFunction!.id);
+      const index = this.availableFunctions.findIndex(f => f.id === this.editingFunction?.id);
       if (index >= 0) {
         this.availableFunctions[index] = this.editingFunction;
       } else {
         this.availableFunctions.push(this.editingFunction);
       }
       if (this.selectedNode) {
-        this.selectedNode.functionId = this.editingFunction.id;
+        this.selectedNode.data.functionId = this.editingFunction.id;
         this.markModified();
       }
       this.closeFunctionEditor();
     }
   }
 
-  runTest() {
+  runTest(): void {
     if (!this.selectedNode || (this.selectedNode.type !== 'Service' && this.selectedNode.type !== 'Frame')) {
       return;
     }
 
-    if (!this.selectedNode.frame || this.selectedNode.frame.trim() === '') {
+    if (!this.selectedNode.data.frame || this.selectedNode.data.frame.trim() === '') {
       alert('Please provide an example frame in the properties panel before running the test.');
       return;
     }
 
-    // Simulate parsing logic
     this.testResult = {
       timestamp: new Date().toISOString(),
-      nodeName: this.selectedNode.name,
+      nodeName: this.selectedNode.data.name,
       nodeType: this.selectedNode.type,
-      rawFrame: this.selectedNode.frame,
+      rawFrame: this.selectedNode.data.frame,
       parsedFields: [
         { name: 'Header', value: '0x7E', status: 'OK' },
         { name: 'TerminalID', value: '123456789', status: 'OK' },
@@ -211,7 +261,7 @@ export class ProtocolDesignerComponent {
       ],
       executionLog: [
         `Initializing parser for ${this.selectedNode.type}...`,
-        `Reading raw data: ${this.selectedNode.frame.substring(0, 20)}...`,
+        `Reading raw data: ${this.selectedNode.data.frame.substring(0, 20)}...`,
         'Applying standard field: Header',
         'Applying transformation function: ToHexString',
         'Validation successful.'
@@ -221,28 +271,26 @@ export class ProtocolDesignerComponent {
     this.showTestRunner = true;
   }
 
-  closeTestRunner() {
+  closeTestRunner(): void {
     this.showTestRunner = false;
     this.testResult = null;
   }
 
-  toggleChildren(node: DesignerNode) {
-    node.isCollapsed = !node.isCollapsed;
+  toggleChildren(node: DesignerNode): void {
+    node.visual.isCollapsed = !node.visual.isCollapsed;
     this.markModified();
   }
 
   isNodeVisible(node: DesignerNode): boolean {
-    // A node is visible if it's the Root or if all its parents are visible and not collapsed
     if (node.type === 'Root') return true;
 
     const parents = this.connections
       .filter(c => c.toId === node.id)
       .map(c => this.nodes.find(n => n.id === c.fromId));
 
-    if (parents.length === 0) return true; // Orphan nodes are visible
+    if (parents.length === 0) return true;
 
-    // If any parent is collapsed or hidden, this node should be hidden
-    return parents.every(p => p && this.isNodeVisible(p) && !p.isCollapsed);
+    return parents.every(p => p && this.isNodeVisible(p) && !p.visual.isCollapsed);
   }
 
   isConnectionVisible(conn: Connection): boolean {
@@ -250,30 +298,28 @@ export class ProtocolDesignerComponent {
     const to = this.nodes.find(n => n.id === conn.toId);
     if (!from || !to) return false;
     
-    // Connection is visible if source node is visible AND not collapsed, 
-    // and target node is visible
-    return this.isNodeVisible(from) && !from.isCollapsed && this.isNodeVisible(to);
+    return this.isNodeVisible(from) && !from.visual.isCollapsed && this.isNodeVisible(to);
   }
 
-  capturePreviousFunctionId() {
-    this.previousFunctionId = this.selectedNode?.functionId;
+  capturePreviousFunctionId(): void {
+    this.previousFunctionId = this.selectedNode?.data.functionId;
   }
 
-  capturePreviousStandardFieldId() {
-    this.previousStandardFieldId = this.selectedNode?.standardFieldId;
+  capturePreviousStandardFieldId(): void {
+    this.previousStandardFieldId = this.selectedNode?.data.standardFieldId;
   }
 
-  closeFunctionEditor() {
+  closeFunctionEditor(): void {
     this.showFunctionEditor = false;
     this.editingFunction = null;
-    // Rollback if we were in "NEW" mode and didn't save
-    if (this.selectedNode?.functionId === 'NEW') {
-      this.selectedNode.functionId = this.previousFunctionId;
+    if (this.selectedNode?.data.functionId === 'NEW') {
+      this.selectedNode.data.functionId = this.previousFunctionId;
     }
   }
 
-  onFunctionSelect(event: any) {
-    const value = event.target.value;
+  onFunctionSelect(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    const value = selectElement.value;
     if (value === 'NEW') {
       this.openFunctionEditor();
     } else {
@@ -281,34 +327,34 @@ export class ProtocolDesignerComponent {
     }
   }
 
-  onStandardFieldSelect(event: any) {
-    const value = event.target.value;
+  onStandardFieldSelect(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    const value = selectElement.value;
     if (value === 'NEW') {
       this.addStandardField();
-      if (this.selectedNode?.standardFieldId === 'NEW') {
-        this.selectedNode.standardFieldId = this.previousStandardFieldId;
+      if (this.selectedNode?.data.standardFieldId === 'NEW') {
+        this.selectedNode.data.standardFieldId = this.previousStandardFieldId;
       }
     } else {
       this.previousStandardFieldId = value;
     }
   }
 
-  onDragStart(type: DesignerNode['type']) {
+  onDragStart(type: DesignerNode['type']): void {
     this.draggedType = type;
   }
 
-  onDragOver(event: DragEvent) {
+  onDragOver(event: DragEvent): void {
     event.preventDefault();
   }
 
-  onDrop(event: DragEvent) {
+  onDrop(event: DragEvent): void {
     event.preventDefault();
     if (!this.draggedType) return;
 
     const canvas = event.currentTarget as HTMLElement;
     const rect = canvas.getBoundingClientRect();
     
-    // Account for zoom and offset
     let x = (event.clientX - rect.left - this.canvasOffset.x) / this.zoomLevel - 75;
     let y = (event.clientY - rect.top - this.canvasOffset.y) / this.zoomLevel - 35;
 
@@ -318,20 +364,17 @@ export class ProtocolDesignerComponent {
     }
 
     const newNode: DesignerNode = {
-      id: Math.random().toString(36).substr(2, 9),
+      id: Math.random().toString(36).substring(2, 9),
       type: this.draggedType,
-      name: this.draggedType === 'Frame' ? 'New Frame / Subframe' : `New ${this.draggedType}`,
-      description: '',
-      x,
-      y,
-      format: this.draggedType === 'Frame' ? 'BIN' : undefined,
-      frame: (this.draggedType === 'Service' || this.draggedType === 'Frame') ? '' : undefined,
-      syncMode: this.draggedType === 'Service' ? 'Async' : undefined,
-      frameRole: this.draggedType === 'Frame' ? 'Default' : undefined,
-      ackSource: this.draggedType === 'Ack Field' ? 'Manual' : undefined,
-      ackValue: this.draggedType === 'Ack Field' ? '' : undefined,
-      includeSeparator: this.draggedType === 'Ack Field' ? false : undefined,
-      isFunction: this.draggedType === 'Ack Field' ? false : undefined
+      visual: { x, y, isCollapsed: false },
+      data: {
+        name: this.draggedType === 'Frame' ? 'New Frame / Subframe' : `New ${this.draggedType}`,
+        description: '',
+        ...(this.draggedType === 'Service' ? { syncMode: 'Async', frame: '', filter: '' } : {}),
+        ...(this.draggedType === 'Frame' ? { format: 'BIN', frame: '', frameRole: 'Default' } : {}),
+        ...(this.draggedType === 'Field' ? { length: 8, dataType: 'INT' } : {}),
+        ...(this.draggedType === 'Ack Field' ? { length: 8, dataType: 'INT', ackSource: 'Manual', ackValue: '', includeSeparator: false, isFunction: false } : {})
+      }
     };
 
     this.nodes.push(newNode);
@@ -339,15 +382,15 @@ export class ProtocolDesignerComponent {
     this.draggedType = null;
   }
 
-  startNodeDrag(event: MouseEvent, node: DesignerNode) {
+  startNodeDrag(event: MouseEvent, node: DesignerNode): void {
     this.selectedNode = node;
     this.isDraggingNode = true;
-    this.dragStartX = (event.clientX / this.zoomLevel) - node.x;
-    this.dragStartY = (event.clientY / this.zoomLevel) - node.y;
+    this.dragStartX = (event.clientX / this.zoomLevel) - node.visual.x;
+    this.dragStartY = (event.clientY / this.zoomLevel) - node.visual.y;
     event.stopPropagation();
   }
 
-  startPanning(event: MouseEvent) {
+  startPanning(event: MouseEvent): void {
     if (this.isDraggingNode) return;
     this.isPanning = true;
     this.panStart = {
@@ -357,7 +400,7 @@ export class ProtocolDesignerComponent {
   }
 
   @HostListener('window:mousemove', ['$event'])
-  onMouseMove(event: MouseEvent) {
+  onMouseMove(event: MouseEvent): void {
     const canvas = document.querySelector('.designer-canvas') as HTMLElement;
     if (canvas) {
       const rect = canvas.getBoundingClientRect();
@@ -376,8 +419,8 @@ export class ProtocolDesignerComponent {
         y = Math.round(y / this.gridSize) * this.gridSize;
       }
 
-      this.selectedNode.x = x;
-      this.selectedNode.y = y;
+      this.selectedNode.visual.x = x;
+      this.selectedNode.visual.y = y;
       this.markModified();
     } else if (this.isPanning) {
       this.canvasOffset.x = event.clientX - this.panStart.x;
@@ -386,22 +429,22 @@ export class ProtocolDesignerComponent {
   }
 
   @HostListener('window:mouseup')
-  onMouseUp() {
+  onMouseUp(): void {
     this.isDraggingNode = false;
     this.isPanning = false;
   }
 
-  selectNode(node: DesignerNode) {
+  selectNode(node: DesignerNode): void {
     this.selectedNode = node;
   }
 
-  startConnection(node: DesignerNode, port: 'Request' | 'Ack' = 'Request') {
-    if (node.type === 'Field' || node.type === 'Ack Field') return; // Terminal nodes
+  startConnection(node: DesignerNode, port: 'Request' | 'Ack' = 'Request'): void {
+    if (node.type === 'Field' || node.type === 'Ack Field') return;
     this.connectingSourceNodeId = node.id;
     this.connectingSourcePort = port;
   }
 
-  completeConnection(targetNode: DesignerNode) {
+  completeConnection(targetNode: DesignerNode): void {
     if (!this.connectingSourceNodeId || this.connectingSourceNodeId === targetNode.id) {
       this.connectingSourceNodeId = null;
       return;
@@ -410,12 +453,10 @@ export class ProtocolDesignerComponent {
     const sourceNode = this.nodes.find(n => n.id === this.connectingSourceNodeId);
     if (!sourceNode) return;
 
-    // Rules
     let isValid = false;
     if (sourceNode.type === 'Root' && targetNode.type === 'Service') isValid = true;
     
     if (sourceNode.type === 'Service' && targetNode.type === 'Frame') {
-      // Check if this specific port already has a connection
       const portHasConnection = this.connections.some(c => c.fromId === sourceNode.id && c.fromPort === this.connectingSourcePort);
       
       if (portHasConnection) {
@@ -423,21 +464,19 @@ export class ProtocolDesignerComponent {
         isValid = false;
       } else {
         isValid = true;
-        // Assign frameRole based on the chosen port
-        targetNode.frameRole = this.connectingSourcePort === 'Request' ? 'Request' : 'Ack';
+        targetNode.data.frameRole = this.connectingSourcePort === 'Request' ? 'Request' : 'Ack';
       }
     }
     
     if (sourceNode.type === 'Frame' && (targetNode.type === 'Frame' || targetNode.type === 'Field' || targetNode.type === 'Ack Field')) isValid = true;
 
-    // Additional rule: Service only receives from Root
     if (targetNode.type === 'Service' && sourceNode.type !== 'Root') isValid = false;
 
     if (isValid) {
       const exists = this.connections.some(c => c.fromId === sourceNode.id && c.toId === targetNode.id && c.fromPort === this.connectingSourcePort);
       if (!exists) {
         this.connections.push({
-          id: Math.random().toString(36).substr(2, 9),
+          id: Math.random().toString(36).substring(2, 9),
           fromId: sourceNode.id,
           toId: targetNode.id,
           fromPort: this.connectingSourcePort
@@ -452,24 +491,23 @@ export class ProtocolDesignerComponent {
     this.connectingSourcePort = 'Request';
   }
 
-  getConnectionCoords(conn: Connection) {
+  getConnectionCoords(conn: Connection): { x1: number; y1: number; x2: number; y2: number } {
     const from = this.nodes.find(n => n.id === conn.fromId);
     const to = this.nodes.find(n => n.id === conn.toId);
     if (!from || !to) return { x1: 0, y1: 0, x2: 0, y2: 0 };
 
-    let y1Offset = 40; // Default center (80px / 2)
+    let y1Offset = 40;
     
-    // Specialized ports only for Service nodes
     if (from.type === 'Service') {
       if (conn.fromPort === 'Request') y1Offset = 20;
       else if (conn.fromPort === 'Ack') y1Offset = 60;
     }
 
     return {
-      x1: from.x + 180, // Right edge
-      y1: from.y + y1Offset,
-      x2: to.x,         // Left edge
-      y2: to.y + 40     // Always center left
+      x1: from.visual.x + 180,
+      y1: from.visual.y + y1Offset,
+      x2: to.visual.x,
+      y2: to.visual.y + 40
     };
   }
 
@@ -499,7 +537,7 @@ export class ProtocolDesignerComponent {
     }
   }
 
-  getTempConnectionCoords() {
+  getTempConnectionCoords(): { x1: number; y1: number; x2: number; y2: number } | null {
     if (!this.connectingSourceNodeId) return null;
     const from = this.nodes.find(n => n.id === this.connectingSourceNodeId);
     if (!from) return null;
@@ -511,35 +549,53 @@ export class ProtocolDesignerComponent {
     }
 
     return {
-      x1: from.x + 180,
-      y1: from.y + y1Offset,
+      x1: from.visual.x + 180,
+      y1: from.visual.y + y1Offset,
       x2: this.mousePosition.x,
       y2: this.mousePosition.y
     };
   }
 
-  deleteNode(nodeId: string) {
+  deleteNode(nodeId: string): void {
     this.nodes = this.nodes.filter(n => n.id !== nodeId);
     this.connections = this.connections.filter(c => c.fromId !== nodeId && c.toId !== nodeId);
     if (this.selectedNode?.id === nodeId) this.selectedNode = null;
     this.markModified();
   }
 
-  deleteConnection(connId: string) {
+  deleteConnection(connId: string): void {
     this.connections = this.connections.filter(c => c.id !== connId);
     this.markModified();
   }
 
-  markModified() {
+  markModified(): void {
     this.isModified = true;
   }
 
-  saveChanges() {
-    console.log('Saving changes...', { nodes: this.nodes, connections: this.connections });
-    this.isModified = false;
+  saveChanges(): void {
+    if (!this.versionId) {
+      console.warn('Cannot save to database: versionId is missing.');
+      this.isModified = false;
+      return;
+    }
+
+    const designData = {
+      nodes: this.nodes,
+      connections: this.connections
+    };
+
+    this.apiService.saveProtocolDesign(this.versionId, designData).subscribe({
+      next: () => {
+        this.isModified = false;
+        alert('Design saved successfully');
+      },
+      error: () => {
+        alert('Failed to save design to database.');
+      }
+    });
   }
 
-  exportProtocol() {
+  exportProtocol(): void {
     const data = {
       protocolName: this.protocolName,
       version: this.version,
@@ -553,33 +609,32 @@ export class ProtocolDesignerComponent {
     link.download = `${this.protocolName.replace(/\s+/g, '_')}_v${this.version}.json`;
     link.click();
     window.URL.revokeObjectURL(url);
-    console.log('Protocol exported successfully');
   }
 
-  importProtocol() {
+  importProtocol(): void {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.json';
-    input.onchange = (event: any) => {
-      const file = event.target.files[0];
+    input.onchange = (event: Event): void => {
+      const target = event.target as HTMLInputElement;
+      const file = target.files?.[0];
       if (!file) return;
 
       const reader = new FileReader();
-      reader.onload = (e: any) => {
+      reader.onload = (e: ProgressEvent<FileReader>): void => {
         try {
-          const data = JSON.parse(e.target.result);
+          const result = e.target?.result as string;
+          const data = JSON.parse(result);
           if (data.nodes && data.connections) {
             this.nodes = data.nodes;
             this.connections = data.connections;
             this.protocolName = data.protocolName || this.protocolName;
             this.version = data.version || this.version;
             this.markModified();
-            console.log('Protocol imported successfully');
           } else {
             alert('Invalid protocol design file');
           }
-        } catch (err) {
-          console.error('Error parsing protocol file', err);
+        } catch {
           alert('Error importing protocol design');
         }
       };
@@ -588,7 +643,7 @@ export class ProtocolDesignerComponent {
     input.click();
   }
 
-  exitDesigner() {
+  exitDesigner(): void {
     if (this.isModified) {
       if (confirm('You have unsaved changes. Do you want to save before leaving?')) {
         this.saveChanges();
@@ -602,7 +657,7 @@ export class ProtocolDesignerComponent {
   }
 
   @HostListener('window:beforeunload', ['$event'])
-  onBeforeUnload(event: BeforeUnloadEvent) {
+  onBeforeUnload(event: BeforeUnloadEvent): string | undefined {
     if (this.isModified) {
       event.returnValue = 'You have unsaved changes.';
       return 'You have unsaved changes.';
@@ -610,16 +665,15 @@ export class ProtocolDesignerComponent {
     return undefined;
   }
 
-  // View Controls
-  zoomIn() {
+  zoomIn(): void {
     this.zoomLevel = Math.min(this.zoomLevel + 0.1, 2.0);
   }
 
-  zoomOut() {
+  zoomOut(): void {
     this.zoomLevel = Math.max(this.zoomLevel - 0.1, 0.2);
   }
 
-  fitScreen() {
+  fitScreen(): void {
     if (this.nodes.length === 0) {
       this.zoomLevel = 1.0;
       this.canvasOffset = { x: 0, y: 0 };
@@ -627,10 +681,10 @@ export class ProtocolDesignerComponent {
     }
 
     const padding = 50;
-    const minX = Math.min(...this.nodes.map(n => n.x));
-    const minY = Math.min(...this.nodes.map(n => n.y));
-    const maxX = Math.max(...this.nodes.map(n => n.x + 180));
-    const maxY = Math.max(...this.nodes.map(n => n.y + 80));
+    const minX = Math.min(...this.nodes.map(n => n.visual.x));
+    const minY = Math.min(...this.nodes.map(n => n.visual.y));
+    const maxX = Math.max(...this.nodes.map(n => n.visual.x + 180));
+    const maxY = Math.max(...this.nodes.map(n => n.visual.y + 80));
 
     const contentWidth = maxX - minX + padding * 2;
     const contentHeight = maxY - minY + padding * 2;
@@ -647,7 +701,7 @@ export class ProtocolDesignerComponent {
     }
   }
 
-  toggleGrid() {
+  toggleGrid(): void {
     this.isSnapGridEnabled = !this.isSnapGridEnabled;
   }
 

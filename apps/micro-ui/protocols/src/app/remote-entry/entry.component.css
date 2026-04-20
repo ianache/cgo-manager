@@ -34,6 +34,55 @@
   margin-bottom: 24px;
 }
 
+.view-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.view-toggle {
+  display: flex;
+  background: var(--surface-low);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--surface-highest);
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--secondary-grey);
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.toggle-btn:hover {
+  color: var(--inverse-surface);
+}
+
+.toggle-btn.active {
+  background: var(--surface-lowest);
+  color: var(--primary-red);
+  box-shadow: var(--shadow-sm);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.card-body-text {
+  color: var(--secondary-grey);
+  line-height: 1.6;
+}
+
 .breadcrumb {
   display: flex;
   align-items: center;
@@ -86,8 +135,93 @@
 
 .btn-secondary { background: var(--surface-highest); color: var(--inverse-surface); }
 .btn-tertiary { background: transparent; color: var(--primary-red); }
+.btn-danger { background: #dc3545; color: white; }
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal-container {
+  background: var(--surface-low);
+  border-radius: var(--radius-md);
+  padding: 32px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--surface-highest);
+  animation: modalIn 0.3s ease-out;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-header {
+  margin-bottom: 24px;
+}
+
+.modal-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--inverse-surface);
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--secondary-grey);
+}
+
+.form-group input, 
+.form-group textarea, 
+.form-group select {
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--surface-highest);
+  background: var(--surface-medium);
+  color: var(--inverse-surface);
+  font-family: inherit;
+}
+
+.form-group input:focus, 
+.form-group textarea:focus, 
+.form-group select:focus {
+  outline: 2px solid var(--primary-red-alpha);
+  border-color: var(--primary-red);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 32px;
 }

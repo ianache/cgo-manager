@@ -1,0 +1,65 @@
+:host {
+  display: inline-block;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+}
+
+.radio-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 0;
+}
+
+.radio-circle {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e1e3e4;
+  border-radius: 50%;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+}
+
+.radio-dot {
+  width: 0;
+  height: 0;
+  background-color: #bb0012;
+  border-radius: 50%;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── States ─────────────────────────────────────────── */
+
+:host:hover:not(.cgo-radio-disabled):not(.cgo-radio-checked) .radio-circle {
+  border-color: #b8c9d3;
+}
+
+:host.cgo-radio-checked .radio-circle {
+  border-color: #bb0012;
+}
+
+:host.cgo-radio-checked .radio-dot {
+  width: 10px;
+  height: 10px;
+}
+
+:host.cgo-radio-disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.radio-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #191c1d;
+}
+
+:host.cgo-radio-disabled .radio-label {
+  color: #506169;
+}

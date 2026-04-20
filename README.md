@@ -73,3 +73,13 @@ npx nx serve shell --devRemotes=dashboard,tenants,tracking,config
 ```
 npm run start:all
 ```
+
+# Storybook
+
+```
+npx nx storybook shared-ui-kit --watch
+```
+o
+```
+npm run storybook
+```

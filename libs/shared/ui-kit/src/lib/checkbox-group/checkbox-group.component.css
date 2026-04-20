@@ -1,0 +1,27 @@
+.cgo-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.cgo-checkbox-group__header {
+  padding-bottom: 10px;
+  margin-bottom: 4px;
+  border-bottom: none;
+}
+
+.cgo-checkbox-group__items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-left: 30px;
+}
+
+/* Indent adjusts with size */
+:host-context(.cgo-checkbox--sm) .cgo-checkbox-group__items { padding-left: 26px; }
+:host-context(.cgo-checkbox--lg) .cgo-checkbox-group__items { padding-left: 34px; }
+
+.cgo-checkbox-group--disabled {
+  opacity: 0.38;
+  pointer-events: none;
+}

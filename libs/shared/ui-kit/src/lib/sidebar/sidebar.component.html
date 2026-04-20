@@ -6,13 +6,30 @@
   </div>
 
   <nav class="nav-list">
-    <a *ngFor="let item of navItems" 
-       [routerLink]="item.path" 
-       routerLinkActive="active"
-       class="nav-item">
-      <span class="nav-icon">{{ item.icon }}</span>
-      <span class="nav-label">{{ item.label }}</span>
-    </a>
+    <ng-container *ngFor="let item of navItems">
+      <div *ngIf="item.children" class="nav-group">
+        <div class="nav-item collapsable" (click)="toggleSubmenu(item.label)">
+          <span class="nav-icon">{{ item.icon }}</span>
+          <span class="nav-label">{{ item.label }}</span>
+          <span class="chevron" [class.rotated]="isExpanded(item.label)">▾</span>
+        </div>
+        <div class="submenu" [class.show]="isExpanded(item.label)">
+          <a *ngFor="let child of item.children" 
+             [routerLink]="child.path" 
+             routerLinkActive="active"
+             class="submenu-item">
+            <span class="submenu-label">{{ child.label }}</span>
+          </a>
+        </div>
+      </div>
+      <a *ngIf="!item.children"
+         [routerLink]="item.path" 
+         routerLinkActive="active"
+         class="nav-item">
+        <span class="nav-icon">{{ item.icon }}</span>
+        <span class="nav-label">{{ item.label }}</span>
+      </a>
+    </ng-container>
   </nav>
 
   <div class="footer">

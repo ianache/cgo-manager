@@ -5,7 +5,7 @@ import { ApiService, Metric } from '@cgomanager/shared-data-access';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, MetricCardComponent, KpiCardComponent, BaseTableComponent, FormHeaderComponent],
+  imports: [CommonModule, KpiCardComponent, BaseTableComponent, FormHeaderComponent],
   selector: 'app-dashboard-entry',
   templateUrl: './entry.component.html',
   styleUrl: './entry.component.css'

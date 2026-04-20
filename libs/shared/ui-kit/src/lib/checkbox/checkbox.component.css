@@ -1,0 +1,146 @@
+/* ── Design tokens ───────────────────────────────────────── */
+:host {
+  --cb-primary:       #bb0012;
+  --cb-primary-dim:   #93000b;
+  --cb-on-primary:    #ffffff;
+  --cb-border:        #506169;
+  --cb-border-hover:  #191c1d;
+  --cb-surface:       #ffffff;
+  --cb-disabled-bg:   #e1e3e4;
+  --cb-disabled-fg:   #506169;
+  --cb-error:         #ba1a1a;
+  --cb-focus-ring:    rgba(187, 0, 18, 0.24);
+  --cb-label:         #191c1d;
+  --cb-helper:        #506169;
+  display: inline-block;
+}
+
+/* ── Root label ──────────────────────────────────────────── */
+.cgo-checkbox {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+.cgo-checkbox--disabled { cursor: not-allowed; opacity: 0.38; }
+
+/* ── Hidden native input ─────────────────────────────────── */
+.cgo-checkbox__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* ── Visual box ──────────────────────────────────────────── */
+.cgo-checkbox__box {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  border: 2px solid var(--cb-border);
+  background: var(--cb-surface);
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  /* Size md default */
+  width: 20px;
+  height: 20px;
+}
+
+/* Sizes */
+.cgo-checkbox--sm .cgo-checkbox__box { width: 16px; height: 16px; }
+.cgo-checkbox--lg .cgo-checkbox__box { width: 24px; height: 24px; }
+
+/* States */
+.cgo-checkbox__box--checked,
+.cgo-checkbox__box--indeterminate {
+  background: var(--cb-primary);
+  border-color: var(--cb-primary);
+}
+
+/* Hover (via parent label hover, not disabled) */
+.cgo-checkbox:not(.cgo-checkbox--disabled):hover .cgo-checkbox__box--unchecked {
+  border-color: var(--cb-border-hover);
+  background: #f3f4f5;
+}
+.cgo-checkbox:not(.cgo-checkbox--disabled):hover .cgo-checkbox__box--checked,
+.cgo-checkbox:not(.cgo-checkbox--disabled):hover .cgo-checkbox__box--indeterminate {
+  background: var(--cb-primary-dim);
+  border-color: var(--cb-primary-dim);
+}
+
+/* Focus (keyboard navigation via :focus-within) */
+.cgo-checkbox__input:focus-visible ~ .cgo-checkbox__box,
+.cgo-checkbox:focus-within .cgo-checkbox__box {
+  outline: 2px solid var(--cb-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--cb-focus-ring);
+}
+
+/* Error border */
+.cgo-checkbox--error .cgo-checkbox__box--unchecked {
+  border-color: var(--cb-error);
+}
+.cgo-checkbox--error .cgo-checkbox__box--checked,
+.cgo-checkbox--error .cgo-checkbox__box--indeterminate {
+  background: var(--cb-error);
+  border-color: var(--cb-error);
+}
+
+/* ── Checkmark / dash icon ───────────────────────────────── */
+.cgo-checkbox__icon {
+  display: block;
+  width: 12px;
+  height: 10px;
+  pointer-events: none;
+}
+.cgo-checkbox__box--indeterminate .cgo-checkbox__icon {
+  height: 2px;
+}
+
+/* Adjust icon size per checkbox size */
+.cgo-checkbox--sm .cgo-checkbox__icon { width: 9px; height: 8px; }
+.cgo-checkbox--sm .cgo-checkbox__box--indeterminate .cgo-checkbox__icon { height: 2px; }
+.cgo-checkbox--lg .cgo-checkbox__icon { width: 14px; height: 12px; }
+.cgo-checkbox--lg .cgo-checkbox__box--indeterminate .cgo-checkbox__icon { height: 2px; }
+
+/* ── Label content area ──────────────────────────────────── */
+.cgo-checkbox__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 1px;
+}
+
+.cgo-checkbox__label {
+  font-family: Inter, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--cb-label);
+  line-height: 1.4;
+}
+.cgo-checkbox--sm .cgo-checkbox__label { font-size: 0.8rem; }
+.cgo-checkbox--lg .cgo-checkbox__label { font-size: 0.95rem; }
+
+.cgo-checkbox--disabled .cgo-checkbox__label { color: var(--cb-helper); }
+
+.cgo-checkbox__helper {
+  font-family: Inter, sans-serif;
+  font-size: 0.75rem;
+  color: var(--cb-helper);
+  line-height: 1.4;
+}
+
+.cgo-checkbox__error {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: Inter, sans-serif;
+  font-size: 0.75rem;
+  color: var(--cb-error);
+  line-height: 1.4;
+}
+.cgo-checkbox__error .material-symbols-outlined { font-size: 14px; }

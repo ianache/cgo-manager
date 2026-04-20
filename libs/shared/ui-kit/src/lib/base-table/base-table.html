@@ -15,8 +15,10 @@
         <tr>
           @for (col of columns; track col.key) {
             <td>
-              @if (col.key === 'status' && statusTemplate) {
-                <ng-container [ngTemplateOutlet]="statusTemplate" [ngTemplateOutletContext]="{ $implicit: row[col.key], row: row }"></ng-container>
+              @if (getTemplate(col.key)) {
+                <ng-container [ngTemplateOutlet]="getTemplate(col.key)!" [ngTemplateOutletContext]="{ $implicit: row[col.key], row: row }"></ng-container>
+              } @else if (col.type === 'checkbox') {
+                <input type="checkbox" [(ngModel)]="row[col.key]" class="cgo-checkbox">
               } @else if (col.type === 'image') {
                 @if (getCellValue(row, col.key)) {
                   <img class="cell-logo" [src]="getCellValue(row, col.key)" alt="logo" />

@@ -114,3 +114,12 @@ td {
 .actions-cell-center {
   justify-content: center !important;
 }
+
+.cgo-checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-xs);
+  border: 2px solid var(--surface-highest);
+  cursor: pointer;
+  accent-color: var(--primary-red);
+}

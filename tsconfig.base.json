@@ -38,6 +38,9 @@
       ],
       "protocols/Routes": [
         "apps/micro-ui/protocols/src/app/remote-entry/entry.routes.ts"
+      ],
+      "security/Routes": [
+        "apps/micro-ui/security/src/app/remote-entry/entry.routes.ts"
       ]
     }
   },

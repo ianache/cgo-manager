@@ -1,0 +1,28 @@
+<div class="role-card cloud-shadow" 
+     [class.selected]="isSelected" 
+     (click)="selectRole.emit()">
+  <div class="card-header">
+    <div class="icon-container" [style.background]="role.iconBg || null">
+      <span class="material-symbols-outlined role-icon">{{ role.icon }}</span>
+    </div>
+    <div class="selection-indicator">
+      <cgo-checkbox
+        [checked]="isSelected"
+        (click)="$event.stopPropagation()"
+        class="card-role-checkbox">
+      </cgo-checkbox>
+    </div>
+  </div>
+  
+  <div class="card-body">
+    <h3 class="role-title">{{ role.name }}</h3>
+    <p class="role-description">{{ role.description }}</p>
+  </div>
+  
+  <div class="card-footer">
+    <div class="user-badge">
+      <span class="material-symbols-outlined badge-icon">group</span>
+      <span class="badge-text">{{ role.userCount }} Users</span>
+    </div>
+  </div>
+</div>

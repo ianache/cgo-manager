@@ -21,6 +21,7 @@ const config: ModuleFederationConfig = {
     'config',
     'reporting',
     'protocols',
+    'security',
   ],
 };
 

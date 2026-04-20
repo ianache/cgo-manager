@@ -1,0 +1,52 @@
+<label
+  class="cgo-checkbox"
+  [class]="'cgo-checkbox--' + size"
+  [class.cgo-checkbox--disabled]="disabled"
+  [class.cgo-checkbox--error]="hasError"
+  [attr.aria-disabled]="disabled || null"
+  [for]="uid">
+
+  <!-- Hidden native input (accessibility + keyboard) -->
+  <input
+    class="cgo-checkbox__input"
+    type="checkbox"
+    [id]="uid"
+    [checked]="checked"
+    [disabled]="disabled"
+    [required]="required"
+    [attr.aria-checked]="state === 'indeterminate' ? 'mixed' : checked"
+    [attr.aria-invalid]="hasError || null"
+    (change)="toggle()"
+    (click)="$event.stopPropagation()" />
+
+  <!-- Custom visual box -->
+  <span class="cgo-checkbox__box" [class]="'cgo-checkbox__box--' + state" aria-hidden="true">
+    @if (state === 'checked') {
+      <svg class="cgo-checkbox__icon" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    }
+    @if (state === 'indeterminate') {
+      <svg class="cgo-checkbox__icon" viewBox="0 0 12 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 1H11" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    }
+  </span>
+
+  <!-- Label & helper text -->
+  @if (label || helperText || errorMessage) {
+    <span class="cgo-checkbox__content">
+      @if (label) {
+        <span class="cgo-checkbox__label">{{ label }}</span>
+      }
+      @if (errorMessage) {
+        <span class="cgo-checkbox__error">
+          <span class="material-symbols-outlined">error</span>
+          {{ errorMessage }}
+        </span>
+      } @else if (helperText) {
+        <span class="cgo-checkbox__helper">{{ helperText }}</span>
+      }
+    </span>
+  }
+</label>

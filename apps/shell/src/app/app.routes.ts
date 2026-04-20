@@ -4,6 +4,10 @@ import { authGuard } from '@cgomanager/shared-data-access';
 
 export const appRoutes: Route[] = [
   {
+    path: 'security',
+    loadChildren: () => import('security/Routes').then((m) => m!.remoteRoutes),
+  },
+  {
     path: 'protocols',
     loadChildren: () => import('protocols/Routes').then((m) => m!.remoteRoutes),
   },

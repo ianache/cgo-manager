@@ -11,13 +11,14 @@ import { BaseTableComponent } from '../base-table/base-table';
 })
 export class PaginatedTableComponent implements OnInit, OnChanges {
   protected readonly Math = Math;
-  @Input() columns: { key: string; label: string; type?: 'image' | 'link' | 'badges' }[] = [];
+  @Input() columns: { key: string; label: string; type?: 'image' | 'link' | 'badges' | 'checkbox' | 'custom' }[] = [];
   @Input() data: any[] = [];
   @Input() pageSize = 10;
   @Input() showActions = false;
 
   @ContentChild('actionsTemplate') actionsTemplate?: TemplateRef<any>;
-  @ContentChild('statusTemplate') statusTemplate?: TemplateRef<any>;
+  
+  @Input() customTemplates: { [key: string]: TemplateRef<any> } = {};
 
   currentPage = 1;
   totalPages = 1;

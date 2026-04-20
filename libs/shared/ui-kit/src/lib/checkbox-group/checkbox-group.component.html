@@ -1,0 +1,30 @@
+<div class="cgo-checkbox-group" [class.cgo-checkbox-group--disabled]="disabled">
+
+  <!-- Select All header -->
+  <div class="cgo-checkbox-group__header">
+    <cgo-checkbox
+      [label]="label || 'Select All'"
+      [helperText]="helperText"
+      [checked]="allChecked"
+      [indeterminate]="someChecked"
+      [disabled]="disabled"
+      [size]="size"
+      (checkedChange)="toggleAll($event)">
+    </cgo-checkbox>
+  </div>
+
+  <!-- Child items -->
+  <div class="cgo-checkbox-group__items">
+    @for (item of items; track item.id) {
+      <cgo-checkbox
+        class="cgo-checkbox-group__item"
+        [label]="item.label"
+        [helperText]="item.helperText || ''"
+        [checked]="item.checked || false"
+        [disabled]="disabled || !!item.disabled"
+        [size]="size"
+        (checkedChange)="toggleItem(item.id, $event)">
+      </cgo-checkbox>
+    }
+  </div>
+</div>

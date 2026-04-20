@@ -9,3 +9,10 @@ export * from './lib/form-header/form-header';
 export * from './lib/paginated-table/paginated-table';
 
 export * from './lib/generic-card/generic-card';
+export * from './lib/checkbox/checkbox.component';
+export * from './lib/checkbox-group/checkbox-group.component';
+export * from './lib/checkbox-catalog/checkbox-catalog.component';
+export * from './lib/card-role/card-role';
+export * from './lib/radio-button/radio-button';
+export * from './lib/radio-button/radio-group';
+export * from './lib/radio-button/radio-catalog';

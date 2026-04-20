@@ -3,23 +3,249 @@
     <h2 class="page-title">Tenant Management</h2>
     <p class="page-subtitle">Manage satellite tracking permissions and white-label branding for your clients.</p>
   </div>
-  <cgo-button variant="primary">+ ADD NEW TENANT</cgo-button>
+  <cgo-button variant="primary" (click)="addTenant()">+ ADD NEW TENANT</cgo-button>
 </div>
 
-<div class="content-body">
-  <cgo-base-table [columns]="columns" [data]="tenants" [showActions]="true">
-    <ng-template #statusTemplate let-status>
-      <div class="status-cell">
-        <span class="status-dot" [class.active]="status === 'Active'"></span>
-        {{ status }}
+@if (!showBranding) {
+  <div class="content-body">
+    <cgo-paginated-table 
+      [columns]="columns" 
+      [data]="tenants" 
+      [showActions]="true" 
+      [pageSize]="10"
+      [customTemplates]="getTenantTemplates(statusTpl)">
+      
+      <ng-template #statusTpl let-status>
+        <div class="status-cell">
+          <span class="status-dot" [class.active]="status === 'ACTIVE'"></span>
+          {{ status }}
+        </div>
+      </ng-template>
+      
+      <ng-template #actionsTemplate let-row>
+        <div class="table-actions">
+          <button class="btn btn-secondary" (click)="editTenant(row)">Edit</button>
+          <button class="btn btn-danger" (click)="deleteTenant(row.id)">Delete</button>
+          <button class="btn btn-tertiary" (click)="openBranding(row)">Branding</button>
+        </div>
+      </ng-template>
+    </cgo-paginated-table>
+  </div>
+} @else {
+  <div class="branding-view">
+    <div class="view-header">
+      <div class="breadcrumb">
+        <span class="crumb link" (click)="closeBranding()">Tenants</span>
+        <span class="separator">/</span>
+        <span class="crumb">{{ selectedTenantForBranding?.name }} Branding</span>
       </div>
-    </ng-template>
-    
-    <ng-template #actionsTemplate let-row>
-      <div class="table-actions">
-        <cgo-button variant="tertiary">View</cgo-button>
-        <cgo-button variant="secondary">Branding</cgo-button>
+      <div class="view-actions">
+        <button class="btn btn-secondary" (click)="closeBranding()">Cancel</button>
+        <button class="btn btn-primary" (click)="saveBranding()">Save Configuration</button>
       </div>
-    </ng-template>
-  </cgo-base-table>
-</div>
+    </div>
+
+    <div class="branding-grid">
+      <div class="config-panel">
+        <section class="config-section">
+          <div class="section-header">
+            <h3>Identity & Assets</h3>
+            <p>Configure visual anchors for the tenant's interface.</p>
+          </div>
+          
+          <div class="field-grid">
+            <div class="field-group">
+              <label>Main Brand Logo</label>
+              <div class="upload-area">
+                <span class="material-symbols-outlined">upload_file</span>
+                <span>Drop logo or browse</span>
+                <input type="text" [(ngModel)]="brandingConfig.logo" placeholder="URL to logo">
+              </div>
+            </div>
+            <div class="field-group">
+              <label>Favicon (32x32)</label>
+              <div class="upload-area icon-area">
+                <span class="material-symbols-outlined">add_photo_alternate</span>
+                <input type="text" [(ngModel)]="brandingConfig.favicon" placeholder="URL to favicon">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="config-section">
+          <div class="section-header">
+            <h3>Color Orchestration</h3>
+          </div>
+          <div class="color-grid">
+            <div class="color-field">
+              <label>Primary Accent</label>
+              <div class="color-input">
+                <div class="color-preview" [style.background]="brandingConfig.primaryColor"></div>
+                <input type="text" [(ngModel)]="brandingConfig.primaryColor">
+              </div>
+            </div>
+            <div class="color-field">
+              <label>Secondary Surface</label>
+              <div class="color-input">
+                <div class="color-preview" [style.background]="brandingConfig.secondaryColor"></div>
+                <input type="text" [(ngModel)]="brandingConfig.secondaryColor">
+              </div>
+            </div>
+            <div class="color-field">
+              <label>Base Background</label>
+              <div class="color-input">
+                <div class="color-preview" [style.background]="brandingConfig.backgroundColor"></div>
+                <input type="text" [(ngModel)]="brandingConfig.backgroundColor">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="config-section">
+          <div class="section-header-row">
+            <div class="section-info">
+              <h3>Semantic Labeling</h3>
+              <p>Customize terms used across the platform for this tenant.</p>
+            </div>
+            
+            <div class="search-filter-row">
+              <div class="search-input-wrapper">
+                <span class="material-symbols-outlined search-icon">search</span>
+                <input type="text" [(ngModel)]="labelSearchQuery" placeholder="Search labels...">
+              </div>
+              
+              <div class="module-selector">
+                <select [(ngModel)]="selectedModule">
+                  <option value="All">All Modules</option>
+                  @for (mod of availableModules; track mod) {
+                    <option [value]="mod">{{ mod }}</option>
+                  }
+                </select>
+              </div>
+
+              <div class="action-buttons">
+                <button class="btn btn-tertiary" (click)="addLanguage()">+ Add Language</button>
+                <button class="btn btn-ai" (click)="aiTranslateAll()" [disabled]="isTranslating">
+                  <span class="material-symbols-outlined" [class.spinning]="isTranslating">
+                    {{ isTranslating ? 'sync' : 'auto_awesome' }}
+                  </span>
+                  {{ isTranslating ? 'TRANSLATING...' : 'AI TRANSLATE ALL' }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="label-table-container">
+            <!-- For semantic labels, we need to pass a template per language -->
+            <cgo-paginated-table 
+              [columns]="labelColumns" 
+              [data]="filteredLabels" 
+              [pageSize]="10"
+              [showActions]="false"
+              [customTemplates]="{
+                'en': enTpl,
+                'es': esTpl,
+                'fr': frTpl,
+                'pt': ptTpl
+              }">
+              
+              <ng-template #enTpl let-value let-row="row">
+                <div class="inline-edit-row">
+                  <input type="text" [(ngModel)]="row.en.singular" placeholder="Singular">
+                  <input type="text" [(ngModel)]="row.en.plural" placeholder="Plural">
+                </div>
+              </ng-template>
+
+              <ng-template #esTpl let-value let-row="row">
+                <div class="inline-edit-row">
+                  <input type="text" [(ngModel)]="row.es.singular" placeholder="Singular">
+                  <input type="text" [(ngModel)]="row.es.plural" placeholder="Plural">
+                </div>
+              </ng-template>
+
+              <ng-template #frTpl let-value let-row="row">
+                <div class="inline-edit-row">
+                  <input type="text" [(ngModel)]="row.fr.singular" placeholder="Singular">
+                  <input type="text" [(ngModel)]="row.fr.plural" placeholder="Plural">
+                </div>
+              </ng-template>
+
+              <ng-template #ptTpl let-value let-row="row">
+                <div class="inline-edit-row">
+                  <input type="text" [(ngModel)]="row.pt.singular" placeholder="Singular">
+                  <input type="text" [(ngModel)]="row.pt.plural" placeholder="Plural">
+                </div>
+              </ng-template>
+
+            </cgo-paginated-table>
+          </div>
+        </section>
+      </div>
+
+      <aside class="preview-panel">
+        <div class="preview-header">
+          <label>Real-time Preview</label>
+          <div class="preview-controls">
+            <span class="material-symbols-outlined active">desktop_windows</span>
+            <span class="material-symbols-outlined">smartphone</span>
+          </div>
+        </div>
+        <div class="mockup-container" [style.background]="brandingConfig.backgroundColor">
+          <div class="mockup-top-bar" [style.background]="brandingConfig.secondaryColor"></div>
+          <div class="mockup-content">
+            <div class="mockup-sidebar">
+              <div class="sidebar-item active" [style.color]="brandingConfig.primaryColor">Dashboard</div>
+              <div class="sidebar-item">Vehicles</div>
+              <div class="sidebar-item">Mission</div>
+            </div>
+            <div class="mockup-main">
+              <div class="mockup-card">
+                <div class="card-bar" [style.background]="brandingConfig.primaryColor"></div>
+                <div class="card-text">42 Active Units</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+}
+
+<!-- Modal -->
+@if (showModal && editingTenant) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ editingTenant.id !== undefined ? 'Edit' : 'New' }} Tenant</h3>
+      </div>
+      <div class="modal-form">
+        <div class="form-group">
+          <label for="t-name">Name</label>
+          <input id="t-name" type="text" [(ngModel)]="editingTenant.name" placeholder="Tenant Name">
+        </div>
+        
+        <div class="form-group">
+          <label for="t-status">Status</label>
+          <select id="t-status" [(ngModel)]="editingTenant.status">
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="INACTIVE">INACTIVE</option>
+            <option value="SUSPENDED">SUSPENDED</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="t-plan">Subscription Plan</label>
+          <select id="t-plan" [(ngModel)]="editingTenant.subscriptionPlan">
+            @for (plan of plans; track plan.id) {
+              <option [value]="plan.id">{{ plan.name }}</option>
+            }
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+        <button class="btn btn-primary" (click)="saveTenant()">Save</button>
+      </div>
+    </div>
+  </div>
+}

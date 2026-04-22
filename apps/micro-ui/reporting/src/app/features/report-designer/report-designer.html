@@ -1,23 +1,36 @@
 <div class="designer-container">
-  <header>
-    <h1>Report Designer</h1>
-    <div class="stepper">
-      <div [class.active]="currentStep() >= 1">1. Concept</div>
-      <div [class.active]="currentStep() >= 2">2. Data</div>
-      <div [class.active]="currentStep() >= 3">3. Delivery</div>
-    </div>
-  </header>
+  <cgo-form-header 
+    [title]="reportId() ? 'Edit Report' : 'Report Designer'" 
+    [description]="reportId() ? 'Modify the configuration of your existing report.' : 'Follow the steps to create a new operational report definition.'">
+  </cgo-form-header>
 
-  <main [formGroup]="reportForm">
+  <div class="designer-stepper cloud-shadow">
+    <div class="step" [class.active]="currentStep() === 1" [class.completed]="currentStep() > 1">
+      <span class="step-num">{{ currentStep() > 1 ? '✓' : '1' }}</span>
+      <span class="step-label">Concept</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step" [class.active]="currentStep() === 2" [class.completed]="currentStep() > 2">
+      <span class="step-num">{{ currentStep() > 2 ? '✓' : '2' }}</span>
+      <span class="step-label">Data</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step" [class.active]="currentStep() === 3">
+      <span class="step-num">3</span>
+      <span class="step-label">Delivery</span>
+    </div>
+  </div>
+
+  <main [formGroup]="reportForm" class="designer-main cloud-shadow">
     <!-- Step 1: Concept -->
     <section *ngIf="currentStep() === 1" class="step-content">
-      <div class="form-group">
-        <label>Report Name</label>
-        <input type="text" formControlName="name" placeholder="e.g. Monthly Fuel Usage">
+      <div class="form-section">
+        <label class="label-sm">Report Name</label>
+        <input type="text" formControlName="name" placeholder="e.g. Monthly Fuel Usage" class="cgo-input">
       </div>
-      <div class="form-group">
-        <label>Data Cube</label>
-        <select formControlName="cubeName">
+      <div class="form-section">
+        <label class="label-sm">Data Source (Cube)</label>
+        <select formControlName="cubeName" class="cgo-select">
           <option value="">Select a Cube</option>
           <option *ngFor="let cube of cubes()" [value]="cube">{{cube}}</option>
         </select>
@@ -26,53 +39,89 @@
 
     <!-- Step 2: Data -->
     <section *ngIf="currentStep() === 2" class="step-content">
-      <h3>Select Metrics (Measures)</h3>
-      <div class="chip-grid">
-        <button *ngFor="let m of availableMeasures()" 
-                [class.selected]="selectedMeasures().includes(m)"
-                (click)="toggleMeasure(m)">
-          {{m}}
-        </button>
-      </div>
+      <div class="data-selection">
+        <div class="selection-column">
+          <label class="label-sm">Select Metrics (Measures)</label>
+          <div class="checkbox-list">
+            <cgo-checkbox 
+              *ngFor="let m of availableMeasures()"
+              [label]="m"
+              [checked]="selectedMeasures().includes(m)"
+              (checkedChange)="onMeasureToggle(m, $event)">
+            </cgo-checkbox>
+          </div>
+        </div>
 
-      <h3>Select Dimensions</h3>
-      <div class="chip-grid">
-        <button *ngFor="let d of availableDimensions()" 
-                [class.selected]="selectedDimensions().includes(d)"
-                (click)="toggleDimension(d)">
-          {{d}}
-        </button>
+        <div class="selection-column">
+          <label class="label-sm">Select Dimensions</label>
+          <div class="checkbox-list">
+            <cgo-checkbox 
+              *ngFor="let d of availableDimensions()"
+              [label]="d"
+              [checked]="selectedDimensions().includes(d)"
+              (checkedChange)="onDimensionToggle(d, $event)">
+            </cgo-checkbox>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- Step 3: Delivery -->
     <section *ngIf="currentStep() === 3" class="step-content">
-      <div class="form-group">
-        <label>Format</label>
-        <div class="radio-group">
-          <label><input type="radio" formControlName="format" value="xlsx"> Excel (.xlsx)</label>
-          <label><input type="radio" formControlName="format" value="csv"> CSV</label>
-          <label><input type="radio" formControlName="format" value="parquet"> Parquet</label>
+      <div class="form-section">
+        <label class="label-sm">Export Format</label>
+        <cgo-radio-group formControlName="format" direction="horizontal">
+          <cgo-radio-button value="xlsx" label="Excel (.xlsx)"></cgo-radio-button>
+          <cgo-radio-button value="csv" label="CSV"></cgo-radio-button>
+          <cgo-radio-button value="parquet" label="Parquet"></cgo-radio-button>
+        </cgo-radio-group>
+      </div>
+
+      <div class="form-row">
+        <div class="form-section flex-1">
+          <label class="label-sm">Delivery Channel</label>
+          <select formControlName="deliveryChannel" class="cgo-select">
+            <option value="email">Email Notification</option>
+            <option value="ftp">Secure FTP</option>
+            <option value="whatsapp">WhatsApp Business</option>
+          </select>
         </div>
-      </div>
-      <div class="form-group">
-        <label>Delivery Channel</label>
-        <select formControlName="deliveryChannel">
-          <option value="email">Email</option>
-          <option value="ftp">FTP</option>
-          <option value="whatsapp">WhatsApp</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Destination</label>
-        <input type="text" formControlName="destination" [placeholder]="reportForm.value.deliveryChannel === 'email' ? 'email@example.com' : 'Destination path/number'">
+        <div class="form-section flex-2">
+          <label class="label-sm">Destination</label>
+          <input 
+            type="text" 
+            formControlName="destination" 
+            [placeholder]="reportForm.value.deliveryChannel === 'email' ? 'email@example.com' : 'Destination path/number'"
+            class="cgo-input">
+        </div>
       </div>
     </section>
   </main>
 
-  <footer>
-    <button (click)="prevStep()" [disabled]="currentStep() === 1" class="btn-secondary">Back</button>
-    <button (click)="nextStep()" *ngIf="currentStep() < 3" class="btn-primary" [disabled]="currentStep() === 1 && !reportForm.get('name')?.valid">Next</button>
-    <button (click)="saveReport()" *ngIf="currentStep() === 3" class="btn-success" [disabled]="!reportForm.valid">Finish & Save</button>
+  <footer class="designer-footer">
+    <cgo-button 
+      variant="secondary" 
+      (click)="prevStep()" 
+      [disabled]="currentStep() === 1">
+      Back
+    </cgo-button>
+    
+    <div class="footer-right">
+      <cgo-button 
+        *ngIf="currentStep() < 3"
+        variant="primary" 
+        (click)="nextStep()" 
+        [disabled]="currentStep() === 1 && !reportForm.get('name')?.valid">
+        Next Step
+      </cgo-button>
+      
+      <cgo-button 
+        *ngIf="currentStep() === 3"
+        variant="primary" 
+        (click)="saveReport()" 
+        [disabled]="!reportForm.valid">
+        {{ reportId() ? 'Update Report' : 'Finish & Save' }}
+      </cgo-button>
+    </div>
   </footer>
 </div>

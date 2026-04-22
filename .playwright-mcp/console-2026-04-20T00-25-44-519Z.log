@@ -1,0 +1,9 @@
+[    1254ms] [ERROR] connecting frames error Error: Parent frame not connected.
+    at r.start (https://app-companion-430619.appspot.com/assets/dist-DBGpmqTc.js:1:4952)
+    at async https://app-companion-430619.appspot.com/assets/PostMessageClient-4tOPXKSX.js:1:420224 @ https://app-companion-430619.appspot.com/assets/util-Cb2bb2N4.js:403
+[    1256ms] [WARNING] undefined @ https://app-companion-430619.appspot.com/assets/PostMessageClient-4tOPXKSX.js:0
+[    1258ms] [WARNING] undefined @ https://app-companion-430619.appspot.com/assets/PostMessageClient-4tOPXKSX.js:0
+[    1248ms] undefined
+[    1258ms] [WARNING] undefined @ https://app-companion-430619.appspot.com/assets/PostMessageClient-4tOPXKSX.js:0
+[    1249ms] undefined
+[    1418ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://app-companion-430619.appspot.com/favicon.ico:0

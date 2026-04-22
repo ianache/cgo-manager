@@ -1,7 +1,7 @@
 import { Component, ViewChild, TemplateRef, AfterViewInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PaginatedTableComponent, FormHeaderComponent } from '@cgomanager/shared-ui-kit';
+import { PaginatedTableComponent, FormHeaderComponent, ButtonComponent } from '@cgomanager/shared-ui-kit';
 import { RouterModule } from '@angular/router';
 
 type UserRole = 'Administrator' | 'Manager' | 'Operator' | 'Auditor';
@@ -19,7 +19,7 @@ interface User {
 @Component({
   selector: 'app-user-directory',
   standalone: true,
-  imports: [CommonModule, FormsModule, PaginatedTableComponent, FormHeaderComponent, RouterModule],
+  imports: [CommonModule, FormsModule, PaginatedTableComponent, FormHeaderComponent, ButtonComponent, RouterModule],
   template: `
     <!-- Cell template definitions (not rendered directly) -->
     <ng-template #userCellTpl let-value let-row="row">
@@ -44,14 +44,14 @@ interface User {
       title="User Directory"
       description="Manage system access, monitor user activity, and maintain organizational hierarchy for the C-GO ecosystem.">
       <div actions class="header-actions">
-        <button class="btn-secondary">
+        <cgo-button variant="secondary">
           <span class="material-symbols-outlined">download</span>
           Export
-        </button>
-        <button class="btn-primary" routerLink="../user-edit">
+        </cgo-button>
+        <cgo-button variant="primary" routerLink="../user-edit">
           <span class="material-symbols-outlined">person_add</span>
           Register New User
-        </button>
+        </cgo-button>
       </div>
     </cgo-form-header>
 
@@ -90,11 +90,11 @@ interface User {
         </select>
 
         <div class="filter-actions">
-          <button class="btn-tertiary-sm" (click)="resetFilters()">Reset</button>
-          <button class="btn-primary-sm" (click)="applyFilters()">
+          <cgo-button variant="tertiary" (click)="resetFilters()">Reset</cgo-button>
+          <cgo-button variant="primary" (click)="applyFilters()">
             <span class="material-symbols-outlined">filter_list</span>
             Apply
-          </button>
+          </cgo-button>
         </div>
       </div>
     </div>
@@ -123,20 +123,6 @@ interface User {
   styles: [`
     /* ── Header actions ─────────────────────────────────── */
     .header-actions { display: flex; gap: 12px; }
-
-    .btn-primary, .btn-secondary {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 20px; border-radius: 4px;
-      font-size: 0.75rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.1em;
-      cursor: pointer; transition: all 0.2s; font-family: inherit;
-    }
-    .btn-primary { background: #bb0012; color: #ffffff; border: none; }
-    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
-    .btn-secondary { background: #edeeef; color: #191c1d; border: none; }
-    .btn-secondary:hover { background: #e1e3e4; }
-    .btn-primary .material-symbols-outlined,
-    .btn-secondary .material-symbols-outlined { font-size: 18px; }
 
     /* ── Filter card ─────────────────────────────────────── */
     .filter-card {

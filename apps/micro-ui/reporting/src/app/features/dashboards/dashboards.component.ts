@@ -1,72 +1,296 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { 
+  PaginatedTableComponent, 
+  GenericCardComponent, 
+  ButtonComponent 
+} from '@cgomanager/shared-ui-kit';
+import { ApiService, ReportDefinition } from '@cgomanager/shared-data-access';
 
 @Component({
   selector: 'app-reporting-dashboards',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [
+    CommonModule, 
+    RouterModule, 
+    PaginatedTableComponent, 
+    GenericCardComponent,
+    ButtonComponent
+  ],
   template: `
     <div class="dashboards-page">
       <div class="page-header">
-        <div class="header-content">
-          <h2 class="page-title">Reporting Dashboards</h2>
-          <p class="page-description">Visualize your operational data through high-level telemetry views.</p>
+        <div class="header-left">
+          <h2 class="page-title">Reports Management</h2>
+          <p class="page-description">Manage and design your operational reports and data snapshots.</p>
         </div>
-        <button class="btn-primary" routerLink="../builder">
-          <span class="material-symbols-outlined">add_chart</span>
-          Create New Dashboard
-        </button>
+        
+        <div class="header-actions">
+          <div class="view-toggle cloud-shadow">
+            <button 
+              class="toggle-btn" 
+              [class.active]="viewMode() === 'table'"
+              (click)="viewMode.set('table')"
+              title="Table View">
+              <span class="material-symbols-outlined">table_rows</span>
+            </button>
+            <button 
+              class="toggle-btn" 
+              [class.active]="viewMode() === 'card'"
+              (click)="viewMode.set('card')"
+              title="Card View">
+              <span class="material-symbols-outlined">grid_view</span>
+            </button>
+          </div>
+
+          <cgo-button 
+            variant="primary" 
+            routerLink="../designer">
+            <span class="material-symbols-outlined">add_chart</span>
+            Create New Report
+          </cgo-button>
+        </div>
       </div>
 
-      <div class="dashboard-grid">
-        @for (dash of dashboards; track dash.id) {
-          <div class="dashboard-card cloud-shadow">
-            <div class="card-thumb">
-              <span class="material-symbols-outlined dash-icon">{{ dash.icon }}</span>
-            </div>
-            <div class="card-body">
-              <h4 class="dash-name">{{ dash.name }}</h4>
-              <p class="dash-meta">Last updated: {{ dash.lastUpdate }}</p>
-            </div>
-            <div class="card-actions">
-              <button class="action-btn"><span class="material-symbols-outlined">visibility</span></button>
-              <button class="action-btn"><span class="material-symbols-outlined">edit</span></button>
-              <button class="action-btn"><span class="material-symbols-outlined">share</span></button>
-            </div>
+      <div class="content-area">
+        <ng-container *ngIf="viewMode() === 'table'">
+          <cgo-paginated-table
+            [columns]="columns"
+            [data]="reports()"
+            [pageSize]="10"
+            [showActions]="true"
+            [showHeader]="true"
+            [showHeaderSearch]="true"
+            headerTitle="Existing Reports Catalog"
+            headerDescription="Browse and manage all previously created report definitions.">
+            <ng-template #actionsTemplate let-report>
+              <div class="table-actions">
+                <button class="icon-btn" title="View"><span class="material-symbols-outlined">visibility</span></button>
+                <button class="icon-btn" title="Edit" [routerLink]="['../designer', report.id]"><span class="material-symbols-outlined">edit</span></button>
+                <button class="icon-btn" title="Delete"><span class="material-symbols-outlined">delete</span></button>
+              </div>
+            </ng-template>
+          </cgo-paginated-table>
+        </ng-container>
+
+        <ng-container *ngIf="viewMode() === 'card'">
+          <div class="report-grid">
+            @for (report of reports(); track report.id) {
+              <cgo-generic-card [clickable]="true">
+                <div card-image class="report-card-icon">
+                  <span class="material-symbols-outlined">description</span>
+                </div>
+                <h4 card-title class="report-name">{{ report.name }}</h4>
+                <p card-subtitle class="report-meta">Cube: {{ report.cubeName }} | Format: {{ report.format }}</p>
+                
+                <div class="report-card-footer" card-footer>
+                  <span class="destination-tag">
+                    <span class="material-symbols-outlined">send</span>
+                    {{ report.delivery.destination }}
+                  </span>
+                  <div class="card-actions">
+                    <button class="icon-btn" [routerLink]="['../designer', report.id]"><span class="material-symbols-outlined">edit</span></button>
+                    <button class="icon-btn"><span class="material-symbols-outlined">more_vert</span></button>
+                  </div>
+                </div>
+              </cgo-generic-card>
+            }
           </div>
-        }
+        </ng-container>
       </div>
     </div>
   `,
   styles: [`
-    .page-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; }
-    .page-title { font-size: 1.875rem; font-weight: 800; letter-spacing: -0.05em; margin: 0; color: #191c1d; }
-    .page-description { margin: 4px 0 0; color: #506169; font-weight: 500; }
-    .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
-    .dashboard-card { background: white; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: all 0.2s; }
-    .dashboard-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(25,28,29,0.08); }
-    .cloud-shadow { box-shadow: 0 12px 32px rgba(25, 28, 29, 0.04), 0 4px 8px rgba(25, 28, 29, 0.02); }
-    .card-thumb { height: 120px; background: #f8f9fa; display: flex; align-items: center; justify-content: center; color: #bb0012; }
-    .dash-icon { font-size: 48px; opacity: 0.8; }
-    .card-body { padding: 20px; border-bottom: 1px solid #edeeef; }
-    .dash-name { margin: 0; font-size: 1rem; font-weight: 800; text-transform: uppercase; color: #191c1d; }
-    .dash-meta { margin: 4px 0 0; font-size: 0.75rem; color: #506169; font-weight: 500; }
-    .card-actions { padding: 12px; display: flex; justify-content: flex-end; gap: 8px; }
-    .action-btn { background: none; border: none; cursor: pointer; color: #506169; padding: 4px; border-radius: 4px; }
-    .action-btn:hover { background: #f0f1f2; color: #bb0012; }
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 24px; border-radius: 4px; font-size: 0.75rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer;
-      background: #bb0012; color: #ffffff; border: none; transition: all 0.2s;
+    .dashboards-page { 
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    
+    .page-header { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: flex-end;
+    }
+
+    .page-title { 
+      font-size: 2rem; 
+      font-weight: 700; 
+      margin: 0; 
+      color: var(--inverse-surface); 
+    }
+
+    .page-description { 
+      margin: 8px 0 0; 
+      color: var(--secondary-grey); 
+      font-weight: 500; 
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .view-toggle {
+      display: flex;
+      background: var(--surface-lowest);
+      padding: 4px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--surface-highest);
+    }
+
+    .toggle-btn {
+      background: none;
+      border: none;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      color: var(--secondary-grey);
+      display: flex;
+      align-items: center;
+      transition: all 0.2s;
+    }
+
+    .toggle-btn.active {
+      background: var(--surface-container);
+      color: var(--primary-red);
+    }
+
+    .cloud-shadow { box-shadow: var(--shadow-cloud); }
+
+    .content-area {
+      flex: 1;
+    }
+
+    .report-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .report-card-icon {
+      height: 140px;
+      background: var(--surface-low);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-red);
+    }
+
+    .report-card-icon .material-symbols-outlined {
+      font-size: 48px;
+    }
+
+    .report-name {
+      margin: 0;
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--inverse-surface);
+    }
+
+    .report-meta {
+      font-size: 0.875rem;
+      color: var(--secondary-grey);
+      margin: 4px 0 0;
+    }
+
+    .report-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding-top: 16px;
+      border-top: 1px solid var(--surface-highest);
+    }
+
+    .destination-tag {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--secondary-grey);
+      background: var(--surface-low);
+      padding: 4px 8px;
+      border-radius: var(--radius-xs);
+    }
+
+    .destination-tag .material-symbols-outlined {
+      font-size: 14px;
+    }
+
+    .table-actions, .card-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--secondary-grey);
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      transition: background 0.2s;
+    }
+
+    .icon-btn:hover {
+      background: var(--surface-container);
+      color: var(--primary-red);
     }
   `]
 })
-export class DashboardsComponent {
-  dashboards = [
-    { id: 1, name: 'Fleet Telemetry', icon: 'satellite_alt', lastUpdate: '2h ago' },
-    { id: 2, name: 'Tenant Usage', icon: 'corporate_fare', lastUpdate: '5h ago' },
-    { id: 3, name: 'Network Health', icon: 'lan', lastUpdate: '1d ago' },
+export class DashboardsComponent implements OnInit {
+  private api = inject(ApiService);
+  
+  viewMode = signal<'table' | 'card'>('table');
+  reports = signal<ReportDefinition[]>([]);
+
+  columns = [
+    { key: 'name', label: 'Report Name' },
+    { key: 'cubeName', label: 'Data Source' },
+    { key: 'format', label: 'Format' },
+    { key: 'delivery.destination', label: 'Destination' },
   ];
+
+  ngOnInit() {
+    this.loadReports();
+  }
+
+  loadReports() {
+    this.api.getReports().subscribe({
+      next: (data) => this.reports.set(data),
+      error: (err) => {
+        console.error('Error loading reports', err);
+        // Fallback for demo if API fails
+        this.reports.set([
+          { 
+            id: '1', 
+            name: 'Monthly Sales Analysis', 
+            cubeName: 'SalesCube', 
+            format: 'xlsx', 
+            measures: [], 
+            dimensions: [], 
+            filters: [],
+            delivery: { channel: 'email', destination: 'finance@cgo.com' } 
+          },
+          { 
+            id: '2', 
+            name: 'Inventory Snapshot', 
+            cubeName: 'WarehouseCube', 
+            format: 'csv', 
+            measures: [], 
+            dimensions: [], 
+            filters: [],
+            delivery: { channel: 'ftp', destination: '/mnt/reports/inv' } 
+          }
+        ]);
+      }
+    });
+  }
 }

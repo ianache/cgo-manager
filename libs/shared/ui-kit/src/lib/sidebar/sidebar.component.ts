@@ -29,6 +29,7 @@ export class SidebarComponent {
       icon: '📈',
       children: [
         { label: 'Dashboards', path: '/reporting/dashboards' },
+        { label: 'Data Sources', path: '/reporting/data-sources' },
         { label: 'Scheduled Tasks', path: '/reporting/scheduled-tasks' },
       ],
     },

@@ -1,31 +1,63 @@
 <div class="paginated-table-wrapper">
-  <cgo-base-table
-    [columns]="columns"
-    [data]="paginatedData"
-    [showActions]="showActions"
-    [actionsTemplateInput]="actionsTemplate"
-    [customTemplates]="customTemplates">
-  </cgo-base-table>
-
-  <div class="pagination-footer">
-    <div class="pagination-info">
-      Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, data.length) }} of {{ data.length }} entries
-    </div>
-    <div class="pagination-controls">
-      <button class="page-btn" [disabled]="currentPage === 1" (click)="prevPage()">Previous</button>
-
-      <div class="page-numbers">
-        @for (page of pages; track page) {
-          <button
-            class="page-number"
-            [class.active]="currentPage === page"
-            (click)="goToPage(page)">
-            {{ page }}
-          </button>
+  @if (showHeader) {
+    <div class="table-header-container">
+      <div class="table-header-info">
+        <h3 class="table-header-title">{{ headerTitle }}</h3>
+        @if (headerDescription) {
+          <p class="table-header-description">{{ headerDescription }}</p>
         }
       </div>
+      
+      <div class="table-header-actions">
+        @if (showHeaderSearch) {
+          <div class="table-search-field">
+            <span class="material-symbols-outlined search-icon">search</span>
+            <input 
+              type="text" 
+              class="table-search-input" 
+              [ngModel]="searchQuery()" 
+              (ngModelChange)="searchQuery.set($event)"
+              placeholder="Search in catalog...">
+          </div>
+        }
+        <ng-container *ngTemplateOutlet="headerActions"></ng-container>
+      </div>
+    </div>
+  }
 
-      <button class="page-btn" [disabled]="currentPage === totalPages" (click)="nextPage()">Next</button>
+  <div class="table-box cloud-shadow">
+    <cgo-base-table
+      [columns]="columns"
+      [data]="paginatedData"
+      [showActions]="showActions"
+      [actionsTemplateInput]="actionsTemplate"
+      [customTemplates]="customTemplates">
+    </cgo-base-table>
+
+    <div class="pagination-footer">
+      <div class="pagination-info">
+        Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, data.length) }} of {{ data.length }} entries
+      </div>
+      <div class="pagination-controls">
+        <button class="page-btn" [disabled]="currentPage === 1" (click)="prevPage()">
+          <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+
+        <div class="page-numbers">
+          @for (page of pages; track page) {
+            <button
+              class="page-number"
+              [class.active]="currentPage === page"
+              (click)="goToPage(page)">
+              {{ page }}
+            </button>
+          }
+        </div>
+
+        <button class="page-btn" [disabled]="currentPage === totalPages" (click)="nextPage()">
+          <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+      </div>
     </div>
   </div>
 </div>

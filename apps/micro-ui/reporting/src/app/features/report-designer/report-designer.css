@@ -1,124 +1,156 @@
 .designer-container {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: #f8f9fa;
-  border: 4px solid #000;
-  font-family: 'Inter', sans-serif;
-}
-
-header {
-  border-bottom: 2px solid #000;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-}
-
-h1 {
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: -1px;
-  margin: 0;
-}
-
-.stepper {
+  padding: 32px;
+  max-width: 900px;
+  margin: 0 auto;
   display: flex;
-  gap: 2rem;
-  margin-top: 1rem;
+  flex-direction: column;
+  gap: 32px;
 }
 
-.stepper div {
-  font-weight: bold;
-  color: #ccc;
-  transition: color 0.3s;
+.designer-stepper {
+  background: var(--surface-lowest);
+  padding: 24px 48px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.stepper div.active {
-  color: #ff3e00; /* Bauhaus Red */
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
 }
 
-.step-content {
+.step-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--surface-container);
+  color: var(--secondary-grey);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.875rem;
+  transition: all 0.3s;
+}
+
+.step.active .step-num {
+  background: var(--primary-red);
+  color: white;
+  box-shadow: 0 0 0 4px rgba(187, 0, 18, 0.1);
+}
+
+.step.completed .step-num {
+  background: var(--inverse-surface);
+  color: white;
+}
+
+.step-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--secondary-grey);
+}
+
+.step.active .step-label {
+  color: var(--inverse-surface);
+}
+
+.step-line {
+  flex: 1;
+  height: 2px;
+  background: var(--surface-container);
+  margin: 0 16px;
+  margin-top: -24px;
+}
+
+.designer-main {
+  background: var(--surface-lowest);
+  border-radius: var(--radius-md);
+  padding: 40px;
   min-height: 300px;
 }
 
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-label {
-  display: block;
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  margin-bottom: 0.5rem;
-}
-
-input[type="text"], select {
-  width: 100%;
-  padding: 0.8rem;
-  border: 2px solid #000;
-  border-radius: 0;
-  background: #fff;
-  font-family: inherit;
-}
-
-.chip-grid {
+.step-content {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 2rem;
+  flex-direction: column;
+  gap: 32px;
+  animation: fadeIn 0.3s ease-out;
 }
 
-.chip-grid button {
-  padding: 0.5rem 1rem;
-  border: 2px solid #000;
-  background: #fff;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-weight: bold;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.chip-grid button.selected {
-  background: #000;
-  color: #fff;
-}
-
-.radio-group {
+.form-section {
   display: flex;
-  gap: 1.5rem;
+  flex-direction: column;
+  gap: 8px;
 }
 
-footer {
+.form-row {
+  display: flex;
+  gap: 24px;
+}
+
+.flex-1 { flex: 1; }
+.flex-2 { flex: 2; }
+
+.cgo-input, .cgo-select {
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--surface-highest);
+  background: var(--surface-low);
+  font-family: var(--font-family);
+  font-size: 0.875rem;
+  color: var(--inverse-surface);
+  transition: border-color 0.2s;
+}
+
+.cgo-input:focus, .cgo-select:focus {
+  outline: none;
+  border-color: var(--primary-red);
+  background: var(--surface-lowest);
+}
+
+.data-selection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+}
+
+.checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--surface-low);
+  border-radius: var(--radius-sm);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.designer-footer {
   display: flex;
   justify-content: space-between;
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 2px solid #000;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid var(--surface-highest);
 }
 
-button.btn-primary, button.btn-success {
-  background: #000;
-  color: #fff;
-  padding: 0.8rem 2rem;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  text-transform: uppercase;
+.footer-right {
+  display: flex;
+  gap: 16px;
 }
 
-button.btn-success {
-  background: #0055ff; /* Bauhaus Blue */
-}
-
-button.btn-secondary {
-  background: transparent;
-  border: 2px solid #000;
-  padding: 0.8rem 2rem;
-  font-weight: bold;
-  cursor: pointer;
-  text-transform: uppercase;
-}
-
-button:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
+.cloud-shadow {
+  box-shadow: var(--shadow-cloud);
 }

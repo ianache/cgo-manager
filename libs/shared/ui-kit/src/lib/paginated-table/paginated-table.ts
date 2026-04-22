@@ -1,11 +1,12 @@
-import { Component, Input, ContentChild, TemplateRef, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, ContentChild, TemplateRef, OnInit, OnChanges, SimpleChanges, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { BaseTableComponent } from '../base-table/base-table';
 
 @Component({
   selector: 'cgo-paginated-table',
   standalone: true,
-  imports: [CommonModule, BaseTableComponent],
+  imports: [CommonModule, FormsModule, BaseTableComponent],
   templateUrl: './paginated-table.html',
   styleUrl: './paginated-table.css',
 })
@@ -15,14 +16,30 @@ export class PaginatedTableComponent implements OnInit, OnChanges {
   @Input() data: any[] = [];
   @Input() pageSize = 10;
   @Input() showActions = false;
+  
+  // Header options
+  @Input() showHeader = false;
+  @Input() headerTitle = '';
+  @Input() headerDescription = '';
+  @Input() showHeaderSearch = false;
 
   @ContentChild('actionsTemplate') actionsTemplate?: TemplateRef<any>;
+  @ContentChild('headerActions') headerActions?: TemplateRef<any>;
   
   @Input() customTemplates: { [key: string]: TemplateRef<any> } = {};
 
   currentPage = 1;
   totalPages = 1;
   paginatedData: any[] = [];
+  searchQuery = signal('');
+
+  constructor() {
+    effect(() => {
+      this.searchQuery();
+      this.currentPage = 1;
+      this.updatePagination();
+    }, { allowSignalWrites: true });
+  }
 
   ngOnInit(): void {
     this.updatePagination();
@@ -35,13 +52,24 @@ export class PaginatedTableComponent implements OnInit, OnChanges {
   }
 
   updatePagination(): void {
-    this.totalPages = Math.ceil(this.data.length / this.pageSize) || 1;
+    let filteredData = this.data;
+    const query = this.searchQuery().toLowerCase();
+    
+    if (query) {
+      filteredData = this.data.filter(item => 
+        Object.values(item).some(val => 
+          String(val).toLowerCase().includes(query)
+        )
+      );
+    }
+
+    this.totalPages = Math.ceil(filteredData.length / this.pageSize) || 1;
     if (this.currentPage > this.totalPages) {
       this.currentPage = this.totalPages;
     }
     const start = (this.currentPage - 1) * this.pageSize;
     const end = start + this.pageSize;
-    this.paginatedData = this.data.slice(start, end);
+    this.paginatedData = filteredData.slice(start, end);
   }
 
   nextPage(): void {

@@ -1,0 +1,1075 @@
+- main [ref=e5]:
+  - iframe [ref=e7]:
+    - main [ref=f1e5]:
+      - generic [ref=f1e8]:
+        - generic:
+          - generic [ref=f1e10]:
+            - button [ref=f1e12] [cursor=pointer]:
+              - img [ref=f1e14]
+            - generic [ref=f1e16]:
+              - generic:
+                - button "C-GO White Label Manager"
+                - button [ref=f1e18] [cursor=pointer]:
+                  - img [ref=f1e19]
+              - generic [ref=f1e22]:
+                - text: "- Screen: C-GO - Role Management"
+                - button "Show All Screens" [ref=f1e23] [cursor=pointer]
+          - generic [ref=f1e26]:
+            - button "Options" [ref=f1e27] [cursor=pointer]:
+              - text: Options
+              - img [ref=f1e29]
+            - button [ref=f1e33] [cursor=pointer]:
+              - img [ref=f1e35]
+            - button "Exporta" [ref=f1e37] [cursor=pointer]:
+              - img [ref=f1e38]
+              - paragraph [ref=f1e41]: Exporta
+            - button "Compartir" [ref=f1e43] [cursor=pointer]:
+              - img [ref=f1e45]
+              - paragraph [ref=f1e47]: Compartir
+            - button "Menú de la cuenta" [ref=f1e49] [cursor=pointer]:
+              - img "Profile image for Ilver Anache Pupo" [ref=f1e51]
+        - generic [ref=f1e53]:
+          - generic [ref=f1e54]:
+            - button [ref=f1e56] [cursor=pointer]:
+              - img [ref=f1e57]
+            - button [ref=f1e61] [cursor=pointer]:
+              - img [ref=f1e63]
+            - button [ref=f1e66] [cursor=pointer]:
+              - img [ref=f1e68]
+          - button [ref=f1e71] [cursor=pointer]:
+            - img [ref=f1e73]
+          - generic [ref=f1e76]:
+            - button "Choose File" [ref=f1e77]
+            - button [ref=f1e78] [cursor=pointer]:
+              - img [ref=f1e79]
+          - button [ref=f1e83] [cursor=pointer]:
+            - img [ref=f1e84]
+          - button [ref=f1e91] [cursor=pointer]:
+            - img [ref=f1e93]
+        - generic [ref=f1e95]:
+          - img [ref=f1e99]
+          - button "45%" [ref=f1e103] [cursor=pointer]:
+            - generic [ref=f1e104]: 45%
+          - button "Vínculos útiles" [ref=f1e106] [cursor=pointer]:
+            - img [ref=f1e108]
+        - button "Choose File" [ref=f1e110]
+        - application [ref=f1e112]:
+          - generic [ref=f1e114]:
+            - generic:
+              - generic:
+                - generic [ref=f1e116]:
+                  - generic [ref=f1e120]:
+                    - generic [ref=f1e122]: palette
+                    - generic [ref=f1e123]: Company 2
+                  - generic [ref=f1e126]:
+                    - generic [ref=f1e127]:
+                      - generic [ref=f1e128]:
+                        - generic [ref=f1e129]:
+                          - generic [ref=f1e130]: Primary
+                          - generic "Click to copy" [ref=f1e131] [cursor=pointer]: "#1275E2"
+                        - generic [ref=f1e132]:
+                          - 'generic "T0 #000000 — Click to copy" [ref=f1e133] [cursor=pointer]'
+                          - 'generic "T10 #001b3e — Click to copy" [ref=f1e134] [cursor=pointer]'
+                          - 'generic "T20 #002f64 — Click to copy" [ref=f1e135] [cursor=pointer]'
+                          - 'generic "T30 #00458d — Click to copy" [ref=f1e136] [cursor=pointer]'
+                          - 'generic "T40 #005db8 — Click to copy" [ref=f1e137] [cursor=pointer]'
+                          - 'generic "T50 #1275e2 — Click to copy" [ref=f1e138] [cursor=pointer]'
+                          - 'generic "T60 #4090fe — Click to copy" [ref=f1e139] [cursor=pointer]'
+                          - 'generic "T70 #7aacff — Click to copy" [ref=f1e140] [cursor=pointer]'
+                          - 'generic "T80 #aac7ff — Click to copy" [ref=f1e141] [cursor=pointer]'
+                          - 'generic "T90 #d6e3ff — Click to copy" [ref=f1e142] [cursor=pointer]'
+                          - 'generic "T95 #ecf0ff — Click to copy" [ref=f1e143] [cursor=pointer]'
+                          - 'generic "T100 #ffffff — Click to copy" [ref=f1e144] [cursor=pointer]'
+                      - generic [ref=f1e145]:
+                        - generic [ref=f1e146]:
+                          - generic [ref=f1e147]: Secondary
+                          - generic "Click to copy" [ref=f1e148] [cursor=pointer]: "#5F78A3"
+                        - generic [ref=f1e149]:
+                          - 'generic "T0 #000000 — Click to copy" [ref=f1e150] [cursor=pointer]'
+                          - 'generic "T10 #001b3e — Click to copy" [ref=f1e151] [cursor=pointer]'
+                          - 'generic "T20 #153058 — Click to copy" [ref=f1e152] [cursor=pointer]'
+                          - 'generic "T30 #2e4770 — Click to copy" [ref=f1e153] [cursor=pointer]'
+                          - 'generic "T40 #465f89 — Click to copy" [ref=f1e154] [cursor=pointer]'
+                          - 'generic "T50 #5f78a3 — Click to copy" [ref=f1e155] [cursor=pointer]'
+                          - 'generic "T60 #7991be — Click to copy" [ref=f1e156] [cursor=pointer]'
+                          - 'generic "T70 #93acda — Click to copy" [ref=f1e157] [cursor=pointer]'
+                          - 'generic "T80 #afc7f7 — Click to copy" [ref=f1e158] [cursor=pointer]'
+                          - 'generic "T90 #d6e3ff — Click to copy" [ref=f1e159] [cursor=pointer]'
+                          - 'generic "T95 #ecf0ff — Click to copy" [ref=f1e160] [cursor=pointer]'
+                          - 'generic "T100 #ffffff — Click to copy" [ref=f1e161] [cursor=pointer]'
+                      - generic [ref=f1e162]:
+                        - generic [ref=f1e163]:
+                          - generic [ref=f1e164]: Tertiary
+                          - generic "Click to copy" [ref=f1e165] [cursor=pointer]: "#C55B00"
+                        - generic [ref=f1e166]:
+                          - 'generic "T0 #000000 — Click to copy" [ref=f1e167] [cursor=pointer]'
+                          - 'generic "T10 #321200 — Click to copy" [ref=f1e168] [cursor=pointer]'
+                          - 'generic "T20 #532200 — Click to copy" [ref=f1e169] [cursor=pointer]'
+                          - 'generic "T30 #763400 — Click to copy" [ref=f1e170] [cursor=pointer]'
+                          - 'generic "T40 #9a4600 — Click to copy" [ref=f1e171] [cursor=pointer]'
+                          - 'generic "T50 #c15900 — Click to copy" [ref=f1e172] [cursor=pointer]'
+                          - 'generic "T60 #e3711f — Click to copy" [ref=f1e173] [cursor=pointer]'
+                          - 'generic "T70 #ff8d43 — Click to copy" [ref=f1e174] [cursor=pointer]'
+                          - 'generic "T80 #ffb68c — Click to copy" [ref=f1e175] [cursor=pointer]'
+                          - 'generic "T90 #ffdbc9 — Click to copy" [ref=f1e176] [cursor=pointer]'
+                          - 'generic "T95 #ffede5 — Click to copy" [ref=f1e177] [cursor=pointer]'
+                          - 'generic "T100 #ffffff — Click to copy" [ref=f1e178] [cursor=pointer]'
+                      - generic [ref=f1e179]:
+                        - generic [ref=f1e180]:
+                          - generic [ref=f1e181]: Neutral
+                          - generic "Click to copy" [ref=f1e182] [cursor=pointer]: "#74777F"
+                        - generic [ref=f1e183]:
+                          - 'generic "T0 #000000 — Click to copy" [ref=f1e184] [cursor=pointer]'
+                          - 'generic "T10 #181c22 — Click to copy" [ref=f1e185] [cursor=pointer]'
+                          - 'generic "T20 #2d3038 — Click to copy" [ref=f1e186] [cursor=pointer]'
+                          - 'generic "T30 #44474e — Click to copy" [ref=f1e187] [cursor=pointer]'
+                          - 'generic "T40 #5b5e66 — Click to copy" [ref=f1e188] [cursor=pointer]'
+                          - 'generic "T50 #74777f — Click to copy" [ref=f1e189] [cursor=pointer]'
+                          - 'generic "T60 #8e9099 — Click to copy" [ref=f1e190] [cursor=pointer]'
+                          - 'generic "T70 #a9abb4 — Click to copy" [ref=f1e191] [cursor=pointer]'
+                          - 'generic "T80 #c4c6cf — Click to copy" [ref=f1e192] [cursor=pointer]'
+                          - 'generic "T90 #e0e2ec — Click to copy" [ref=f1e193] [cursor=pointer]'
+                          - 'generic "T95 #eff0fa — Click to copy" [ref=f1e194] [cursor=pointer]'
+                          - 'generic "T100 #ffffff — Click to copy" [ref=f1e195] [cursor=pointer]'
+                    - generic [ref=f1e196]:
+                      - generic [ref=f1e197]:
+                        - generic [ref=f1e198]:
+                          - generic [ref=f1e199]: Headline
+                          - generic [ref=f1e200]: Inter
+                        - generic [ref=f1e201]: Aa
+                      - generic [ref=f1e202]:
+                        - generic [ref=f1e203]:
+                          - button "Primary" [ref=f1e204]
+                          - button "Secondary" [ref=f1e205]
+                        - generic [ref=f1e206]:
+                          - button "Inverted" [ref=f1e207]
+                          - button "Outlined" [ref=f1e208]
+                      - generic [ref=f1e210]:
+                        - generic [ref=f1e211]: search
+                        - generic [ref=f1e212]: Search
+                      - generic [ref=f1e213]:
+                        - generic [ref=f1e214]:
+                          - generic [ref=f1e215]: Body
+                          - generic [ref=f1e216]: Inter
+                        - generic [ref=f1e217]: Aa
+                      - generic [ref=f1e226]:
+                        - generic [ref=f1e228]: home
+                        - generic [ref=f1e230]: search
+                        - generic [ref=f1e232]: person
+                      - generic [ref=f1e233]:
+                        - generic [ref=f1e234]:
+                          - generic [ref=f1e235]: Label
+                          - generic [ref=f1e236]: Inter
+                        - generic [ref=f1e237]: Aa
+                      - generic [ref=f1e238]:
+                        - generic [ref=f1e241]: edit
+                        - generic [ref=f1e243]:
+                          - generic [ref=f1e244]: edit
+                          - text: Label
+                      - generic [ref=f1e246]:
+                        - generic [ref=f1e248]: auto_fix_high
+                        - generic [ref=f1e250]: category
+                        - generic [ref=f1e252]: sell
+                        - generic [ref=f1e254]: delete
+                - generic [ref=f1e256]:
+                  - generic [ref=f1e260]:
+                    - generic [ref=f1e262]: palette
+                    - generic [ref=f1e263]: Zenith Meridian
+                  - generic [ref=f1e266]:
+                    - generic [ref=f1e267]:
+                      - generic [ref=f1e268]:
+                        - generic [ref=f1e269]:
+                          - generic [ref=f1e270]: Primary
+                          - generic "Click to copy" [ref=f1e271] [cursor=pointer]: "#EE2A2A"
+                        - generic [ref=f1e272]:
+                          - 'generic "T0 #000000 — Click to copy" [ref=f1e273] [cursor=pointer]'
+                          - 'generic "T10 #410002 — Click to copy" [ref=f1e274] [cursor=pointer]'
+                          - 'generic "T20 #690005 — Click to copy" [ref=f1e275] [cursor=pointer]'
+                          - 'generic "T30 #93000b — Click to copy" [ref=f1e276] [cursor=pointer]'
+                          - 'generic "T40 #c00013 — Click to copy" [ref=f1e277] [cursor=pointer]'
+                          - 'generic "T50 #e72426 — Click to copy" [ref=f1e278] [cursor=pointer]'
+                          - 'generic "T60 #ff544a — Click to copy" [ref=f1e279] [cursor=pointer]'
+                          - 'generic "T70 #ff897e — Click to copy" [ref=f1e280] [cursor=pointer]'
+                          - 'generic "T80 #ffb4ab — Click to copy" [ref=f1e281] [cursor=pointer]'
+                          - 'generic "T90 #ffdad6 — Click to copy" [ref=f1e282] [cursor=pointer]'
+                          - 'generic "T95 #ffedea — Click to copy" [ref=f1e283] [cursor=pointer]'
+                          - 'generic "T100 #ffffff — Click to copy" [ref=f1e284] [cursor=pointer]'
+                      - generic [ref=f1e285]:
+                        - generic [ref=f1e286]:
+                          - generic [ref=f1e287]: Secondary
+                          - generic "Click to copy" [ref=f1e288] [cursor=pointer]: "#37474F"
+                        - generic [ref=f1e289]:
+                          - 'generic "T0 #000000 — Click to copy" [ref=f1e290] [cursor=pointer]'
+                          - 'generic "T10 #0d1e25 — Click to copy" [ref=f1e291] [cursor=pointer]'
+                          - 'generic "T20 #23333a — Click to copy" [ref=f1e292] [cursor=pointer]'
+                          - 'generic "T30 #394951 — Click to copy" [ref=f1e293] [cursor=pointer]'
+                          - 'generic "T40 #506169 — Click to copy" [ref=f1e294] [cursor=pointer]'
+                          - 'generic "T50 #697a82 — Click to copy" [ref=f1e295] [cursor=pointer]'
+                          - 'generic "T60 #82939c — Click to copy" [ref=f1e296] [cursor=pointer]'
+                          - 'generic "T70 #9daeb7 — Click to copy" [ref=f1e297] [cursor=pointer]'
+                          - 'generic "T80 #b8c9d3 — Click to copy" [ref=f1e298] [cursor=pointer]'
+                          - 'generic "T90 #d4e5ef — Click to copy" [ref=f1e299] [cursor=pointer]'
+                          - 'generic "T95 #e2f3fd — Click to copy" [ref=f1e300] [cursor=pointer]'
+                          - 'generic "T100 #ffffff — Click to copy" [ref=f1e301] [cursor=pointer]'
+                      - generic [ref=f1e302]:
+                        - generic [ref=f1e303]:
+                          - generic [ref=f1e304]: Tertiary
+                          - generic "Click to copy" [ref=f1e305] [cursor=pointer]: "#0084B6"
+                        - generic [ref=f1e306]:
+                          - 'generic "T0 #000000 — Click to copy" [ref=f1e307] [cursor=pointer]'
+                          - 'generic "T10 #001e2d — Click to copy" [ref=f1e308] [cursor=pointer]'
+                          - 'generic "T20 #00344b — Click to copy" [ref=f1e309] [cursor=pointer]'
+                          - 'generic "T30 #004c6b — Click to copy" [ref=f1e310] [cursor=pointer]'
+                          - 'generic "T40 #00658d — Click to copy" [ref=f1e311] [cursor=pointer]'
+                          - 'generic "T50 #007fb0 — Click to copy" [ref=f1e312] [cursor=pointer]'
+                          - 'generic "T60 #339acd — Click to copy" [ref=f1e313] [cursor=pointer]'
+                          - 'generic "T70 #55b5e9 — Click to copy" [ref=f1e314] [cursor=pointer]'
+                          - 'generic "T80 #81cfff — Click to copy" [ref=f1e315] [cursor=pointer]'
+                          - 'generic "T90 #c6e7ff — Click to copy" [ref=f1e316] [cursor=pointer]'
+                          - 'generic "T95 #e4f3ff — Click to copy" [ref=f1e317] [cursor=pointer]'
+                          - 'generic "T100 #ffffff — Click to copy" [ref=f1e318] [cursor=pointer]'
+                      - generic [ref=f1e319]:
+                        - generic [ref=f1e320]:
+                          - generic [ref=f1e321]: Neutral
+                          - generic "Click to copy" [ref=f1e322] [cursor=pointer]: "#F8F9FA"
+                        - generic [ref=f1e323]:
+                          - 'generic "T0 #000000 — Click to copy" [ref=f1e324] [cursor=pointer]'
+                          - 'generic "T10 #191c1d — Click to copy" [ref=f1e325] [cursor=pointer]'
+                          - 'generic "T20 #2e3132 — Click to copy" [ref=f1e326] [cursor=pointer]'
+                          - 'generic "T30 #454748 — Click to copy" [ref=f1e327] [cursor=pointer]'
+                          - 'generic "T40 #5c5f60 — Click to copy" [ref=f1e328] [cursor=pointer]'
+                          - 'generic "T50 #757778 — Click to copy" [ref=f1e329] [cursor=pointer]'
+                          - 'generic "T60 #8f9192 — Click to copy" [ref=f1e330] [cursor=pointer]'
+                          - 'generic "T70 #aaabac — Click to copy" [ref=f1e331] [cursor=pointer]'
+                          - 'generic "T80 #c5c7c8 — Click to copy" [ref=f1e332] [cursor=pointer]'
+                          - 'generic "T90 #e1e3e4 — Click to copy" [ref=f1e333] [cursor=pointer]'
+                          - 'generic "T95 #f0f1f2 — Click to copy" [ref=f1e334] [cursor=pointer]'
+                          - 'generic "T100 #ffffff — Click to copy" [ref=f1e335] [cursor=pointer]'
+                    - generic [ref=f1e336]:
+                      - generic [ref=f1e337]:
+                        - generic [ref=f1e338]:
+                          - generic [ref=f1e339]: Headline
+                          - generic [ref=f1e340]: Inter
+                        - generic [ref=f1e341]: Aa
+                      - generic [ref=f1e342]:
+                        - generic [ref=f1e343]:
+                          - button "Primary" [ref=f1e344]
+                          - button "Secondary" [ref=f1e345]
+                        - generic [ref=f1e346]:
+                          - button "Inverted" [ref=f1e347]
+                          - button "Outlined" [ref=f1e348]
+                      - generic [ref=f1e350]:
+                        - generic [ref=f1e351]: search
+                        - generic [ref=f1e352]: Search
+                      - generic [ref=f1e353]:
+                        - generic [ref=f1e354]:
+                          - generic [ref=f1e355]: Body
+                          - generic [ref=f1e356]: Inter
+                        - generic [ref=f1e357]: Aa
+                      - generic [ref=f1e366]:
+                        - generic [ref=f1e368]: home
+                        - generic [ref=f1e370]: search
+                        - generic [ref=f1e372]: person
+                      - generic [ref=f1e373]:
+                        - generic [ref=f1e374]:
+                          - generic [ref=f1e375]: Label
+                          - generic [ref=f1e376]: Inter
+                        - generic [ref=f1e377]: Aa
+                      - generic [ref=f1e378]:
+                        - generic [ref=f1e381]: edit
+                        - generic [ref=f1e383]:
+                          - generic [ref=f1e384]: edit
+                          - text: Label
+                      - generic [ref=f1e386]:
+                        - generic [ref=f1e388]: auto_fix_high
+                        - generic [ref=f1e390]: category
+                        - generic [ref=f1e392]: sell
+                        - generic [ref=f1e394]: delete
+                - generic [ref=f1e396]:
+                  - generic [ref=f1e400]:
+                    - generic [ref=f1e402]: play_circle
+                    - generic [ref=f1e403]: "Prototype : C-GO Aerospace Admin Panel"
+                  - generic [ref=f1e409]:
+                    - generic:
+                      - img
+                      - generic: Prototipo
+                      - generic: Haz doble clic para abrir
+                - generic [ref=f1e415]:
+                  - generic [ref=f1e419]:
+                    - generic [ref=f1e421]: devices
+                    - generic [ref=f1e422]: C-GO - White Label Configuration
+                  - img [ref=f1e426]
+                - generic [ref=f1e429]:
+                  - generic [ref=f1e433]:
+                    - generic [ref=f1e435]: devices
+                    - generic [ref=f1e436]: Zenith Meridian - Checkbox States Catalog
+                  - img [ref=f1e440]
+                - generic [ref=f1e443]:
+                  - generic [ref=f1e447]:
+                    - generic [ref=f1e449]: devices
+                    - generic [ref=f1e450]: Zenith Meridian - Isolated Button Components
+                  - iframe [ref=f1e455]:
+                    - generic [ref=f3e2]:
+                      - button "send PRIMARY ACTION" [ref=f3e3] [cursor=pointer]:
+                        - generic [ref=f3e4]: send
+                        - generic [ref=f3e5]: PRIMARY ACTION
+                      - button "visibility SECONDARY ACTION" [ref=f3e6] [cursor=pointer]:
+                        - generic [ref=f3e7]: visibility
+                        - generic [ref=f3e8]: SECONDARY ACTION
+                      - button "check_circle SUCCESS ACTIVE" [ref=f3e9] [cursor=pointer]:
+                        - generic [ref=f3e10]: check_circle
+                        - generic [ref=f3e11]: SUCCESS ACTIVE
+                      - button "report DANGER INACTIVE" [ref=f3e12]:
+                        - generic [ref=f3e13]: report
+                        - generic [ref=f3e14]: DANGER INACTIVE
+                - generic [ref=f1e458]:
+                  - generic [ref=f1e462]:
+                    - generic [ref=f1e464]: devices
+                    - generic [ref=f1e465]: C-GO - User Registration & Assignment
+                  - img [ref=f1e469]
+                - generic [ref=f1e472]:
+                  - generic [ref=f1e476]:
+                    - generic [ref=f1e478]: devices
+                    - generic [ref=f1e479]: Reusable Map & Telemetry Component Template
+                  - iframe [ref=f1e484]:
+                    - generic [ref=f6e2]:
+                      - banner [ref=f6e3]:
+                        - generic [ref=f6e4]:
+                          - generic [ref=f6e6]: location_on
+                          - generic [ref=f6e7]:
+                            - heading "JMV103" [level=1] [ref=f6e8]
+                            - paragraph [ref=f6e9]: Sunday, April 19, 2026, 8:40:01 PM -05
+                        - generic [ref=f6e10]:
+                          - button "edit" [ref=f6e11] [cursor=pointer]:
+                            - generic [ref=f6e12]: edit
+                          - button "delete" [ref=f6e13] [cursor=pointer]:
+                            - generic [ref=f6e14]: delete
+                          - button "settings" [ref=f6e15] [cursor=pointer]:
+                            - generic [ref=f6e16]: settings
+                          - img "User profile" [ref=f6e18]
+                      - main [ref=f6e19]:
+                        - generic [ref=f6e21]:
+                          - generic [ref=f6e22]: JMV103
+                          - generic [ref=f6e24]: location_on
+                        - generic [ref=f6e26]:
+                          - button "add" [ref=f6e27] [cursor=pointer]:
+                            - generic [ref=f6e28]: add
+                          - button "remove" [ref=f6e29] [cursor=pointer]:
+                            - generic [ref=f6e30]: remove
+                        - button "layers Satellite View" [ref=f6e32] [cursor=pointer]:
+                          - generic [ref=f6e33]: layers
+                          - generic [ref=f6e34]: Satellite View
+                      - contentinfo [ref=f6e35]:
+                        - generic [ref=f6e36]:
+                          - generic [ref=f6e37]:
+                            - generic [ref=f6e38]: network_cell
+                            - generic [ref=f6e39]: 3G Network
+                          - generic [ref=f6e40]: SIGNAL STRENGTH
+                        - generic [ref=f6e42]:
+                          - generic [ref=f6e43]:
+                            - generic [ref=f6e44]: signal_cellular_4_bar
+                            - generic [ref=f6e45]: 4G Signal
+                          - generic [ref=f6e46]: ACTIVE CONNECTION
+                        - generic [ref=f6e48]:
+                          - generic [ref=f6e49]:
+                            - generic [ref=f6e50]: settings_input_antenna
+                            - generic [ref=f6e51]:
+                              - generic [ref=f6e52]: Concox
+                              - generic [ref=f6e53]: PROV.
+                          - generic [ref=f6e54]: STABLE CONNECTION
+                - generic [ref=f1e487]:
+                  - generic [ref=f1e491]:
+                    - generic [ref=f1e493]: devices
+                    - generic [ref=f1e494]: Plantilla de Card Reutilizable
+                  - iframe [ref=f1e499]:
+                    - generic [ref=f11e3]:
+                      - generic [ref=f11e4]:
+                        - generic [ref=f11e5]:
+                          - img "Component visual identifier" [ref=f11e7]
+                          - generic [ref=f11e8]:
+                            - heading "Performance Index Alpha" [level=3] [ref=f11e9]
+                            - paragraph [ref=f11e10]: Real-time analytical metrics for asset vitality.
+                        - generic [ref=f11e11]:
+                          - button "edit" [ref=f11e12] [cursor=pointer]:
+                            - generic [ref=f11e13]: edit
+                          - button "settings" [ref=f11e14] [cursor=pointer]:
+                            - generic [ref=f11e15]: settings
+                          - button "delete" [ref=f11e16] [cursor=pointer]:
+                            - generic [ref=f11e17]: delete
+                      - generic [ref=f11e31]:
+                        - generic [ref=f11e32]: 94.8%
+                        - generic [ref=f11e33]: Efficiency Rating
+                      - generic [ref=f11e34]:
+                        - generic [ref=f11e35]:
+                          - generic [ref=f11e36]: Active
+                          - generic [ref=f11e38]:
+                            - generic [ref=f11e39]: schedule
+                            - text: Updated 2m ago
+                        - generic [ref=f11e40]:
+                          - generic [ref=f11e41]: Critical
+                          - generic [ref=f11e42]: High Priority
+                - generic [ref=f1e502]:
+                  - generic [ref=f1e506]:
+                    - generic [ref=f1e508]: devices
+                    - generic [ref=f1e509]: C-GO - Reusable Card Component Showcase
+                  - img [ref=f1e513]
+                - generic [ref=f1e516]:
+                  - generic [ref=f1e520]:
+                    - generic [ref=f1e522]: devices
+                    - generic [ref=f1e523]: Zenith Meridian - Isolated Button Components
+                  - img [ref=f1e527]
+                - generic [ref=f1e530]:
+                  - generic [ref=f1e534]:
+                    - generic [ref=f1e536]: devices
+                    - generic [ref=f1e537]: C-GO - Super Admin Dashboard
+                  - img [ref=f1e541]
+                - generic [ref=f1e544]:
+                  - generic [ref=f1e548]:
+                    - generic [ref=f1e550]: devices
+                    - generic [ref=f1e551]: C-GO - Tenant Management (Updated Table)
+                  - img [ref=f1e555]
+                - generic [ref=f1e558]:
+                  - generic [ref=f1e562]:
+                    - generic [ref=f1e564]: devices
+                    - generic [ref=f1e565]: C-GO - Tenant Registry (Standardized Table)
+                  - img [ref=f1e569]
+                - generic [ref=f1e572]:
+                  - generic [ref=f1e576]:
+                    - generic [ref=f1e578]: play_circle
+                    - generic [ref=f1e579]: "Prototype : C-GO Aerospace Admin Control"
+                  - generic [ref=f1e585]:
+                    - generic:
+                      - img
+                      - generic: Prototipo
+                      - generic: Haz doble clic para abrir
+                - generic [ref=f1e591]:
+                  - generic [ref=f1e595]:
+                    - generic [ref=f1e597]: devices
+                    - generic [ref=f1e598]: C-GO - White Label Configuration (Updated Buttons)
+                  - img [ref=f1e602]
+                - generic [ref=f1e605]:
+                  - generic [ref=f1e609]:
+                    - generic [ref=f1e611]: devices
+                    - generic [ref=f1e612]: Zenith Meridian - Isolated Button Components
+                  - iframe [ref=f1e617]:
+                    - generic [ref=f7e2]:
+                      - button "rocket_launch PRIMARY ACTION" [ref=f7e3] [cursor=pointer]:
+                        - generic [ref=f7e4]: rocket_launch
+                        - generic [ref=f7e5]: PRIMARY ACTION
+                      - button "explore SECONDARY ACTION" [ref=f7e6] [cursor=pointer]:
+                        - generic [ref=f7e7]: explore
+                        - generic [ref=f7e8]: SECONDARY ACTION
+                      - button "task_alt SUCCESS ACTIVE" [ref=f7e9] [cursor=pointer]:
+                        - generic [ref=f7e10]: task_alt
+                        - generic [ref=f7e11]: SUCCESS ACTIVE
+                      - button "error DANGER INACTIVE" [ref=f7e12]:
+                        - generic [ref=f7e13]: error
+                        - generic [ref=f7e14]: DANGER INACTIVE
+                - generic [ref=f1e620]:
+                  - generic [ref=f1e624]:
+                    - generic [ref=f1e626]: devices
+                    - generic [ref=f1e627]: Zenith Meridian - Isolated Button Components
+                  - iframe [ref=f1e632]:
+                    - generic [ref=f5e2]:
+                      - button "send PRIMARY ACTION" [ref=f5e3] [cursor=pointer]:
+                        - generic [ref=f5e4]: send
+                        - generic [ref=f5e5]: PRIMARY ACTION
+                      - button "visibility SECONDARY ACTION" [ref=f5e6] [cursor=pointer]:
+                        - generic [ref=f5e7]: visibility
+                        - generic [ref=f5e8]: SECONDARY ACTION
+                      - button "check_circle SUCCESS ACTIVE" [ref=f5e9] [cursor=pointer]:
+                        - generic [ref=f5e10]: check_circle
+                        - generic [ref=f5e11]: SUCCESS ACTIVE
+                      - button "report DANGER INACTIVE" [ref=f5e12]:
+                        - generic [ref=f5e13]: report
+                        - generic [ref=f5e14]: DANGER INACTIVE
+                - generic [ref=f1e635]:
+                  - generic [ref=f1e639]:
+                    - generic [ref=f1e641]: devices
+                    - generic [ref=f1e642]: Plantilla de Card Reutilizable
+                  - iframe [ref=f1e647]:
+                    - generic [ref=f10e3]:
+                      - generic [ref=f10e4]:
+                        - generic [ref=f10e5]:
+                          - img "Component visual identifier" [ref=f10e7]
+                          - generic [ref=f10e8]:
+                            - heading "Performance Index Alpha" [level=3] [ref=f10e9]
+                            - paragraph [ref=f10e10]: Real-time analytical metrics for asset vitality.
+                        - generic [ref=f10e11]:
+                          - button "edit" [ref=f10e12] [cursor=pointer]:
+                            - generic [ref=f10e13]: edit
+                          - button "settings" [ref=f10e14] [cursor=pointer]:
+                            - generic [ref=f10e15]: settings
+                          - button "delete" [ref=f10e16] [cursor=pointer]:
+                            - generic [ref=f10e17]: delete
+                      - generic [ref=f10e19]:
+                        - generic [ref=f10e20]:
+                          - generic [ref=f10e21]: Uptime
+                          - generic [ref=f10e22]:
+                            - generic [ref=f10e23]: 99.99%
+                            - generic [ref=f10e24]:
+                              - generic [ref=f10e25]: arrow_upward
+                              - text: 0.02%
+                        - generic [ref=f10e26]:
+                          - img [ref=f10e28]
+                          - generic [ref=f10e31]: 94.8%
+                          - generic [ref=f10e32]: Efficiency Rating
+                        - generic [ref=f10e33]:
+                          - generic [ref=f10e34]: Signal Strength
+                          - generic [ref=f10e41]: "-64 dBm"
+                      - generic [ref=f10e42]:
+                        - generic [ref=f10e43]:
+                          - generic [ref=f10e44]: Active
+                          - generic [ref=f10e46]:
+                            - generic [ref=f10e47]: schedule
+                            - text: Updated 2m ago
+                        - generic [ref=f10e48]:
+                          - generic [ref=f10e49]: Critical
+                          - generic [ref=f10e50]: High Priority
+                - generic [ref=f1e650]:
+                  - generic [ref=f1e654]:
+                    - generic [ref=f1e656]: devices
+                    - generic [ref=f1e657]: C-GO - User Directory
+                  - img [ref=f1e661]
+                - generic [ref=f1e664]:
+                  - generic [ref=f1e668]:
+                    - generic [ref=f1e670]: devices
+                    - generic [ref=f1e671]: C-GO - Reusable Card Component Showcase
+                  - img [ref=f1e675]
+                - generic [ref=f1e678]:
+                  - generic [ref=f1e682]:
+                    - generic [ref=f1e684]: devices
+                    - generic [ref=f1e685]: C-GO - Tenant Management
+                  - img [ref=f1e689]
+                - generic [ref=f1e692]:
+                  - generic [ref=f1e696]:
+                    - generic [ref=f1e698]: devices
+                    - generic [ref=f1e699]: C-GO - Role Management
+                  - img [ref=f1e703]
+                - generic [ref=f1e706]:
+                  - generic [ref=f1e710]:
+                    - generic [ref=f1e712]: devices
+                    - generic [ref=f1e713]: C-GO - Role Management (Updated Checkboxes)
+                  - img [ref=f1e717]
+                - generic [ref=f1e720]:
+                  - generic [ref=f1e724]:
+                    - generic [ref=f1e726]: devices
+                    - generic [ref=f1e727]: C-GO - Tenant Management (Updated Table)
+                  - img [ref=f1e731]
+                - generic [ref=f1e734]:
+                  - generic [ref=f1e738]:
+                    - generic [ref=f1e740]: devices
+                    - generic [ref=f1e741]: Plantilla de Card Reutilizable
+                  - iframe [ref=f1e746]:
+                    - generic [ref=f8e3]:
+                      - generic [ref=f8e4]:
+                        - generic [ref=f8e5]:
+                          - img "Component visual identifier" [ref=f8e7]
+                          - generic [ref=f8e8]:
+                            - heading "Performance Index Alpha" [level=3] [ref=f8e9]
+                            - paragraph [ref=f8e10]: Real-time analytical metrics for asset vitality.
+                        - generic [ref=f8e11]:
+                          - button "edit" [ref=f8e12] [cursor=pointer]:
+                            - generic [ref=f8e13]: edit
+                          - button "settings" [ref=f8e14] [cursor=pointer]:
+                            - generic [ref=f8e15]: settings
+                          - button "delete" [ref=f8e16] [cursor=pointer]:
+                            - generic [ref=f8e17]: delete
+                      - generic [ref=f8e19]:
+                        - generic [ref=f8e20]:
+                          - generic [ref=f8e21]: Uptime
+                          - generic [ref=f8e22]:
+                            - generic [ref=f8e23]: 99.99%
+                            - generic [ref=f8e24]:
+                              - generic [ref=f8e25]: arrow_upward
+                              - text: 0.02%
+                        - generic [ref=f8e26]:
+                          - img [ref=f8e28]
+                          - generic [ref=f8e31]: 94.8%
+                          - generic [ref=f8e32]: Efficiency Rating
+                        - generic [ref=f8e33]:
+                          - generic [ref=f8e34]: Signal Strength
+                          - generic [ref=f8e41]: "-64 dBm"
+                      - generic [ref=f8e42]:
+                        - generic [ref=f8e43]:
+                          - generic [ref=f8e44]: Active
+                          - generic [ref=f8e46]:
+                            - generic [ref=f8e47]: schedule
+                            - text: Updated 2m ago
+                        - generic [ref=f8e48]:
+                          - generic [ref=f8e49]: Critical
+                          - generic [ref=f8e50]: High Priority
+                - generic [ref=f1e749]:
+                  - generic [ref=f1e753]:
+                    - generic [ref=f1e755]: devices
+                    - generic [ref=f1e756]: C-GO - Super Admin Dashboard (Updated Button Sizes)
+                  - iframe [ref=f1e761]:
+                    - generic [active] [ref=f2e1]:
+                      - complementary [ref=f2e2]:
+                        - generic [ref=f2e3]:
+                          - heading "C-GO Admin" [level=1] [ref=f2e4]
+                          - paragraph [ref=f2e5]: Mission Control
+                        - navigation [ref=f2e6]:
+                          - link "dashboard Dashboard" [ref=f2e7] [cursor=pointer]:
+                            - /url: "#"
+                            - generic [ref=f2e8]: dashboard
+                            - text: Dashboard
+                          - link "corporate_fare Tenants" [ref=f2e9] [cursor=pointer]:
+                            - /url: "#"
+                            - generic [ref=f2e10]: corporate_fare
+                            - text: Tenants
+                          - link "palette Branding" [ref=f2e11] [cursor=pointer]:
+                            - /url: "#"
+                            - generic [ref=f2e12]: palette
+                            - text: Branding
+                          - link "satellite_alt Telemetry" [ref=f2e13] [cursor=pointer]:
+                            - /url: "#"
+                            - generic [ref=f2e14]: satellite_alt
+                            - text: Telemetry
+                          - link "history_edu Logs" [ref=f2e15] [cursor=pointer]:
+                            - /url: "#"
+                            - generic [ref=f2e16]: history_edu
+                            - text: Logs
+                        - button "add ADD NEW TENANT" [ref=f2e18] [cursor=pointer]:
+                          - generic [ref=f2e19]: add
+                          - text: ADD NEW TENANT
+                        - generic [ref=f2e20]:
+                          - link "help Help Center" [ref=f2e21] [cursor=pointer]:
+                            - /url: "#"
+                            - generic [ref=f2e22]: help
+                            - text: Help Center
+                          - link "logout Sign Out" [ref=f2e23] [cursor=pointer]:
+                            - /url: "#"
+                            - generic [ref=f2e24]: logout
+                            - text: Sign Out
+                      - main [ref=f2e25]:
+                        - generic [ref=f2e26]:
+                          - generic [ref=f2e27]:
+                            - generic [ref=f2e28]:
+                              - generic [ref=f2e29]: search
+                              - textbox "Search telemetry, tenants, or logs..." [ref=f2e30]
+                            - navigation [ref=f2e31]:
+                              - link "Overview" [ref=f2e32] [cursor=pointer]:
+                                - /url: "#"
+                              - link "Global Map" [ref=f2e33] [cursor=pointer]:
+                                - /url: "#"
+                              - link "Incidents" [ref=f2e34] [cursor=pointer]:
+                                - /url: "#"
+                          - generic [ref=f2e35]:
+                            - button "notifications" [ref=f2e36] [cursor=pointer]:
+                              - generic [ref=f2e37]: notifications
+                            - button "settings" [ref=f2e38] [cursor=pointer]:
+                              - generic [ref=f2e39]: settings
+                            - generic [ref=f2e40]:
+                              - generic [ref=f2e41]:
+                                - paragraph [ref=f2e42]: Admin Control
+                                - paragraph [ref=f2e43]: Superuser
+                              - img "Administrator profile" [ref=f2e44]
+                        - generic [ref=f2e45]:
+                          - generic [ref=f2e46]:
+                            - generic [ref=f2e47]:
+                              - heading "Platform Overview" [level=2] [ref=f2e48]
+                              - paragraph [ref=f2e49]: Real-time satellite constellation and tenant health monitoring.
+                            - generic [ref=f2e50]:
+                              - button "download EXPORT REPORT" [ref=f2e51] [cursor=pointer]:
+                                - generic [ref=f2e52]: download
+                                - generic [ref=f2e53]: EXPORT REPORT
+                              - button "refresh FORCE SYNC" [ref=f2e54] [cursor=pointer]:
+                                - generic [ref=f2e55]: refresh
+                                - generic [ref=f2e56]: FORCE SYNC
+                          - generic [ref=f2e57]:
+                            - generic [ref=f2e58]:
+                              - generic [ref=f2e60]: corporate_fare
+                              - paragraph [ref=f2e61]: Total Tenants
+                              - heading "124" [level=3] [ref=f2e62]
+                              - generic [ref=f2e63]:
+                                - generic [ref=f2e64]: trending_up
+                                - text: +12% from last month
+                            - generic [ref=f2e65]:
+                              - generic [ref=f2e67]: bolt
+                              - paragraph [ref=f2e68]: Platform Uptime
+                              - heading "99.98%" [level=3] [ref=f2e69]
+                              - generic [ref=f2e72]: Active Status
+                            - generic [ref=f2e73]:
+                              - generic [ref=f2e75]: sensors
+                              - paragraph [ref=f2e76]: Active Satellites
+                              - heading "8,422" [level=3] [ref=f2e77]
+                              - generic [ref=f2e78]: Tracking in 42 Sectors
+                            - generic [ref=f2e79]:
+                              - paragraph [ref=f2e80]: System Alerts
+                              - heading "03" [level=3] [ref=f2e81]
+                              - generic [ref=f2e82]:
+                                - generic [ref=f2e83]: warning
+                                - text: Requires Attention
+                          - generic [ref=f2e84]:
+                            - generic [ref=f2e85]:
+                              - generic [ref=f2e86]:
+                                - heading "Global Vehicle Activity" [level=4] [ref=f2e87]
+                                - generic [ref=f2e88]:
+                                  - generic [ref=f2e91]: Active
+                                  - generic [ref=f2e94]: Standby
+                              - generic [ref=f2e96]:
+                                - generic [ref=f2e97]: Mon
+                                - generic [ref=f2e98]: Tue
+                                - generic [ref=f2e99]: Wed
+                                - generic [ref=f2e100]: Thu
+                                - generic [ref=f2e101]: Fri
+                                - generic [ref=f2e102]: Sat
+                                - generic [ref=f2e103]: Sun
+                            - generic [ref=f2e104]:
+                              - generic [ref=f2e105]:
+                                - heading "System Logs" [level=4] [ref=f2e106]
+                                - generic [ref=f2e107] [cursor=pointer]: terminal
+                              - generic [ref=f2e108]:
+                                - generic [ref=f2e111]:
+                                  - paragraph [ref=f2e112]: 08:42:11 | AUTH_FAILURE
+                                  - paragraph [ref=f2e113]: "Multiple failed login attempts detected on Tenant: Hyperion Logistics"
+                                - generic [ref=f2e116]:
+                                  - paragraph [ref=f2e117]: 08:35:04 | DB_SYNC
+                                  - paragraph [ref=f2e118]: Automated telemetry snapshot completed for Sector 7G.
+                                - generic [ref=f2e121]:
+                                  - paragraph [ref=f2e122]: 08:12:59 | PROV_SUCCESS
+                                  - paragraph [ref=f2e123]: New Tenant Stellar Swift successfully provisioned.
+                              - button "View Detailed History arrow_forward" [ref=f2e124] [cursor=pointer]:
+                                - text: View Detailed History
+                                - generic [ref=f2e125]: arrow_forward
+                          - generic [ref=f2e126]:
+                            - generic [ref=f2e127]:
+                              - heading "Priority Tenants" [level=4] [ref=f2e128]
+                              - link "View All 124 Tenants" [ref=f2e129] [cursor=pointer]:
+                                - /url: "#"
+                            - generic [ref=f2e130]:
+                              - generic [ref=f2e131] [cursor=pointer]:
+                                - img "Tenant logo" [ref=f2e132]
+                                - generic [ref=f2e133]:
+                                  - generic [ref=f2e134]:
+                                    - heading "Orbital Express" [level=5] [ref=f2e135]
+                                    - generic [ref=f2e136]: Active
+                                  - paragraph [ref=f2e137]: "SLA: 99.9% Platinum"
+                                  - paragraph [ref=f2e140]: "Utilization: 88%"
+                              - generic [ref=f2e141] [cursor=pointer]:
+                                - img "Tenant logo" [ref=f2e142]
+                                - generic [ref=f2e143]:
+                                  - generic [ref=f2e144]:
+                                    - heading "NorthStar Group" [level=5] [ref=f2e145]
+                                    - generic [ref=f2e146]: Maintenance
+                                  - paragraph [ref=f2e147]: "SLA: 99.5% Gold"
+                                  - paragraph [ref=f2e150]: "Utilization: 42%"
+                              - generic [ref=f2e151] [cursor=pointer]:
+                                - img "Tenant logo" [ref=f2e152]
+                                - generic [ref=f2e153]:
+                                  - generic [ref=f2e154]:
+                                    - heading "Apex Solutions" [level=5] [ref=f2e155]
+                                    - generic [ref=f2e156]: Active
+                                  - paragraph [ref=f2e157]: "SLA: 99.9% Platinum"
+                                  - paragraph [ref=f2e160]: "Utilization: 94%"
+                        - generic [ref=f2e161]:
+                          - generic [ref=f2e162]: C-GO Mission Control v4.2.1-stable
+                          - generic [ref=f2e163]:
+                            - link "Privacy Protocol" [ref=f2e164] [cursor=pointer]:
+                              - /url: "#"
+                            - link "API Docs" [ref=f2e165] [cursor=pointer]:
+                              - /url: "#"
+                            - generic [ref=f2e166]: © 2024 C-GO Aerospace Industries
+                - generic [ref=f1e764]:
+                  - generic [ref=f1e768]:
+                    - generic [ref=f1e770]: play_circle
+                    - generic [ref=f1e771]: "Prototype : C-GO - Tenant Registry (Standardized Table)"
+                  - generic [ref=f1e777]:
+                    - generic:
+                      - img
+                      - generic: Prototipo
+                      - generic: Haz doble clic para abrir
+                - generic [ref=f1e783]:
+                  - generic [ref=f1e787]:
+                    - generic [ref=f1e789]: devices
+                    - generic [ref=f1e790]: Plantilla de Card Reutilizable
+                  - iframe [ref=f1e795]:
+                    - generic [ref=f12e3]:
+                      - generic [ref=f12e4]:
+                        - generic [ref=f12e5]:
+                          - img "Component visual identifier" [ref=f12e7]
+                          - generic [ref=f12e8]:
+                            - heading "Performance Index Alpha" [level=3] [ref=f12e9]
+                            - paragraph [ref=f12e10]: Real-time analytical metrics for asset vitality.
+                        - generic [ref=f12e11]:
+                          - button "edit" [ref=f12e12] [cursor=pointer]:
+                            - generic [ref=f12e13]: edit
+                          - button "settings" [ref=f12e14] [cursor=pointer]:
+                            - generic [ref=f12e15]: settings
+                          - button "delete" [ref=f12e16] [cursor=pointer]:
+                            - generic [ref=f12e17]: delete
+                      - generic [ref=f12e19]:
+                        - generic [ref=f12e20]:
+                          - generic [ref=f12e21]: Uptime
+                          - generic [ref=f12e22]:
+                            - generic [ref=f12e23]: 99.99%
+                            - generic [ref=f12e24]:
+                              - generic [ref=f12e25]: arrow_upward
+                              - text: 0.02%
+                        - generic [ref=f12e26]:
+                          - generic [ref=f12e27]: 94.8%
+                          - generic [ref=f12e28]: Efficiency Rating
+                        - generic [ref=f12e29]:
+                          - generic [ref=f12e30]: Signal Strength
+                          - generic [ref=f12e37]: "-64 dBm"
+                      - generic [ref=f12e38]:
+                        - generic [ref=f12e39]:
+                          - generic [ref=f12e40]: Active
+                          - generic [ref=f12e42]:
+                            - generic [ref=f12e43]: schedule
+                            - text: Updated 2m ago
+                        - generic [ref=f12e44]:
+                          - generic [ref=f12e45]: Critical
+                          - generic [ref=f12e46]: High Priority
+                - generic [ref=f1e798]:
+                  - generic [ref=f1e802]:
+                    - generic [ref=f1e804]: devices
+                    - generic [ref=f1e805]: Reusable Table Component Template
+                  - iframe [ref=f1e810]:
+                    - generic [ref=f9e2]:
+                      - generic [ref=f9e3]:
+                        - generic [ref=f9e4]:
+                          - generic [ref=f9e5]:
+                            - heading "Records Management" [level=2] [ref=f9e6]
+                            - paragraph [ref=f9e7]: v1.0.4 - Live Data Stream
+                          - button "add New Entry" [ref=f9e9] [cursor=pointer]:
+                            - generic [ref=f9e10]: add
+                            - text: New Entry
+                        - table [ref=f9e12]:
+                          - rowgroup [ref=f9e13]:
+                            - row "Field 1 Field 2 Field 3 Field 4 Field 5 Status Actions" [ref=f9e14]:
+                              - columnheader [ref=f9e15]:
+                                - checkbox [ref=f9e17] [cursor=pointer]
+                              - columnheader "Field 1" [ref=f9e18]
+                              - columnheader "Field 2" [ref=f9e19]
+                              - columnheader "Field 3" [ref=f9e20]
+                              - columnheader "Field 4" [ref=f9e21]
+                              - columnheader "Field 5" [ref=f9e22]
+                              - columnheader "Status" [ref=f9e23]
+                              - columnheader "Actions" [ref=f9e24]
+                          - rowgroup [ref=f9e25]:
+                            - row "ZM-88492 Operational Hub Alpha Oct 24, 2023 Level 04 System Root Active more_vert" [ref=f9e26] [cursor=pointer]:
+                              - cell [ref=f9e27]:
+                                - checkbox [ref=f9e29]
+                              - cell "ZM-88492" [ref=f9e30]
+                              - cell "Operational Hub Alpha" [ref=f9e31]
+                              - cell "Oct 24, 2023" [ref=f9e32]
+                              - cell "Level 04" [ref=f9e33]
+                              - cell "System Root" [ref=f9e34]
+                              - cell "Active" [ref=f9e35]:
+                                - generic [ref=f9e36]: Active
+                              - cell "more_vert" [ref=f9e37]:
+                                - button "more_vert" [ref=f9e38]:
+                                  - generic [ref=f9e39]: more_vert
+                            - row "ZM-91204 Neural Logic Node Oct 25, 2023 Level 02 Branch Node Critical more_vert" [ref=f9e40] [cursor=pointer]:
+                              - cell [ref=f9e41]:
+                                - checkbox [checked] [ref=f9e43]
+                              - cell "ZM-91204" [ref=f9e44]
+                              - cell "Neural Logic Node" [ref=f9e45]
+                              - cell "Oct 25, 2023" [ref=f9e46]
+                              - cell "Level 02" [ref=f9e47]
+                              - cell "Branch Node" [ref=f9e48]
+                              - cell "Critical" [ref=f9e49]:
+                                - generic [ref=f9e50]: Critical
+                              - cell "more_vert" [ref=f9e51]:
+                                - button "more_vert" [ref=f9e52]:
+                                  - generic [ref=f9e53]: more_vert
+                            - row "ZM-77312 Vector Processing Oct 26, 2023 Level 07 User Local Archived more_vert" [ref=f9e54] [cursor=pointer]:
+                              - cell [ref=f9e55]:
+                                - checkbox [ref=f9e57]
+                              - cell "ZM-77312" [ref=f9e58]
+                              - cell "Vector Processing" [ref=f9e59]
+                              - cell "Oct 26, 2023" [ref=f9e60]
+                              - cell "Level 07" [ref=f9e61]
+                              - cell "User Local" [ref=f9e62]
+                              - cell "Archived" [ref=f9e63]:
+                                - generic [ref=f9e64]: Archived
+                              - cell "more_vert" [ref=f9e65]:
+                                - button "more_vert" [ref=f9e66]:
+                                  - generic [ref=f9e67]: more_vert
+                            - row "ZM-12055 Meridian Core Unit Oct 27, 2023 Level 01 Admin Core Active more_vert" [ref=f9e68] [cursor=pointer]:
+                              - cell [ref=f9e69]:
+                                - checkbox [ref=f9e71]
+                              - cell "ZM-12055" [ref=f9e72]
+                              - cell "Meridian Core Unit" [ref=f9e73]
+                              - cell "Oct 27, 2023" [ref=f9e74]
+                              - cell "Level 01" [ref=f9e75]
+                              - cell "Admin Core" [ref=f9e76]
+                              - cell "Active" [ref=f9e77]:
+                                - generic [ref=f9e78]: Active
+                              - cell "more_vert" [ref=f9e79]:
+                                - button "more_vert" [ref=f9e80]:
+                                  - generic [ref=f9e81]: more_vert
+                        - generic [ref=f9e82]:
+                          - generic [ref=f9e83]:
+                            - text: "Total Records:"
+                            - generic [ref=f9e84]: "145"
+                          - generic [ref=f9e85]:
+                            - generic [ref=f9e86]:
+                              - generic [ref=f9e87]: "Rows per page:"
+                              - generic [ref=f9e88]:
+                                - combobox "Rows per page:" [ref=f9e89] [cursor=pointer]:
+                                  - option "10"
+                                  - option "20" [selected]
+                                  - option "50"
+                                  - option "100"
+                                - generic: expand_more
+                            - generic [ref=f9e90]:
+                              - generic [ref=f9e91]: 5 of 10
+                              - generic [ref=f9e92]:
+                                - button "chevron_left" [ref=f9e93] [cursor=pointer]:
+                                  - generic [ref=f9e94]: chevron_left
+                                - button "chevron_right" [ref=f9e95] [cursor=pointer]:
+                                  - generic [ref=f9e96]: chevron_right
+                      - generic [ref=f9e97]:
+                        - generic [ref=f9e98]:
+                          - generic [ref=f9e99]:
+                            - generic [ref=f9e100]: Health Status
+                            - generic [ref=f9e101]: monitor_heart
+                          - generic [ref=f9e102]: 98.2%
+                          - paragraph [ref=f9e103]: Global system uptime within params
+                        - generic [ref=f9e104]:
+                          - generic [ref=f9e105]:
+                            - generic [ref=f9e106]: Sync Rate
+                            - generic [ref=f9e107]: sync
+                          - generic [ref=f9e108]: 1.4s
+                          - paragraph [ref=f9e109]: Average latency across records
+                        - generic [ref=f9e110]:
+                          - generic [ref=f9e111]:
+                            - generic [ref=f9e112]: Security
+                            - generic [ref=f9e113]: verified_user
+                          - generic [ref=f9e114]: AES-256
+                          - paragraph [ref=f9e115]: End-to-end encryption active
+                - generic [ref=f1e813]:
+                  - generic [ref=f1e817]:
+                    - generic [ref=f1e819]: devices
+                    - generic [ref=f1e820]: C-GO - Real-time Tracking (Updated Buttons)
+                  - img [ref=f1e824]
+                - generic [ref=f1e827]:
+                  - generic [ref=f1e831]:
+                    - generic [ref=f1e833]: devices
+                    - generic [ref=f1e834]: C-GO - Real-time Tracking
+                  - img [ref=f1e838]
+                - generic [ref=f1e841]:
+                  - generic [ref=f1e845]:
+                    - generic [ref=f1e847]: devices
+                    - generic [ref=f1e848]: Zenith Meridian - Isolated Button Components
+                  - iframe [ref=f1e853]:
+                    - generic [ref=f4e2]:
+                      - button "rocket_launch PRIMARY ACTION" [ref=f4e3] [cursor=pointer]:
+                        - generic [ref=f4e4]: rocket_launch
+                        - generic [ref=f4e5]: PRIMARY ACTION
+                      - button "explore SECONDARY ACTION" [ref=f4e6] [cursor=pointer]:
+                        - generic [ref=f4e7]: explore
+                        - generic [ref=f4e8]: SECONDARY ACTION
+                      - button "task_alt SUCCESS ACTIVE" [ref=f4e9] [cursor=pointer]:
+                        - generic [ref=f4e10]: task_alt
+                        - generic [ref=f4e11]: SUCCESS ACTIVE
+                      - button "error DANGER INACTIVE" [ref=f4e12]:
+                        - generic [ref=f4e13]: error
+                        - generic [ref=f4e14]: DANGER INACTIVE
+                - generic [ref=f1e856]:
+                  - generic [ref=f1e860]:
+                    - generic [ref=f1e862]: devices
+                    - generic [ref=f1e863]: C-GO - White Label Configuration
+                  - img [ref=f1e867]
+                - generic [ref=f1e870]:
+                  - generic [ref=f1e874]:
+                    - generic [ref=f1e876]: devices
+                    - generic [ref=f1e877]: C-GO - White Label Configuration
+                  - img [ref=f1e881]
+                - generic [ref=f1e884]:
+                  - generic [ref=f1e888]:
+                    - generic [ref=f1e890]: devices
+                    - generic [ref=f1e891]: C-GO - White Label Configuration
+                  - img [ref=f1e895]
+                - generic [ref=f1e898]:
+                  - generic [ref=f1e902]:
+                    - generic [ref=f1e904]: devices
+                    - generic [ref=f1e905]: C-GO - Checkboxes States Catalog
+                  - img [ref=f1e909]
+                - generic [ref=f1e912]:
+                  - generic [ref=f1e916]:
+                    - generic [ref=f1e918]: image
+                    - generic [ref=f1e919]: 1776649312882.png
+                  - img [ref=f1e923]
+                - generic [ref=f1e926]:
+                  - generic [ref=f1e930]:
+                    - generic [ref=f1e932]: image
+                    - generic [ref=f1e933]: image.png
+                  - img [ref=f1e937]
+                - generic [ref=f1e940]:
+                  - generic [ref=f1e944]:
+                    - generic [ref=f1e946]: image
+                    - generic [ref=f1e947]: 1776641986729.png
+                  - img [ref=f1e951]
+          - img
+          - img
+          - generic [ref=f1e953]:
+            - generic [ref=f1e954]:
+              - button "Apply these to the User Registration form 1" [ref=f1e956] [cursor=pointer]:
+                - generic [ref=f1e957]: Apply these to the User Registration form
+                - generic [ref=f1e958]: "1"
+              - button "Add a Dark Mode version of this catalog 2" [ref=f1e960] [cursor=pointer]:
+                - generic [ref=f1e961]: Add a Dark Mode version of this catalog
+                - generic [ref=f1e962]: "2"
+              - button "Create a similar catalog for Radio Buttons 3" [ref=f1e964] [cursor=pointer]:
+                - generic [ref=f1e965]: Create a similar catalog for Radio Buttons
+                - generic [ref=f1e966]: "3"
+            - generic [ref=f1e970]:
+              - textbox [ref=f1e974]:
+                - paragraph [ref=f1e975]: ¿Qué te gustaría cambiar o crear?
+              - generic [ref=f1e976]:
+                - button "Choose File" [ref=f1e977]
+                - button [ref=f1e979] [cursor=pointer]:
+                  - img [ref=f1e981]
+                - button [ref=f1e984] [cursor=pointer]:
+                  - img [ref=f1e986]
+                - generic [ref=f1e989]:
+                  - button [ref=f1e991] [cursor=pointer]:
+                    - img [ref=f1e993]
+                  - button "3.0 Flash" [ref=f1e995] [cursor=pointer]:
+                    - generic [ref=f1e996]: 3.0 Flash
+                    - img [ref=f1e998]
+                  - button [ref=f1e1002] [cursor=pointer]:
+                    - img [ref=f1e1003]
+                  - button [disabled] [ref=f1e1006]:
+                    - img [ref=f1e1008]
+          - button [ref=f1e1012] [cursor=pointer]:
+            - status [ref=f1e1013]:
+              - generic [ref=f1e1014]:
+                - generic [ref=f1e1015]:
+                  - img [ref=f1e1017]
+                  - generic [ref=f1e1020]: Registro de agente
+                - img [ref=f1e1022]
+          - generic [ref=f1e1026]:
+            - button "Collapse panel" [ref=f1e1029] [cursor=pointer]:
+              - img [ref=f1e1030]
+            - generic [ref=f1e1037]:
+              - generic [ref=f1e1039] [cursor=pointer]:
+                - img "Ilver Anache Pupo" [ref=f1e1040]
+                - paragraph [ref=f1e1041]: "Create a \"Checkboxes States Catalog\" screen for the C-GO Aerospace Admin Panel design system. This is a component documentation/catalog page showing ALL operational states of a custom checkbox component. Layout: Full-width catalog page with sidebar navigation (inverse_surface #2e3132) and main content area (surface #f8f9fa). Use Inter font throughout. The catalog must show these checkbox state groups, each in a card (surface_container_lowest #ffffff, cloud-shadow, border-radius 4px, NO 1px borders): **Group 1 – Default / Unchecked** - Unchecked enabled - Unchecked hovered (subtle background fill) - Unchecked focused (primary color outline ring) - Unchecked disabled (opacity 0.38, not-allowed cursor) **Group 2 – Checked** - Checked enabled (primary #bb0012 fill, white checkmark) - Checked hovered (slightly darker fill) - Checked focused (primary outline ring) - Checked disabled (muted fill, opacity 0.38) **Group 3 – Indeterminate** - Indeterminate enabled (primary fill with dash/minus icon) - Indeterminate hovered - Indeterminate focused - Indeterminate disabled **Group 4 – With Labels** - Checkbox + label text (right side) - Checkbox + label + helper/description text below label - Checkbox + label (disabled state) - Checkbox + error state (red label, error message below) **Group 5 – Sizes** - Small (16px) - Medium (20px, default) - Large (24px) **Group 6 – In Context** - Checkbox inside a list item row (like a data table row selector) - \"Select All\" indeterminate parent with children checkboxes - Checkbox inside a form field group Each state must be clearly labeled with its state name in Label-SM style (uppercase, 0.05rem letter-spacing, secondary color #506169). Checkboxes use primary red #bb0012 for active/checked states. Follow the \"No-Line Rule\" — use background shifts not borders. Use the Precision Orbit design system aesthetic."
+              - button "Mostrar más" [ref=f1e1043] [cursor=pointer]:
+                - img [ref=f1e1045]
+            - generic [ref=f1e1051]:
+              - paragraph [ref=f1e1052]:
+                - text: I've created the
+                - strong [ref=f1e1053]: Checkboxes States Catalog
+                - text: for the C-GO Aerospace Admin Panel.
+              - paragraph [ref=f1e1054]: "The catalog is organized into six clear sections to document the checkbox component's behavior:"
+              - list [ref=f1e1055]:
+                - listitem [ref=f1e1056]:
+                  - strong [ref=f1e1057]: "Default & Checked States:"
+                  - text: Showcasing the primary red (#bb0012) aesthetic and interaction feedback like hover and focus rings.
+                - listitem [ref=f1e1058]:
+                  - strong [ref=f1e1059]: "Indeterminate & Labeled:"
+                  - text: Demonstrating partial selection states and how labels/error messages are handled.
+                - listitem [ref=f1e1060]:
+                  - strong [ref=f1e1061]: "Sizes & Context:"
+                  - text: Illustrating the 16px, 20px, and 24px variations, along with real-world usage in data tables and forms.
+              - paragraph [ref=f1e1062]:
+                - text: The design follows the "No-Line Rule," using subtle background shifts and elevation rather than borders, maintaining consistency with the
+                - strong [ref=f1e1063]: Zenith Meridian
+                - text: design system.
+              - paragraph [ref=f1e1064]: Would you like to adjust any of these states or see how they look in a specific application screen?

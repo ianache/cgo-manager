@@ -98,6 +98,16 @@ export interface ProtocolVersion {
   designerData?: any;
 }
 
+export interface DataSource {
+  id?: string;
+  name: string;
+  type: 'cube' | 'sql' | 'api';
+  connectionString?: string;
+  config?: any;
+  status: 'active' | 'inactive';
+  lastSync?: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -138,12 +148,41 @@ export class ApiService {
     return this.http.get<ReportDefinition[]>(`${this.baseUrl}/reports`, { withCredentials: true });
   }
 
+  getReportById(id: string): Observable<ReportDefinition> {
+    return this.http.get<ReportDefinition>(`${this.baseUrl}/reports/${id}`, { withCredentials: true });
+  }
+
   createReport(report: ReportDefinition): Observable<ReportDefinition> {
     return this.http.post<ReportDefinition>(`${this.baseUrl}/reports`, report, { withCredentials: true });
   }
 
+  updateReport(id: string, report: Partial<ReportDefinition>): Observable<ReportDefinition> {
+    return this.http.put<ReportDefinition>(`${this.baseUrl}/reports/${id}`, report, { withCredentials: true });
+  }
+
   getExecutionLogs(): Observable<ExecutionLog[]> {
     return this.http.get<ExecutionLog[]>(`${this.baseUrl}/reports/logs`, { withCredentials: true });
+  }
+
+  // Data Source Methods
+  getDataSources(): Observable<DataSource[]> {
+    return this.http.get<DataSource[]>(`${this.baseUrl}/datasources`, { withCredentials: true });
+  }
+
+  getDataSourceById(id: string): Observable<DataSource> {
+    return this.http.get<DataSource>(`${this.baseUrl}/datasources/${id}`, { withCredentials: true });
+  }
+
+  createDataSource(ds: DataSource): Observable<DataSource> {
+    return this.http.post<DataSource>(`${this.baseUrl}/datasources`, ds, { withCredentials: true });
+  }
+
+  updateDataSource(id: string, ds: Partial<DataSource>): Observable<DataSource> {
+    return this.http.put<DataSource>(`${this.baseUrl}/datasources/${id}`, ds, { withCredentials: true });
+  }
+
+  deleteDataSource(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/datasources/${id}`, { withCredentials: true });
   }
 
   // Protocol Management Methods

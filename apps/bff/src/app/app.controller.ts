@@ -265,4 +265,102 @@ export class AppController {
       }
     });
   }
+
+  // Reporting - Data Sources
+  @Get('datasources')
+  async getDataSources() {
+    return this.prisma.dataSource.findMany({
+      orderBy: { updatedAt: 'desc' }
+    });
+  }
+
+  @Get('datasources/:id')
+  async getDataSource(@Param('id') id: string) {
+    return this.prisma.dataSource.findUnique({ where: { id } });
+  }
+
+  @Post('datasources')
+  async createDataSource(@Body() data: any) {
+    return this.prisma.dataSource.create({
+      data: {
+        ...this.sanitize(data),
+        configJson: data.config ? JSON.stringify(data.config) : null
+      }
+    });
+  }
+
+  @Put('datasources/:id')
+  async updateDataSource(@Param('id') id: string, @Body() data: any) {
+    return this.prisma.dataSource.update({
+      where: { id },
+      data: {
+        ...this.sanitize(data),
+        configJson: data.config ? JSON.stringify(data.config) : null
+      }
+    });
+  }
+
+  @Delete('datasources/:id')
+  async deleteDataSource(@Param('id') id: string) {
+    return this.prisma.dataSource.delete({ where: { id } });
+  }
+
+  // Reporting - Reports
+  @Get('reports')
+  async getReports() {
+    const reports = await this.prisma.report.findMany({
+      orderBy: { updatedAt: 'desc' }
+    });
+    return reports.map(r => ({
+      ...r,
+      measures: r.measures ? JSON.parse(r.measures) : [],
+      dimensions: r.dimensions ? JSON.parse(r.dimensions) : [],
+      filters: r.filters ? JSON.parse(r.filters) : [],
+      delivery: r.deliveryJson ? JSON.parse(r.deliveryJson) : {}
+    }));
+  }
+
+  @Get('reports/:id')
+  async getReport(@Param('id') id: string) {
+    const r = await this.prisma.report.findUnique({ where: { id } });
+    if (!r) return null;
+    return {
+      ...r,
+      measures: r.measures ? JSON.parse(r.measures) : [],
+      dimensions: r.dimensions ? JSON.parse(r.dimensions) : [],
+      filters: r.filters ? JSON.parse(r.filters) : [],
+      delivery: r.deliveryJson ? JSON.parse(r.deliveryJson) : {}
+    };
+  }
+
+  @Post('reports')
+  async createReport(@Body() data: any) {
+    return this.prisma.report.create({
+      data: {
+        name: data.name,
+        cubeName: data.cubeName,
+        format: data.format,
+        measures: JSON.stringify(data.measures || []),
+        dimensions: JSON.stringify(data.dimensions || []),
+        filters: JSON.stringify(data.filters || []),
+        deliveryJson: JSON.stringify(data.delivery || {})
+      }
+    });
+  }
+
+  @Put('reports/:id')
+  async updateReport(@Param('id') id: string, @Body() data: any) {
+    return this.prisma.report.update({
+      where: { id },
+      data: {
+        name: data.name,
+        cubeName: data.cubeName,
+        format: data.format,
+        measures: JSON.stringify(data.measures || []),
+        dimensions: JSON.stringify(data.dimensions || []),
+        filters: JSON.stringify(data.filters || []),
+        deliveryJson: JSON.stringify(data.delivery || {})
+      }
+    });
+  }
 }

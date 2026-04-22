@@ -89,3 +89,31 @@ model Tenant {
   createdBy        String?
   modifiedBy       String?
 }
+
+model DataSource {
+  id               String   @id @default(uuid())
+  name             String
+  type             String   // cube, sql, api
+  connectionString String   @db.Text // Sensitive info
+  status           String   @default("active") // active, inactive
+  lastSync         String?
+  configJson       String?  @db.LongText
+  reports          Report[]
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Report {
+  id           String     @id @default(uuid())
+  name         String
+  cubeName     String
+  dataSourceId String?
+  dataSource   DataSource? @relation(fields: [dataSourceId], references: [id])
+  measures     String?    @db.Text // JSON string array
+  dimensions   String?    @db.Text // JSON string array
+  filters      String?    @db.Text // JSON string
+  format       String     @default("xlsx")
+  deliveryJson String?    @db.Text // JSON for channel/destination
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}

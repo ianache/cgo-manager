@@ -1,0 +1,93 @@
+<div class="actions-container">
+  <cgo-form-header
+    title="Action Management"
+    description="Define specific granular actions and assign required Keycloak roles for execution.">
+    <div actions>
+      <cgo-button variant="primary" (click)="openCreate()">
+        <span class="material-symbols-outlined">add</span>
+        New Action
+      </cgo-button>
+    </div>
+  </cgo-form-header>
+
+  @if (!showForm()) {
+    <div class="table-card cloud-shadow">
+      <cgo-paginated-table
+        [columns]="columns"
+        [data]="actions()"
+        [pageSize]="10"
+        [showActions]="true"
+        [customTemplates]="customTemplates">
+        <ng-template #nameCellTpl let-value>
+          <div class="translated-cell">
+            <span class="main-val">{{ value['es'] || value['en'] }}</span>
+            <span class="sub-val">{{ value['en'] ? 'EN: ' + value['en'] : '' }}</span>
+          </div>
+        </ng-template>
+        <ng-template #iconCellTpl let-value>
+          <span class="material-symbols-outlined icon-display" *ngIf="value">{{ value }}</span>
+          <span class="empty-hint" *ngIf="!value">-</span>
+        </ng-template>
+        <ng-template #statusCellTpl let-value>
+          <span class="status-pill" [ngClass]="value ? 'status-active' : 'status-inactive'">
+            {{ value ? 'Active' : 'Inactive' }}
+          </span>
+        </ng-template>
+        <ng-template #actionsTemplate let-action>
+          <div class="actions-group">
+            <button class="action-btn" title="Edit"><span class="material-symbols-outlined">edit</span></button>
+          </div>
+        </ng-template>
+      </cgo-paginated-table>
+    </div>
+  }
+
+  @if (showForm()) {
+    <div class="form-overlay" (click)="showForm.set(false)">
+      <div class="form-drawer cloud-shadow" (click)="$event.stopPropagation()">
+        <div class="drawer-header">
+           <h3>New Action</h3>
+        </div>
+        <form [formGroup]="actionForm" class="drawer-body">
+           <div class="form-field">
+             <label>Parent Feature</label>
+             <select formControlName="feature_id">
+                <option value="">Select a feature...</option>
+                @for (feat of features(); track feat.id) {
+                  <option [value]="feat.id">{{ feat.name['es'] || feat.name['en'] }}</option>
+                }
+             </select>
+           </div>
+           <div class="form-field">
+             <label>Name</label>
+             <div class="translation-trigger" (click)="translationTarget = 'name'; showTranslationModal.set(true)">
+               <span class="preview-text">{{ getTranslationPreview('name') }}</span>
+               <span class="material-symbols-outlined">translate</span>
+             </div>
+           </div>
+           
+           <div class="form-field">
+             <label>Allowed Roles</label>
+             <cgo-role-selector 
+               [selectedRoles]="actionForm.get('allowed_roles')?.value"
+               (change)="onRolesChange($event)">
+             </cgo-role-selector>
+           </div>
+        </form>
+        <div class="drawer-footer">
+          <cgo-button variant="secondary" (click)="showForm.set(false)">Cancel</cgo-button>
+          <cgo-button variant="primary" (click)="saveAction()" [disabled]="!actionForm.valid">Save Action</cgo-button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (showTranslationModal()) {
+    <cgo-translation-modal
+      [title]="'Edit Action ' + translationTarget"
+      [data]="actionForm.get(translationTarget)?.value"
+      (save)="actionForm.get(translationTarget)?.setValue($event); showTranslationModal.set(false)"
+      (close)="showTranslationModal.set(false)"
+    ></cgo-translation-modal>
+  }
+</div>

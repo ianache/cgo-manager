@@ -3,7 +3,8 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 20px;
+  padding: 0 24px;
+  height: 40px;
   border-radius: 4px;
   font-size: 0.75rem;
   font-weight: 700;
@@ -25,34 +26,37 @@
 .btn-primary {
   background: var(--primary-red, #bb0012);
   color: #ffffff;
+  box-shadow: 0 4px 12px rgba(187, 0, 18, 0.15);
 }
 
 .btn-primary:hover:not(:disabled) {
   opacity: 0.9;
   transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(187, 0, 18, 0.25);
 }
 
 .btn-secondary {
   background: var(--surface-container, #edeeef);
   color: var(--inverse-surface, #191c1d);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .btn-secondary:hover:not(:disabled) {
   background: var(--surface-variant, #e1e3e4);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
 .btn-tertiary {
   background: transparent;
   color: var(--secondary-grey, #506169);
   border: 1px solid var(--surface-highest, #e1e3e4);
-}
-
-.btn-tertiary:hover:not(:disabled) {
-  background: var(--surface-low, #f8f9fa);
-  border-color: var(--secondary-fixed-dim, #b8c9d3);
+  height: 38px; /* accounting for border to match 40px overall if box-sizing is border-box */
 }
 
 /* Ensure material icons inside buttons have consistent sizing */
-:host ::ng-content .material-symbols-outlined {
-  font-size: 18px;
+:host ::ng-deep .material-symbols-outlined {
+  font-size: 18px !important;
+  line-height: 1 !important;
+  display: block;
 }

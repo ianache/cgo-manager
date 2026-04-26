@@ -3,6 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BaseTableComponent } from '../base-table/base-table';
 
+export interface PaginatedTableColumn {
+  key: string;
+  label: string;
+  type?: 'image' | 'link' | 'badges' | 'checkbox' | 'custom';
+}
+
 @Component({
   selector: 'cgo-paginated-table',
   standalone: true,
@@ -12,7 +18,7 @@ import { BaseTableComponent } from '../base-table/base-table';
 })
 export class PaginatedTableComponent implements OnInit, OnChanges {
   protected readonly Math = Math;
-  @Input() columns: { key: string; label: string; type?: 'image' | 'link' | 'badges' | 'checkbox' | 'custom' }[] = [];
+  @Input() columns: PaginatedTableColumn[] = [];
   @Input() data: any[] = [];
   @Input() pageSize = 10;
   @Input() showActions = false;

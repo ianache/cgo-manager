@@ -1,0 +1,92 @@
+<div class="ds-form-page">
+  <cgo-form-header 
+    [title]="isEdit ? 'Edit Data Source' : 'New Data Source'" 
+    description="Configure how C-GO connects to your data infrastructure. Supports OLAP Cubes, SQL Databases, and REST APIs.">
+  </cgo-form-header>
+
+  <div class="ds-layout">
+    <main class="ds-main-form cloud-shadow">
+      <form [formGroup]="dsForm">
+        <div class="form-grid">
+          <div class="form-field full-width">
+            <label>Data Source Name</label>
+            <input type="text" formControlName="name" placeholder="e.g. Production Analytics Cube">
+          </div>
+
+          <div class="form-field">
+            <label>Connection Type</label>
+            <select formControlName="type">
+              <option value="cube">OLAP Cube (XMLA/SSAS)</option>
+              <option value="sql">SQL Database (MySQL/PostgreSQL)</option>
+              <option value="api">REST API / GraphQL</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label>Status</label>
+            <select formControlName="status">
+              <option value="active">Active (Synchronizing)</option>
+              <option value="inactive">Inactive (Paused)</option>
+            </select>
+          </div>
+
+          <div class="form-field full-width">
+            <label>Connection String / URL</label>
+            <textarea formControlName="connection_string" rows="3" placeholder="http://analytics.internal:8080/xmla"></textarea>
+            <span class="field-hint">Sensitive information is encrypted at rest.</span>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">Security & Auth</h3>
+          <div class="form-grid">
+             <div class="form-field">
+                <label>Auth Method</label>
+                <select>
+                  <option>Basic Auth</option>
+                  <option>OAuth 2.0</option>
+                  <option>API Key</option>
+                </select>
+             </div>
+             <div class="form-field">
+                <label>Username / Client ID</label>
+                <input type="text" placeholder="svc_cgo_reporting">
+             </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="ds-form-footer">
+        <cgo-button variant="secondary" routerLink="/reporting/data-sources">
+          <span class="material-symbols-outlined">close</span>
+          Discard Changes
+        </cgo-button>
+        <div class="footer-right">
+          <cgo-button variant="tertiary" routerLink="../test-result">Test Connection</cgo-button>
+          <cgo-button variant="primary" (click)="save()" [disabled]="!dsForm.valid">
+            <span class="material-symbols-outlined">save</span>
+            Save Configuration
+          </cgo-button>
+        </div>
+      </div>
+    </main>
+
+    <aside class="ds-sidebar">
+      <div class="info-card cloud-shadow">
+        <h4>Live Status</h4>
+        <div class="status-indicator">
+          <div class="pulse" [class.inactive]="dsForm.get('status')?.value === 'inactive'"></div>
+          <div class="preview-value" [class.inactive]="dsForm.get('status')?.value === 'inactive'">
+            {{ dsForm.get('status')?.value === 'active' ? 'Ready to stream' : 'Sync Paused' }}
+          </div>
+        </div>
+      </div>
+
+      <div class="help-card cloud-shadow">
+        <h4>About Cubes</h4>
+        <p>OLAP Cubes allow multidimensional analysis. Ensure your server supports the XMLA protocol and that the C-GO IP range is whitelisted.</p>
+        <a href="#">Read Documentation</a>
+      </div>
+    </aside>
+  </div>
+</div>

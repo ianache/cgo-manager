@@ -1,0 +1,72 @@
+<div class="modal-overlay" (click)="close.emit()">
+  <div class="modal-content cloud-shadow" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>User Profile</h3>
+      <button class="btn-close" (click)="close.emit()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <div class="modal-body profile-layout">
+      <div class="avatar-section">
+        <div class="avatar-edit-container">
+          <div class="avatar-preview">
+            <img *ngIf="avatarPreview()" [src]="avatarPreview()" />
+            <span *ngIf="!avatarPreview()" class="material-symbols-outlined placeholder-icon">person</span>
+          </div>
+          <label class="btn-upload">
+            <span class="material-symbols-outlined">photo_camera</span>
+            Change Avatar
+            <input type="file" (change)="onFileSelected($event)" accept="image/png, image/jpeg" hidden />
+          </label>
+          <span class="hint">Exactly 50x50 pixels</span>
+        </div>
+      </div>
+
+      <div class="details-section">
+        <div class="form-grid">
+          <div class="info-group">
+            <label>Internal ID</label>
+            <p class="read-only-val">{{ user()?.sub }}</p>
+          </div>
+          <div class="info-group">
+            <label>Username</label>
+            <p class="read-only-val">@{{ user()?.preferred_username || user()?.username }}</p>
+          </div>
+          <div class="info-group">
+            <label>First Name</label>
+            <p class="read-only-val">{{ user()?.firstName || user()?.given_name || '-' }}</p>
+          </div>
+          <div class="info-group">
+            <label>Last Name</label>
+            <p class="read-only-val">{{ user()?.lastName || user()?.family_name || '-' }}</p>
+          </div>
+          <div class="info-group full-width">
+            <label>Email Address</label>
+            <p class="read-only-val">{{ user()?.email }}</p>
+          </div>
+          <div class="info-group">
+            <label>Distributor</label>
+            <p class="read-only-val">{{ user()?.distributor || '-' }}</p>
+          </div>
+          <div class="info-group">
+            <label>Country Code</label>
+            <p class="read-only-val">{{ user()?.codigoPais || '-' }}</p>
+          </div>
+          <div class="info-group">
+            <label>Locale</label>
+            <p class="read-only-val uppercase">{{ user()?.locale || 'es' }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <cgo-button variant="secondary" (click)="close.emit()">Cancel</cgo-button>
+      <cgo-button variant="primary" (click)="save()" [disabled]="isSaving()">
+        <span class="material-symbols-outlined" *ngIf="isSaving()">sync</span>
+        {{ isSaving() ? 'Saving...' : 'Save Changes' }}
+      </cgo-button>
+    </div>
+  </div>
+</div>

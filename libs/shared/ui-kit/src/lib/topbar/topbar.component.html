@@ -23,9 +23,41 @@
   </div>
 
   <div class="actions">
-    <div class="user-profile">
-      <div class="avatar">JS</div>
-      <span class="username">John SuperAdmin</span>
+    <div class="user-profile" (click)="toggleDropdown()">
+      <div *ngIf="user()?.avatar" class="avatar-img-container">
+        <img [src]="user()?.avatar" class="avatar-img" />
+      </div>
+      <div *ngIf="!user()?.avatar" class="avatar">
+        {{ initials(user()?.firstName || user()?.username) }}
+      </div>
+      
+      <div class="user-details">
+        <span class="username">{{ user()?.firstName || user()?.preferred_username || 'Guest' }}</span>
+        <span class="user-id" *ngIf="user()?.preferred_username">@{{ user()?.preferred_username }}</span>
+      </div>
+      <span class="material-symbols-outlined arrow-icon" [class.rotated]="showDropdown()">expand_more</span>
+
+      <!-- Dropdown -->
+      <div class="user-dropdown cloud-shadow" *ngIf="showDropdown()" (click)="$event.stopPropagation()">
+         <button (click)="showProfile.set(true); showDropdown.set(false)">
+           <span class="material-symbols-outlined">person</span>
+           Profile
+         </button>
+         <button (click)="showSettings.set(true); showDropdown.set(false)">
+           <span class="material-symbols-outlined">settings</span>
+           Settings
+         </button>
+         <div class="divider"></div>
+         <button class="logout-btn" (click)="showLogout.set(true); showDropdown.set(false)">
+           <span class="material-symbols-outlined">logout</span>
+           Logout
+         </button>
+      </div>
     </div>
   </div>
 </div>
+
+<!-- Modals -->
+<cgo-profile-modal *ngIf="showProfile()" [user]="user()" (close)="showProfile.set(false)"></cgo-profile-modal>
+<cgo-settings-modal *ngIf="showSettings()" [user]="user()" (close)="showSettings.set(false)"></cgo-settings-modal>
+<cgo-logout-modal *ngIf="showLogout()" (close)="showLogout.set(false)"></cgo-logout-modal>

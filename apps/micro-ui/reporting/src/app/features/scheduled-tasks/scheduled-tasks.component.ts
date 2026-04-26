@@ -1,36 +1,62 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, TemplateRef, AfterViewInit, signal, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { PaginatedTableComponent } from '@cgomanager/shared-ui-kit';
+import { RouterModule } from '@angular/router';
+import { 
+  PaginatedTableComponent, 
+  FormHeaderComponent, 
+  ButtonComponent,
+  PaginatedTableColumn
+} from '@cgomanager/shared-ui-kit';
+import { ApiService, ScheduledTask } from '@cgomanager/shared-data-access';
 
 @Component({
   selector: 'app-scheduled-tasks',
   standalone: true,
-  imports: [CommonModule, PaginatedTableComponent],
+  imports: [CommonModule, RouterModule, PaginatedTableComponent, FormHeaderComponent, ButtonComponent],
   template: `
-    <div class="scheduled-tasks-page">
-      <div class="page-header">
-        <div class="header-content">
-          <h2 class="page-title">Scheduled Tasks</h2>
-          <p class="page-description">Automate report generation and distribution workflows.</p>
+    <div class="tasks-page">
+      <cgo-form-header
+        title="Scheduled Automations"
+        description="Monitor and manage recurring report generation tasks. Track execution schedules and delivery health.">
+        <div actions>
+          <cgo-button variant="primary" routerLink="../scheduled-tasks/create">
+            <span class="material-symbols-outlined">add_task</span>
+            Schedule New Task
+          </cgo-button>
         </div>
-        <button class="btn-primary" (click)="scheduleNewTask()">
-          <span class="material-symbols-outlined">schedule_send</span>
-          Schedule New Task
-        </button>
-      </div>
+      </cgo-form-header>
 
       <div class="table-card cloud-shadow">
-        <cgo-paginated-table 
-          [columns]="columns" 
-          [data]="tasks" 
+        <cgo-paginated-table
+          [columns]="columns"
+          [data]="tasks()"
           [pageSize]="10"
-          [showActions]="true">
+          [showActions]="true"
+          [customTemplates]="customTemplates">
+          
+          <ng-template #statusCellTpl let-value>
+            <span class="status-pill" [ngClass]="'status-' + value.toLowerCase()">
+              {{ value }}
+            </span>
+          </ng-template>
+
+          <ng-template #enabledCellTpl let-value>
+            <span class="status-pill" [ngClass]="value ? 'status-active' : 'status-inactive'">
+              {{ value ? 'Enabled' : 'Paused' }}
+            </span>
+          </ng-template>
+
           <ng-template #actionsTemplate let-task>
-            <div class="actions-group">
-              <button class="action-btn"><span class="material-symbols-outlined">play_circle</span></button>
-              <button class="action-btn"><span class="material-symbols-outlined">edit</span></button>
-              <button class="action-btn"><span class="material-symbols-outlined">delete</span></button>
+            <div class="table-actions">
+              <button class="icon-btn" title="Edit" [routerLink]="['../scheduled-tasks', task.id, 'edit']">
+                <span class="material-symbols-outlined">edit</span>
+              </button>
+              <button class="icon-btn" title="Execute Now">
+                <span class="material-symbols-outlined">play_circle</span>
+              </button>
+              <button class="icon-btn" title="Delete" (click)="deleteTask(task.id)">
+                <span class="material-symbols-outlined">delete</span>
+              </button>
             </div>
           </ng-template>
         </cgo-paginated-table>
@@ -38,40 +64,59 @@ import { PaginatedTableComponent } from '@cgomanager/shared-ui-kit';
     </div>
   `,
   styles: [`
-    .page-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; }
-    .page-title { font-size: 1.875rem; font-weight: 800; letter-spacing: -0.05em; margin: 0; color: #191c1d; }
-    .page-description { margin: 4px 0 0; color: #506169; font-weight: 500; }
-    .table-card { background: white; border-radius: 8px; padding: 24px; }
-    .cloud-shadow { box-shadow: 0 12px 32px rgba(25, 28, 29, 0.04), 0 4px 8px rgba(25, 28, 29, 0.02); }
-    .actions-group { display: flex; gap: 4px; justify-content: center; }
-    .action-btn { background: none; border: none; color: #506169; cursor: pointer; padding: 4px; border-radius: 4px; }
-    .action-btn:hover { background: #f0f1f2; color: #bb0012; }
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 24px; border-radius: 4px; font-size: 0.75rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer;
-      background: #bb0012; color: #ffffff; border: none; transition: all 0.2s;
-    }
+    .tasks-page { padding: 32px; display: flex; flex-direction: column; gap: 32px; }
+    .table-card { background: white; border-radius: 8px; overflow: hidden; }
+    .cloud-shadow { box-shadow: 0 12px 32px rgba(25,28,29,0.04), 0 4px 8px rgba(25,28,29,0.02); }
+    
+    .status-pill { padding: 4px 12px; border-radius: 999px; font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; }
+    .status-active { background: #e8f5e9; color: #1b5e20; }
+    .status-inactive { background: #f5f5f5; color: #757575; }
+    .status-pending { background: #fff8e1; color: #e65100; }
+    .status-running { background: #e3f2fd; color: #1565c0; }
+    
+    .table-actions { display: flex; gap: 8px; justify-content: center; }
+    .icon-btn { background: none; border: none; padding: 6px; border-radius: 4px; color: #506169; cursor: pointer; transition: all 0.2s; }
+    .icon-btn:hover { background: #f1f3f4; color: #bb0012; }
   `]
 })
-export class ScheduledTasksComponent {
-  constructor(private router: Router) {}
+export class ScheduledTasksComponent implements OnInit, AfterViewInit {
+  @ViewChild('statusCellTpl') statusCellTpl!: TemplateRef<any>;
+  @ViewChild('enabledCellTpl') enabledCellTpl!: TemplateRef<any>;
 
-  scheduleNewTask(): void {
-    this.router.navigate(['/reporting/scheduled-tasks/create']);
+  private api = inject(ApiService);
+  
+  tasks = signal<ScheduledTask[]>([]);
+  columns: PaginatedTableColumn[] = [
+    { key: 'reportName', label: 'Report' },
+    { key: 'cron', label: 'Schedule (CRON)' },
+    { key: 'enabled', label: 'Status', type: 'custom' },
+    { key: 'status', label: 'Last Run Result', type: 'custom' }
+  ];
+  customTemplates: any = {};
+
+  ngOnInit() {
+    this.loadTasks();
   }
 
-  columns: { key: string; label: string; type?: 'image' | 'link' | 'badges' | 'checkbox' | 'custom' }[] = [
-    { key: 'name', label: 'TASK NAME' },
-    { key: 'frequency', label: 'FREQUENCY' },
-    { key: 'recipients', label: 'RECIPIENTS' },
-    { key: 'lastRun', label: 'LAST RUN' },
-    { key: 'status', label: 'STATUS', type: 'badges' }
-  ];
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.customTemplates = {
+        status: this.statusCellTpl,
+        enabled: this.enabledCellTpl
+      };
+    });
+  }
 
-  tasks = [
-    { id: 1, name: 'Daily Fleet Report', frequency: 'Every day at 08:00', recipients: 'Admin Team', lastRun: 'Today 08:00', status: 'Active' },
-    { id: 2, name: 'Monthly Billing Audit', frequency: '1st of every month', recipients: 'Finance Dept', lastRun: 'Apr 1, 00:00', status: 'Active' },
-    { id: 3, name: 'Critical Incident Alert', frequency: 'Real-time', recipients: 'Operations Manager', lastRun: '2m ago', status: 'Paused' },
-  ];
+  loadTasks() {
+    this.api.getScheduledTasks().subscribe({
+      next: (data) => this.tasks.set(data),
+      error: (err) => console.error('Error loading tasks', err)
+    });
+  }
+
+  deleteTask(id: string) {
+    if (confirm('Delete this scheduled task?')) {
+      this.api.deleteScheduledTask(id).subscribe(() => this.loadTasks());
+    }
+  }
 }

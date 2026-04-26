@@ -1,8 +1,12 @@
-import { NxWelcome } from './nx-welcome';
 import { Route } from '@angular/router';
 import { authGuard } from '@cgomanager/shared-data-access';
+import { LoginErrorComponent } from './auth/login-error';
 
 export const appRoutes: Route[] = [
+  {
+    path: 'login-error',
+    component: LoginErrorComponent,
+  },
   {
     path: 'security',
     loadChildren: () => import('security/Routes').then((m) => m!.remoteRoutes),

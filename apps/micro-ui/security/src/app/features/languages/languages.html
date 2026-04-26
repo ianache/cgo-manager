@@ -1,0 +1,52 @@
+<div class="languages-container">
+  <cgo-form-header
+    title="Language Settings"
+    description="Manage supported languages for multi-language attributes across products, modules, and features.">
+    <div actions>
+      <cgo-button variant="primary" (click)="openCreate()">
+        <span class="material-symbols-outlined">add</span>
+        Add Language
+      </cgo-button>
+    </div>
+  </cgo-form-header>
+
+  <div class="table-card cloud-shadow">
+    <cgo-paginated-table
+      [columns]="columns"
+      [data]="languages()"
+      [pageSize]="10"
+      [showActions]="true">
+      <ng-template #actionsTemplate let-lang>
+        <div class="actions-group">
+           <button class="action-btn" title="Toggle Status">
+             <span class="material-symbols-outlined">{{ lang.is_active ? 'visibility_off' : 'visibility' }}</span>
+           </button>
+        </div>
+      </ng-template>
+    </cgo-paginated-table>
+  </div>
+
+  @if (showForm()) {
+    <div class="modal-overlay">
+      <div class="modal-content cloud-shadow">
+        <div class="modal-header">
+           <h3>Add New Language</h3>
+        </div>
+        <form [formGroup]="langForm" class="modal-body">
+           <div class="form-field">
+             <label>ISO Code (e.g. en, es, pt)</label>
+             <input type="text" formControlName="iso_code" maxlength="5">
+           </div>
+           <div class="form-field">
+             <label>Display Name</label>
+             <input type="text" formControlName="name">
+           </div>
+        </form>
+        <div class="modal-footer">
+          <cgo-button variant="secondary" (click)="showForm.set(false)">Cancel</cgo-button>
+          <cgo-button variant="primary" (click)="saveLanguage()" [disabled]="!langForm.valid">Save Language</cgo-button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

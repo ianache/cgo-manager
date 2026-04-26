@@ -29,11 +29,15 @@
         <input type="text" formControlName="name" placeholder="e.g. Monthly Fuel Usage" class="cgo-input">
       </div>
       <div class="form-section">
-        <label class="label-sm">Data Source (Cube)</label>
-        <select formControlName="cubeName" class="cgo-select">
-          <option value="">Select a Cube</option>
-          <option *ngFor="let cube of cubes()" [value]="cube">{{cube}}</option>
+        <label class="label-sm">Data Source</label>
+        <select formControlName="data_source_id" class="cgo-select">
+          <option value="">Select a Source</option>
+          <option *ngFor="let ds of dataSources()" [value]="ds.id">{{ds.name}}</option>
         </select>
+      </div>
+      <div class="form-section">
+        <label class="label-sm">Cube Reference</label>
+        <input type="text" formControlName="cube_name" placeholder="e.g. SalesModel" class="cgo-input">
       </div>
     </section>
 
@@ -43,44 +47,40 @@
         <div class="selection-column">
           <label class="label-sm">Select Metrics (Measures)</label>
           <div class="checkbox-list">
-            <cgo-checkbox 
-              *ngFor="let m of availableMeasures()"
-              [label]="m"
-              [checked]="selectedMeasures().includes(m)"
-              (checkedChange)="onMeasureToggle(m, $event)">
-            </cgo-checkbox>
+            <div *ngFor="let m of availableMeasures" class="checkbox-item">
+               <input type="checkbox" (change)="toggleSelection(reportForm.value.measures, m)" [checked]="reportForm.value.measures.includes(m)">
+               {{m}}
+            </div>
           </div>
         </div>
 
         <div class="selection-column">
           <label class="label-sm">Select Dimensions</label>
           <div class="checkbox-list">
-            <cgo-checkbox 
-              *ngFor="let d of availableDimensions()"
-              [label]="d"
-              [checked]="selectedDimensions().includes(d)"
-              (checkedChange)="onDimensionToggle(d, $event)">
-            </cgo-checkbox>
+             <div *ngFor="let d of availableDimensions" class="checkbox-item">
+               <input type="checkbox" (change)="toggleSelection(reportForm.value.dimensions, d)" [checked]="reportForm.value.dimensions.includes(d)">
+               {{d}}
+            </div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Step 3: Delivery -->
-    <section *ngIf="currentStep() === 3" class="step-content">
+    <section *ngIf="currentStep() === 3" class="step-content" formGroupName="delivery">
       <div class="form-section">
         <label class="label-sm">Export Format</label>
-        <cgo-radio-group formControlName="format" direction="horizontal">
-          <cgo-radio-button value="xlsx" label="Excel (.xlsx)"></cgo-radio-button>
-          <cgo-radio-button value="csv" label="CSV"></cgo-radio-button>
-          <cgo-radio-button value="parquet" label="Parquet"></cgo-radio-button>
-        </cgo-radio-group>
+        <select formControlName="format" class="cgo-select">
+            <option value="xlsx">Excel (.xlsx)</option>
+            <option value="csv">CSV</option>
+            <option value="parquet">Parquet</option>
+        </select>
       </div>
 
       <div class="form-row">
         <div class="form-section flex-1">
           <label class="label-sm">Delivery Channel</label>
-          <select formControlName="deliveryChannel" class="cgo-select">
+          <select formControlName="channel" class="cgo-select">
             <option value="email">Email Notification</option>
             <option value="ftp">Secure FTP</option>
             <option value="whatsapp">WhatsApp Business</option>
@@ -91,7 +91,7 @@
           <input 
             type="text" 
             formControlName="destination" 
-            [placeholder]="reportForm.value.deliveryChannel === 'email' ? 'email@example.com' : 'Destination path/number'"
+            [placeholder]="reportForm.value.delivery?.channel === 'email' ? 'email@example.com' : 'Destination path/number'"
             class="cgo-input">
         </div>
       </div>
@@ -103,6 +103,7 @@
       variant="secondary" 
       (click)="prevStep()" 
       [disabled]="currentStep() === 1">
+      <span class="material-symbols-outlined">arrow_back</span>
       Back
     </cgo-button>
     
@@ -113,6 +114,7 @@
         (click)="nextStep()" 
         [disabled]="currentStep() === 1 && !reportForm.get('name')?.valid">
         Next Step
+        <span class="material-symbols-outlined">arrow_forward</span>
       </cgo-button>
       
       <cgo-button 
@@ -120,6 +122,7 @@
         variant="primary" 
         (click)="saveReport()" 
         [disabled]="!reportForm.valid">
+        <span class="material-symbols-outlined">save</span>
         {{ reportId() ? 'Update Report' : 'Finish & Save' }}
       </cgo-button>
     </div>

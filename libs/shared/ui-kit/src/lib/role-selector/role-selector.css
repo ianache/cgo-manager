@@ -1,0 +1,105 @@
+.role-selector-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.selector-trigger {
+  padding: 10px 16px;
+  background: white;
+  border: 1px solid #e1e3e4;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  min-height: 40px;
+  transition: all 0.2s;
+}
+
+.selector-trigger:hover { border-color: #bb0012; }
+
+.trigger-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #191c1d;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.arrow {
+  font-size: 20px;
+  color: #506169;
+  transition: transform 0.2s;
+}
+
+.arrow.rotated { transform: rotate(180deg); }
+
+.selector-content {
+  display: none;
+  background: white;
+  border: 1px solid #edeeef;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 4px;
+  z-index: 100;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.dropdown .selector-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+}
+
+.selector-content.show { display: flex; flex-direction: column; gap: 16px; }
+
+.category-label {
+  font-size: 0.625rem;
+  font-weight: 800;
+  color: #b8c9d3;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.roles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.role-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  color: #191c1d;
+  transition: background 0.2s;
+}
+
+.role-item:hover { background: #f8f9fa; }
+
+.role-item input {
+  width: 16px;
+  height: 16px;
+  accent-color: #bb0012;
+  cursor: pointer;
+}
+
+.empty-filter-msg {
+  font-size: 0.75rem;
+  color: #b8c9d3;
+  font-style: italic;
+  text-align: center;
+  padding: 8px 0;
+}
+
+.cloud-shadow {
+  box-shadow: 0 12px 32px rgba(25, 28, 29, 0.08), 0 4px 8px rgba(25, 28, 29, 0.04);
+}

@@ -1,175 +1,103 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, ViewChild, TemplateRef, AfterViewInit, signal, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { 
   PaginatedTableComponent, 
-  GenericCardComponent, 
-  ButtonComponent 
+  FormHeaderComponent, 
+  ButtonComponent,
+  PaginatedTableColumn
 } from '@cgomanager/shared-ui-kit';
 import { ApiService, DataSource } from '@cgomanager/shared-data-access';
 
 @Component({
-  selector: 'app-reporting-data-sources',
+  selector: 'app-data-sources',
   standalone: true,
-  imports: [
-    CommonModule, 
-    RouterModule, 
-    PaginatedTableComponent, 
-    GenericCardComponent,
-    ButtonComponent
-  ],
+  imports: [CommonModule, RouterModule, PaginatedTableComponent, FormHeaderComponent, ButtonComponent],
   template: `
     <div class="datasources-page">
-      <div class="page-header">
-        <div class="header-left">
-          <h2 class="page-title">Data Sources</h2>
-          <p class="page-description">Manage connections to external data lakes, databases, and semantic cubes.</p>
-        </div>
-        
-        <div class="header-actions">
-          <div class="view-toggle cloud-shadow">
-            <button 
-              class="toggle-btn" 
-              [class.active]="viewMode() === 'table'"
-              (click)="viewMode.set('table')"
-              title="Table View">
-              <span class="material-symbols-outlined">table_rows</span>
-            </button>
-            <button 
-              class="toggle-btn" 
-              [class.active]="viewMode() === 'card'"
-              (click)="viewMode.set('card')"
-              title="Card View">
-              <span class="material-symbols-outlined">grid_view</span>
-            </button>
-          </div>
-
-          <cgo-button 
-            variant="primary" 
-            routerLink="create">
-            <span class="material-symbols-outlined">add_link</span>
+      <cgo-form-header
+        title="Data Sources"
+        description="Connect and manage your analytical infrastructure. Integrate XMLA cubes, SQL databases, and REST endpoints.">
+        <div actions>
+          <cgo-button variant="primary" routerLink="../data-sources/create">
+            <span class="material-symbols-outlined">add</span>
             New Data Source
           </cgo-button>
         </div>
-      </div>
+      </cgo-form-header>
 
-      <div class="content-area">
-        <ng-container *ngIf="viewMode() === 'table'">
-          <cgo-paginated-table
-            [columns]="columns"
-            [data]="dataSources()"
-            [pageSize]="10"
-            [showActions]="true"
-            [showHeader]="true"
-            [showHeaderSearch]="true"
-            headerTitle="Connected Data Sources"
-            headerDescription="Browse all available connectors and their synchronization status.">
-            <ng-template #actionsTemplate let-ds>
-              <div class="table-actions">
-                <button class="icon-btn" title="Edit" [routerLink]="['edit', ds.id]"><span class="material-symbols-outlined">edit</span></button>
-                <button class="icon-btn" title="Sync"><span class="material-symbols-outlined">sync</span></button>
-                <button class="icon-btn" title="Delete"><span class="material-symbols-outlined">delete</span></button>
-              </div>
-            </ng-template>
-          </cgo-paginated-table>
-        </ng-container>
+      <div class="table-card cloud-shadow">
+        <cgo-paginated-table
+          [columns]="columns"
+          [data]="dataSources()"
+          [pageSize]="10"
+          [showActions]="true"
+          [customTemplates]="customTemplates">
+          
+          <ng-template #statusCellTpl let-value>
+            <span class="status-pill" [ngClass]="value === 'active' ? 'status-active' : 'status-inactive'">
+              {{ value === 'active' ? 'Active' : 'Inactive' }}
+            </span>
+          </ng-template>
 
-        <ng-container *ngIf="viewMode() === 'card'">
-          <div class="datasource-grid">
-            @for (ds of dataSources(); track ds.id) {
-              <cgo-generic-card [clickable]="true">
-                <div card-image class="ds-card-icon" [ngClass]="ds.type">
-                  <span class="material-symbols-outlined">{{ getIcon(ds.type) }}</span>
-                </div>
-                <div class="ds-status-badge" [class]="ds.status">{{ ds.status }}</div>
-                <h4 card-title class="ds-name">{{ ds.name }}</h4>
-                <p card-subtitle class="ds-meta">Type: {{ ds.type | uppercase }}</p>
-                
-                <div class="ds-card-footer" card-footer>
-                  <span class="sync-tag">
-                    <span class="material-symbols-outlined">update</span>
-                    {{ ds.lastSync || 'Never synced' }}
-                  </span>
-                  <div class="card-actions">
-                    <button class="icon-btn" [routerLink]="['edit', ds.id]"><span class="material-symbols-outlined">edit</span></button>
-                    <button class="icon-btn"><span class="material-symbols-outlined">more_vert</span></button>
-                  </div>
-                </div>
-              </cgo-generic-card>
-            }
-          </div>
-        </ng-container>
+          <ng-template #actionsTemplate let-ds>
+            <div class="table-actions">
+              <button class="icon-btn" title="Edit" [routerLink]="['../data-sources', ds.id, 'edit']">
+                <span class="material-symbols-outlined">edit</span>
+              </button>
+              <button class="icon-btn" title="Sync Status">
+                <span class="material-symbols-outlined">sync</span>
+              </button>
+            </div>
+          </ng-template>
+        </cgo-paginated-table>
       </div>
     </div>
   `,
   styles: [`
     .datasources-page { padding: 32px; display: flex; flex-direction: column; gap: 32px; }
-    .page-header { display: flex; justify-content: space-between; align-items: flex-end; }
-    .page-title { font-size: 2rem; font-weight: 700; margin: 0; color: var(--inverse-surface); }
-    .page-description { margin: 8px 0 0; color: var(--secondary-grey); font-weight: 500; }
-    .header-actions { display: flex; align-items: center; gap: 16px; }
-    .view-toggle { display: flex; background: var(--surface-lowest); padding: 4px; border-radius: var(--radius-md); border: 1px solid var(--surface-highest); }
-    .toggle-btn { background: none; border: none; padding: 8px; border-radius: var(--radius-sm); cursor: pointer; color: var(--secondary-grey); display: flex; align-items: center; transition: all 0.2s; }
-    .toggle-btn.active { background: var(--surface-container); color: var(--primary-red); }
-    .cloud-shadow { box-shadow: var(--shadow-cloud); }
-    .content-area { flex: 1; }
-    .datasource-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
-    .ds-card-icon { height: 120px; background: var(--surface-low); display: flex; align-items: center; justify-content: center; }
-    .ds-card-icon.cube { color: #0066ff; }
-    .ds-card-icon.sql { color: #ff9900; }
-    .ds-card-icon.api { color: #00cc66; }
-    .ds-card-icon .material-symbols-outlined { font-size: 48px; }
-    .ds-status-badge { position: absolute; top: 12px; right: 12px; font-size: 0.625rem; font-weight: 800; text-transform: uppercase; padding: 2px 8px; border-radius: 100px; border: 1px solid currentColor; }
-    .ds-status-badge.active { background: #e6fcf5; color: #087f5b; }
-    .ds-status-badge.inactive { background: #fff5f5; color: #c92a2a; }
-    .ds-name { margin: 0; font-size: 1.125rem; font-weight: 700; color: var(--inverse-surface); }
-    .ds-meta { font-size: 0.875rem; color: var(--secondary-grey); margin: 4px 0 0; }
-    .ds-card-footer { display: flex; justify-content: space-between; align-items: center; width: 100%; padding-top: 16px; border-top: 1px solid var(--surface-highest); }
-    .sync-tag { display: flex; align-items: center; gap: 4px; font-size: 0.75rem; font-weight: 600; color: var(--secondary-grey); }
-    .sync-tag .material-symbols-outlined { font-size: 14px; }
-    .table-actions, .card-actions { display: flex; gap: 8px; }
-    .icon-btn { background: none; border: none; cursor: pointer; color: var(--secondary-grey); padding: 4px; border-radius: var(--radius-sm); display: flex; align-items: center; transition: background 0.2s; }
-    .icon-btn:hover { background: var(--surface-container); color: var(--primary-red); }
+    .table-card { background: white; border-radius: 8px; overflow: hidden; }
+    .cloud-shadow { box-shadow: 0 12px 32px rgba(25,28,29,0.04), 0 4px 8px rgba(25,28,29,0.02); }
+    
+    .status-pill { padding: 4px 12px; border-radius: 999px; font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; }
+    .status-active { background: #e8f5e9; color: #1b5e20; }
+    .status-inactive { background: #f5f5f5; color: #757575; }
+    
+    .table-actions { display: flex; gap: 8px; justify-content: center; }
+    .icon-btn { background: none; border: none; padding: 6px; border-radius: 4px; color: #506169; cursor: pointer; transition: all 0.2s; }
+    .icon-btn:hover { background: #f1f3f4; color: #bb0012; }
   `]
 })
-export class DataSourcesComponent implements OnInit {
+export class DataSourcesComponent implements OnInit, AfterViewInit {
+  @ViewChild('statusCellTpl') statusCellTpl!: TemplateRef<any>;
+
   private api = inject(ApiService);
   
-  viewMode = signal<'table' | 'card'>('table');
   dataSources = signal<DataSource[]>([]);
-
-  columns = [
+  columns: PaginatedTableColumn[] = [
     { key: 'name', label: 'Source Name' },
     { key: 'type', label: 'Type' },
-    { key: 'status', label: 'Status' },
-    { key: 'lastSync', label: 'Last Sync' },
+    { key: 'status', label: 'Status', type: 'custom' },
+    { key: 'last_sync', label: 'Last Sync' }
   ];
+  customTemplates: any = {};
 
   ngOnInit() {
     this.loadDataSources();
   }
 
-  loadDataSources() {
-    this.api.getDataSources().subscribe({
-      next: (data) => this.dataSources.set(data),
-      error: (err) => {
-        console.error('Error loading data sources', err);
-        // Fallback for demo
-        this.dataSources.set([
-          { id: '1', name: 'Main Fleet DB', type: 'sql', status: 'active', lastSync: '10m ago' },
-          { id: '2', name: 'Cube Semantic Layer', type: 'cube', status: 'active', lastSync: '1h ago' },
-          { id: '3', name: 'External Weather API', type: 'api', status: 'inactive', lastSync: '2d ago' },
-        ]);
-      }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.customTemplates = {
+        status: this.statusCellTpl
+      };
     });
   }
 
-  getIcon(type: string): string {
-    switch (type) {
-      case 'cube': return 'database_schema';
-      case 'sql': return 'database';
-      case 'api': return 'api';
-      default: return 'link';
-    }
+  loadDataSources() {
+    this.api.getDataSources().subscribe({
+      next: (data) => this.dataSources.set(data),
+      error: (err) => console.error('Error loading data sources', err)
+    });
   }
 }

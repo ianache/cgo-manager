@@ -1,0 +1,112 @@
+<div class="visual-designer-page">
+  <!-- Top Toolbar -->
+  <header class="visual-toolbar cloud-shadow">
+    <div class="toolbar-left">
+      <button class="btn-icon-round" routerLink="/reporting/dashboards">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      <div class="breadcrumb">
+        <span class="parent">Screen: C-GO</span>
+        <span class="separator">-</span>
+        <span class="current">Visual Report Builder ({{ report()?.name || 'Untitled' }})</span>
+      </div>
+    </div>
+    
+    <div class="toolbar-right">
+      <div class="toolbar-options">
+        <span>Options</span>
+        <span class="material-symbols-outlined">expand_more</span>
+      </div>
+      <button class="btn-icon-round"><span class="material-symbols-outlined">play_arrow</span></button>
+      <button class="btn-secondary-round" (click)="exportReport()">
+        <span class="material-symbols-outlined">export_notes</span>
+        Exporta
+      </button>
+      <button class="btn-primary-round">
+        <span class="material-symbols-outlined">group</span>
+        Compartir
+      </button>
+      <div class="user-avatar">I</div>
+    </div>
+  </header>
+
+  <div class="visual-main-layout">
+    <!-- Main Canvas Area -->
+    <main class="canvas-container">
+      <div class="canvas-background"></div>
+      
+      <!-- Visual Elements on Canvas -->
+      <div class="visual-elements">
+        <div *ngFor="let el of canvasElements()" 
+             class="canvas-element"
+             [ngClass]="el.type"
+             [style.left.px]="el.x"
+             [style.top.px]="el.y"
+             [style.width.px]="el.width"
+             [style.height.px]="el.height">
+          
+          <ng-container [ngSwitch]="el.type">
+            <h1 *ngSwitchCase="'header'">{{ el.content }}</h1>
+            <div *ngSwitchCase="'chart'" class="mock-chart">
+              <div class="chart-bars">
+                <div class="bar" style="height: 60%"></div>
+                <div class="bar" style="height: 80%"></div>
+                <div class="bar" style="height: 45%"></div>
+                <div class="bar" style="height: 90%"></div>
+              </div>
+            </div>
+            <div *ngSwitchCase="'table'" class="mock-table">
+              <div class="table-row header"><span>Date</span><span>Metric</span><span>Value</span></div>
+              <div class="table-row"><span>2026-04-20</span><span>Distance</span><span>420 km</span></div>
+              <div class="table-row"><span>2026-04-21</span><span>Fuel</span><span>120 L</span></div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Floating Interaction Sidebar (Right) -->
+      <aside class="interaction-sidebar cloud-shadow">
+        <button class="tool-btn active"><span class="material-symbols-outlined">near_me</span></button>
+        <button class="tool-btn"><span class="material-symbols-outlined">selection_check</span></button>
+        <button class="tool-btn"><span class="material-symbols-outlined">edit</span></button>
+        <button class="tool-btn"><span class="material-symbols-outlined">pan_tool</span></button>
+        <button class="tool-btn"><span class="material-symbols-outlined">image</span></button>
+        <button class="tool-btn"><span class="material-symbols-outlined">component_exchange</span></button>
+        <div class="tool-sep"></div>
+        <button class="tool-btn"><span class="material-symbols-outlined">star</span></button>
+      </aside>
+
+      <!-- Bottom Prompt Area -->
+      <section class="prompt-container">
+        <div class="prompt-quick-actions">
+          <button class="chip">Ver explorador de esquema SQL <span class="badge">1</span></button>
+          <button class="chip">Crear un reporte con esta fuente <span class="badge">2</span></button>
+          <button class="chip">Volver al catálogo</button>
+        </div>
+
+        <div class="ai-prompt-box cloud-shadow">
+          <div class="prompt-input-row">
+            <button class="btn-icon"><span class="material-symbols-outlined">add</span></button>
+            <button class="btn-icon"><span class="material-symbols-outlined">dock_to_bottom</span></button>
+            <input type="text" 
+                   [(ngModel)]="aiPrompt" 
+                   (keyup.enter)="onAIPromptSubmit()"
+                   placeholder="¿Qué te gustaría cambiar o crear?" 
+                   class="prompt-input">
+            <div class="prompt-tools">
+              <span class="material-symbols-outlined">palette</span>
+              <div class="model-selector">
+                <span>3.0 Flash</span>
+                <span class="material-symbols-outlined">expand_more</span>
+              </div>
+              <span class="material-symbols-outlined">auto_awesome</span>
+              <button class="send-btn" (click)="onAIPromptSubmit()" [disabled]="isGenerating()">
+                <span class="material-symbols-outlined">arrow_upward</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>

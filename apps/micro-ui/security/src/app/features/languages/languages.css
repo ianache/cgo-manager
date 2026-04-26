@@ -1,0 +1,23 @@
+.languages-container { padding: 32px; display: flex; flex-direction: column; gap: 32px; }
+.table-card { background: white; border-radius: 8px; overflow: hidden; }
+.actions-group { display: flex; gap: 8px; justify-content: center; }
+.action-btn { background: none; border: none; color: #506169; cursor: pointer; padding: 6px; border-radius: 4px; transition: all 0.2s; }
+.action-btn:hover { background: #f0f1f2; color: #bb0012; }
+
+.modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.4); z-index: 10000;
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-content { background: white; border-radius: 8px; width: 450px; }
+.modal-header { padding: 24px; border-bottom: 1px solid #edeeef; }
+.modal-header h3 { margin: 0; font-size: 1.125rem; font-weight: 800; }
+.modal-body { padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+.modal-footer { padding: 24px; border-top: 1px solid #edeeef; display: flex; justify-content: flex-end; gap: 12px; }
+
+.form-field { display: flex; flex-direction: column; gap: 8px; }
+.form-field label { font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; color: #506169; }
+.form-field input { padding: 12px 16px; border: 1px solid #e1e3e4; border-radius: 4px; font-size: 0.875rem; outline: none; }
+.form-field input:focus { border-color: #bb0012; }
+
+.cloud-shadow { box-shadow: 0 24px 48px rgba(25,28,29,0.12); }

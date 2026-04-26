@@ -1,0 +1,266 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(25, 28, 29, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.modal-content {
+  background: #f8f9fa;
+  width: 100%;
+  max-width: 1000px;
+  height: 80vh;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 20px 24px;
+  background: white;
+  border-bottom: 1px solid #edeeef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #191c1d;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #506169;
+}
+
+.modal-body.settings-layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  overflow: hidden;
+  padding: 0;
+}
+
+.settings-sidebar {
+  background: white;
+  border-right: 1px solid #edeeef;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+}
+
+.settings-main {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+}
+
+.section-title {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #506169;
+  margin: 0 0 16px 0;
+}
+
+.form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-group label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #506169;
+}
+
+.cgo-input {
+  padding: 10px 12px;
+  border: 1px solid #e1e3e4;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  background: #f8f9fa;
+  outline: none;
+}
+
+.cgo-input:focus {
+  border-color: #bb0012;
+  background: white;
+}
+
+.divider {
+  height: 1px;
+  background: #edeeef;
+}
+
+.roles-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.role-badge {
+  background: #e1e3e4;
+  color: #191c1d;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+/* Permissions Tree */
+.product-item {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+  border: 1px solid #edeeef;
+}
+
+.product-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #bb0012;
+  margin: 0 0 20px 0;
+}
+
+.product-name .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.modules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.module-item {
+  padding-left: 24px;
+  border-left: 2px solid #f1f3f4;
+}
+
+.module-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.module-header .material-symbols-outlined {
+  font-size: 18px;
+  color: #506169;
+}
+
+.module-name {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #191c1d;
+}
+
+.features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.feature-item {
+  background: #f8f9fa;
+  padding: 12px 16px;
+  border-radius: 6px;
+}
+
+.feature-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.feature-name {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #191c1d;
+}
+
+.feature-desc {
+  font-size: 0.75rem;
+  color: #506169;
+  margin: 0;
+}
+
+.actions-badges {
+  display: flex;
+  gap: 6px;
+}
+
+.action-label {
+  font-size: 0.625rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  background: #e8f0fe;
+  color: #1967d2;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.loading-state, .empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #b8c9d3;
+  gap: 12px;
+  text-align: center;
+}
+
+.loading-state .spinning {
+  animation: spin 1s linear infinite;
+  font-size: 32px;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.empty-hint {
+  font-size: 0.8125rem;
+  color: #b8c9d3;
+  font-style: italic;
+}
+
+.modal-footer {
+  padding: 16px 24px;
+  background: white;
+  border-top: 1px solid #edeeef;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cloud-shadow {
+  box-shadow: 0 24px 48px rgba(25, 28, 29, 0.12);
+}

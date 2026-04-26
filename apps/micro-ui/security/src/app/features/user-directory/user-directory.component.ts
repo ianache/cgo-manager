@@ -1,20 +1,9 @@
-import { Component, ViewChild, TemplateRef, AfterViewInit, signal, computed } from '@angular/core';
+import { Component, ViewChild, TemplateRef, AfterViewInit, signal, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PaginatedTableComponent, FormHeaderComponent, ButtonComponent } from '@cgomanager/shared-ui-kit';
 import { RouterModule } from '@angular/router';
-
-type UserRole = 'Administrator' | 'Manager' | 'Operator' | 'Auditor';
-type UserStatus = 'Active' | 'Inactive' | 'Pending';
-
-interface User {
-  id: number;
-  user: string;
-  userId: string;
-  email: string;
-  role: UserRole;
-  status: UserStatus;
-}
+import { ApiService, KeycloakUser } from '@cgomanager/shared-data-access';
 
 @Component({
   selector: 'app-user-directory',
@@ -24,19 +13,47 @@ interface User {
     <!-- Cell template definitions (not rendered directly) -->
     <ng-template #userCellTpl let-value let-row="row">
       <div class="user-cell">
-        <div class="user-avatar" [style.background]="avatarColor(value)">{{ initials(value) }}</div>
+        <div class="user-avatar" [style.background]="avatarColor(row.firstName || row.username)">{{ initials(row.firstName, row.lastName) || initials(row.username) }}</div>
         <div class="user-info">
-          <span class="user-name">{{ value }}</span>
-          <span class="user-id">ID: {{ row.userId }}</span>
+          <div class="user-name-row">
+            <span class="user-name">{{ row.firstName }} {{ row.lastName }}</span>
+            <span class="federation-badge" *ngIf="row.isFederated" [title]="'Source: ' + row.federationName">
+              <span class="material-symbols-outlined">hub</span>
+              {{ row.federationName }}
+            </span>
+          </div>
+          <div class="user-meta-row">
+            <span class="user-id">@{{ row.username }}</span>
+            <span class="user-custom-tag" *ngIf="row.distributor">
+               <span class="material-symbols-outlined">store</span>
+               {{ row.distributor }}
+            </span>
+             <span class="user-custom-tag" *ngIf="row.codigoPais">
+               <span class="material-symbols-outlined">public</span>
+               {{ row.codigoPais }}
+            </span>
+          </div>
         </div>
       </div>
     </ng-template>
 
     <ng-template #statusCellTpl let-value>
-      <span class="status-pill status-{{ value.toLowerCase() }}">
+      <span class="status-pill" [ngClass]="value ? 'status-active' : 'status-inactive'">
         <span class="status-dot-sm"></span>
-        {{ value }}
+        {{ value ? 'Active' : 'Inactive' }}
       </span>
+    </ng-template>
+
+    <ng-template #localeCellTpl let-value>
+      <span class="locale-pill" *ngIf="value">
+        <span class="material-symbols-outlined">language</span>
+        {{ value | uppercase }}
+      </span>
+      <span *ngIf="!value" class="empty-hint">-</span>
+    </ng-template>
+
+    <ng-template #dateCellTpl let-value>
+      {{ value | date:'mediumDate' }}
     </ng-template>
 
     <!-- Header -->
@@ -64,29 +81,14 @@ interface User {
             type="text"
             class="filter-input"
             placeholder="Search by name, email or ID…"
-            [(ngModel)]="searchInput" />
+            [(ngModel)]="searchInput"
+            (keyup.enter)="applyFilters()" />
         </div>
-
-        <select class="filter-select" [(ngModel)]="roleInput">
-          <option value="all">All Roles</option>
-          <option value="Administrator">Administrator</option>
-          <option value="Manager">Manager</option>
-          <option value="Operator">Operator</option>
-          <option value="Auditor">Auditor</option>
-        </select>
 
         <select class="filter-select" [(ngModel)]="statusInput">
           <option value="all">All Status</option>
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
-          <option value="Pending">Pending</option>
-        </select>
-
-        <select class="filter-select" [(ngModel)]="lastLoginInput">
-          <option value="anytime">Anytime</option>
-          <option value="24h">Last 24h</option>
-          <option value="7d">Last 7 days</option>
-          <option value="30d">Last 30 days</option>
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
         </select>
 
         <div class="filter-actions">
@@ -104,7 +106,7 @@ interface User {
       <cgo-paginated-table
         [columns]="columns"
         [data]="filteredUsers()"
-        [pageSize]="6"
+        [pageSize]="10"
         [showActions]="true"
         [customTemplates]="customTemplates">
         <ng-template #actionsTemplate let-user>
@@ -192,27 +194,6 @@ interface User {
 
     .filter-actions { display: flex; gap: 8px; flex-shrink: 0; }
 
-    .btn-tertiary-sm {
-      padding: 9px 16px; border-radius: 4px;
-      font-size: 0.75rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.08em;
-      cursor: pointer; background: transparent;
-      color: #506169; border: 1px solid #e1e3e4;
-      font-family: inherit; transition: all 0.2s;
-    }
-    .btn-tertiary-sm:hover { border-color: #b8c9d3; background: #f8f9fa; }
-
-    .btn-primary-sm {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 9px 16px; border-radius: 4px;
-      font-size: 0.75rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.08em;
-      cursor: pointer; background: #bb0012; color: #fff;
-      border: none; font-family: inherit; transition: all 0.2s;
-    }
-    .btn-primary-sm:hover { opacity: 0.9; }
-    .btn-primary-sm .material-symbols-outlined { font-size: 16px; }
-
     /* ── Table card ──────────────────────────────────────── */
     .table-card {
       background: #ffffff;
@@ -228,16 +209,43 @@ interface User {
       gap: 12px;
     }
     .user-avatar {
-      width: 36px; height: 36px;
+      width: 40px; height: 40px;
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 0.6875rem; font-weight: 800;
+      font-size: 0.75rem; font-weight: 800;
       color: #ffffff; flex-shrink: 0;
       letter-spacing: 0.05em;
     }
-    .user-info { display: flex; flex-direction: column; gap: 1px; }
+    .user-info { display: flex; flex-direction: column; gap: 2px; }
+    .user-name-row { display: flex; align-items: center; gap: 8px; }
     .user-name  { font-size: 0.875rem; font-weight: 700; color: #191c1d; }
-    .user-id    { font-size: 0.75rem; color: #b8c9d3; font-weight: 500; }
+    
+    .federation-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      background: #e3f2fd;
+      color: #1565c0;
+      border-radius: 4px;
+      font-size: 0.625rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .federation-badge .material-symbols-outlined { font-size: 12px; }
+
+    .user-meta-row { display: flex; align-items: center; gap: 12px; }
+    .user-id { font-size: 0.75rem; color: #b8c9d3; font-weight: 500; }
+    
+    .user-custom-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.6875rem;
+      color: #506169;
+      font-weight: 600;
+    }
+    .user-custom-tag .material-symbols-outlined { font-size: 11px; }
 
     /* ── Status badge ────────────────────────────────────── */
     .status-pill {
@@ -259,10 +267,23 @@ interface User {
     }
     .status-active   { background: #e8f5e9; color: #1b5e20; }
     .status-active   .status-dot-sm { background: #43a047; }
-    .status-inactive { background: #f5f5f5; color: #757575; }
-    .status-inactive .status-dot-sm { background: #bdbdbd; }
-    .status-pending  { background: #fff8e1; color: #e65100; }
-    .status-pending  .status-dot-sm { background: #ffa000; }
+    .status-inactive { background: #ffebee; color: #b71c1c; }
+    .status-inactive .status-dot-sm { background: #e53935; }
+
+    /* ── Locale pill ─────────────────────────────────────── */
+    .locale-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      background: #f1f3f4;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #5f6368;
+    }
+    .locale-pill .material-symbols-outlined { font-size: 14px; }
+    .empty-hint { color: #dadce0; font-size: 0.875rem; }
 
     /* ── Action buttons ──────────────────────────────────── */
     .actions-group { display: flex; gap: 4px; justify-content: center; }
@@ -277,88 +298,87 @@ interface User {
     .action-btn .material-symbols-outlined { font-size: 18px; }
   `]
 })
-export class UserDirectoryComponent implements AfterViewInit {
+export class UserDirectoryComponent implements AfterViewInit, OnInit {
   @ViewChild('userCellTpl') userCellTpl!: TemplateRef<any>;
   @ViewChild('statusCellTpl') statusCellTpl!: TemplateRef<any>;
+  @ViewChild('dateCellTpl') dateCellTpl!: TemplateRef<any>;
+  @ViewChild('localeCellTpl') localeCellTpl!: TemplateRef<any>;
+
+  private api = inject(ApiService);
 
   customTemplates: { [key: string]: TemplateRef<any> } = {};
 
   // Filter state (inputs)
   searchInput = '';
-  roleInput = 'all';
   statusInput = 'all';
-  lastLoginInput = 'anytime';
 
   // Applied filters (drive the computed)
-  appliedFilters = signal({ search: '', role: 'all', status: 'all' });
+  appliedFilters = signal({ search: '', status: 'all' });
 
   columns: { key: string; label: string; type?: 'image' | 'link' | 'badges' | 'checkbox' | 'custom' }[] = [
-    { key: 'user',   label: 'USER',   type: 'custom' },
+    { key: 'firstName',   label: 'USER',   type: 'custom' },
     { key: 'email',  label: 'EMAIL' },
-    { key: 'role',   label: 'ROLE' },
-    { key: 'status', label: 'STATUS', type: 'custom' },
+    { key: 'locale', label: 'LOCALE', type: 'custom' },
+    { key: 'createdTimestamp', label: 'CREATED', type: 'custom' },
+    { key: 'enabled', label: 'STATUS', type: 'custom' },
   ];
 
-  allUsers: User[] = [
-    { id: 1,  user: 'Alex Morgan',       userId: '9284-AX', email: 'a.morgan@cgomanager.com',    role: 'Administrator', status: 'Active' },
-    { id: 2,  user: 'Sarah Williams',    userId: '4120-SW', email: 's.williams@cgomanager.com',  role: 'Manager',       status: 'Active' },
-    { id: 3,  user: 'Julian Kang',       userId: '7731-JK', email: 'j.kang@cgomanager.com',      role: 'Operator',      status: 'Pending' },
-    { id: 4,  user: 'Marcus Reid',       userId: '2209-MR', email: 'm.reid@cgomanager.com',      role: 'Auditor',       status: 'Inactive' },
-    { id: 5,  user: 'Elena Torres',      userId: '3301-ET', email: 'e.torres@cgomanager.com',    role: 'Operator',      status: 'Active' },
-    { id: 6,  user: 'David Chen',        userId: '5512-DC', email: 'd.chen@cgomanager.com',      role: 'Manager',       status: 'Active' },
-    { id: 7,  user: 'Priya Sharma',      userId: '6643-PS', email: 'p.sharma@cgomanager.com',    role: 'Auditor',       status: 'Active' },
-    { id: 8,  user: 'Tomás Ruiz',        userId: '8874-TR', email: 't.ruiz@cgomanager.com',      role: 'Operator',      status: 'Inactive' },
-    { id: 9,  user: 'Nina Johansson',    userId: '1195-NJ', email: 'n.johansson@cgomanager.com', role: 'Manager',       status: 'Pending' },
-    { id: 10, user: 'Omar Hassan',       userId: '9906-OH', email: 'o.hassan@cgomanager.com',    role: 'Administrator', status: 'Active' },
-    { id: 11, user: 'Lena Fischer',      userId: '2237-LF', email: 'l.fischer@cgomanager.com',   role: 'Operator',      status: 'Active' },
-    { id: 12, user: 'Bruno Costa',       userId: '3348-BC', email: 'b.costa@cgomanager.com',     role: 'Auditor',       status: 'Pending' },
-  ];
+  allUsers = signal<KeycloakUser[]>([]);
 
   filteredUsers = computed(() => {
-    const { search, role, status } = this.appliedFilters();
-    return this.allUsers.filter(u => {
-      const s = search.toLowerCase();
-      const matchSearch = !s
-        || u.user.toLowerCase().includes(s)
-        || u.email.toLowerCase().includes(s)
-        || u.userId.toLowerCase().includes(s);
-      const matchRole   = role   === 'all' || u.role   === role;
-      const matchStatus = status === 'all' || u.status === status;
-      return matchSearch && matchRole && matchStatus;
+    const { status } = this.appliedFilters();
+    return this.allUsers().filter(u => {
+      const matchStatus = status === 'all' || u.enabled.toString() === status;
+      return matchStatus;
     });
   });
+
+  ngOnInit() {
+    this.loadUsers();
+  }
+
+  loadUsers(search?: string) {
+    this.api.getUsers(search).subscribe({
+      next: (users) => this.allUsers.set(users),
+      error: (err) => console.error('Error loading users', err)
+    });
+  }
 
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.customTemplates = {
-        user:   this.userCellTpl,
-        status: this.statusCellTpl,
+        firstName:   this.userCellTpl,
+        enabled: this.statusCellTpl,
+        createdTimestamp: this.dateCellTpl,
+        locale: this.localeCellTpl
       };
     });
   }
 
   applyFilters(): void {
+    this.loadUsers(this.searchInput);
     this.appliedFilters.set({
       search: this.searchInput,
-      role:   this.roleInput,
       status: this.statusInput,
     });
   }
 
   resetFilters(): void {
     this.searchInput   = '';
-    this.roleInput     = 'all';
     this.statusInput   = 'all';
-    this.lastLoginInput = 'anytime';
-    this.appliedFilters.set({ search: '', role: 'all', status: 'all' });
+    this.loadUsers();
+    this.appliedFilters.set({ search: '', status: 'all' });
   }
 
-  initials(name: string): string {
-    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  initials(first?: string, last?: string): string {
+    if (first && last) return (first[0] + last[0]).toUpperCase();
+    if (first) return first.slice(0, 2).toUpperCase();
+    return '??';
   }
 
   avatarColor(name: string): string {
     const palette = ['#bb0012', '#1565c0', '#2e7d32', '#6a1b9a', '#e65100', '#00695c', '#4527a0'];
-    return palette[name.charCodeAt(0) % palette.length];
+    const code = name ? name.charCodeAt(0) : 0;
+    return palette[code % palette.length];
   }
 }

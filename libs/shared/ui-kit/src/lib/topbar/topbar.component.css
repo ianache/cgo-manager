@@ -109,6 +109,16 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 24px;
+  transition: all 0.2s;
+  position: relative;
+  user-select: none;
+}
+
+.user-profile:hover {
+  background: rgba(25, 28, 29, 0.04);
 }
 
 .avatar {
@@ -124,8 +134,92 @@
   font-size: 0.75rem;
 }
 
+.avatar-img-container {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
 .username {
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--inverse-surface);
+}
+
+.user-id {
+  font-size: 0.75rem;
+  color: #506169;
+  font-weight: 500;
+}
+
+.arrow-icon {
+  font-size: 18px;
+  color: #506169;
+  transition: transform 0.2s;
+}
+
+.arrow-icon.rotated {
+  transform: rotate(180deg);
+}
+
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 220px;
+  background: white;
+  border-radius: 8px;
+  padding: 8px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-dropdown button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #191c1d;
+  border-radius: 4px;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.user-dropdown button:hover {
+  background: #f1f3f4;
+  color: var(--primary-red);
+}
+
+.user-dropdown .divider {
+  height: 1px;
+  background: #edeeef;
+  margin: 8px 0;
+}
+
+.logout-btn:hover {
+  background: #ffebee !important;
+  color: #d32f2f !important;
+}
+
+.cloud-shadow {
+  box-shadow: 0 12px 32px rgba(25, 28, 29, 0.08), 0 4px 8px rgba(25, 28, 29, 0.04);
 }

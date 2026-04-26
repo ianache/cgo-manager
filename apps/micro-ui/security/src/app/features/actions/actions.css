@@ -1,0 +1,41 @@
+.actions-container { padding: 32px; display: flex; flex-direction: column; gap: 32px; }
+.table-card { background: white; border-radius: 8px; overflow: hidden; }
+
+.translated-cell { display: flex; flex-direction: column; gap: 2px; }
+.main-val { font-weight: 700; color: #191c1d; }
+.sub-val { font-size: 0.75rem; color: #b8c9d3; }
+
+.icon-display { color: #506169; font-size: 20px; }
+.empty-hint { color: #dadce0; font-style: italic; font-size: 0.8125rem; }
+
+.status-pill { padding: 4px 12px; border-radius: 999px; font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; }
+.status-active { background: #e8f5e9; color: #1b5e20; }
+.status-inactive { background: #ffebee; color: #b71c1c; }
+
+.actions-group { display: flex; gap: 8px; justify-content: center; }
+.action-btn { background: none; border: none; color: #506169; cursor: pointer; padding: 6px; border-radius: 4px; transition: all 0.2s; }
+.action-btn:hover { background: #f0f1f2; color: #bb0012; }
+
+/* Drawer */
+.form-overlay {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.3); z-index: 5000;
+  display: flex; justify-content: flex-end;
+}
+.form-drawer { width: 500px; height: 100%; background: white; display: flex; flex-direction: column; }
+.drawer-header { padding: 24px; border-bottom: 1px solid #edeeef; }
+.drawer-header h3 { margin: 0; font-size: 1.25rem; font-weight: 800; }
+.drawer-body { flex: 1; padding: 24px; display: flex; flex-direction: column; gap: 24px; overflow-y: auto; }
+.drawer-footer { padding: 24px; border-top: 1px solid #edeeef; display: flex; justify-content: flex-end; gap: 12px; }
+
+.form-field { display: flex; flex-direction: column; gap: 8px; }
+.form-field label { font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; color: #506169; }
+.form-field input, .form-field select { padding: 12px 16px; border: 1px solid #e1e3e4; border-radius: 4px; font-size: 0.875rem; }
+
+.translation-trigger {
+  padding: 12px 16px; border: 1px solid #e1e3e4; border-radius: 4px;
+  background: #f8f9fa; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+}
+.preview-text { font-size: 0.875rem; color: #191c1d; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.cloud-shadow { box-shadow: -12px 0 32px rgba(25,28,29,0.08); }

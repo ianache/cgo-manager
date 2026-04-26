@@ -1,0 +1,38 @@
+<div class="role-selector-wrapper" [class.dropdown]="dropdownMode()">
+  <!-- Dropdown Trigger -->
+  <div class="selector-trigger" *ngIf="dropdownMode()" (click)="toggleDropdown()">
+    <span class="trigger-label">{{ getSelectedLabel() }}</span>
+    <span class="material-symbols-outlined arrow" [class.rotated]="isOpen()">expand_more</span>
+  </div>
+
+  <!-- Content Container (List of roles) -->
+  <div class="selector-content cloud-shadow" [class.show]="!dropdownMode() || isOpen()">
+    <div class="role-category" *ngIf="realmRoles().length > 0">
+      <span class="category-label">Realm Roles</span>
+      <div class="roles-list">
+        @for (role of realmRoles(); track role.id) {
+          <label class="role-item" (click)="toggleRole(role.name, $event)">
+            <input type="checkbox" [checked]="isRoleSelected(role.name)" (change)="toggleRole(role.name, $event)">
+            <span class="role-name">{{ role.name }}</span>
+          </label>
+        }
+      </div>
+    </div>
+
+    <div class="role-category" *ngIf="clientRoles().length > 0">
+      <span class="category-label">Client Roles</span>
+      <div class="roles-list">
+        @for (role of clientRoles(); track role.id) {
+          <label class="role-item" (click)="toggleRole(role.name, $event)">
+            <input type="checkbox" [checked]="isRoleSelected(role.name)" (change)="toggleRole(role.name, $event)">
+            <span class="role-name">{{ role.name }}</span>
+          </label>
+        }
+      </div>
+    </div>
+
+    <div class="empty-filter-msg" *ngIf="filteredAvailable().length === 0">
+      No roles available to select.
+    </div>
+  </div>
+</div>

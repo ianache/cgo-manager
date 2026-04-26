@@ -9,111 +9,243 @@ datasource db {
   provider = "mysql"
 }
 
+// --- Iteration 3 Models ---
+
+model User {
+  id         String   @id @default(uuid())
+  email      String   @unique
+  is_active  Boolean  @default(true)
+  avatar     String?  @db.LongText // Base64 image 50x50
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("tb_users")
+}
+
+// --- Iteration 2 Models ---
+
+model Language {
+  id         String   @id @default(uuid())
+  iso_code   String   @unique
+  name       String
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("tb_languages")
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String   @db.Text // JSON string: {"en": "...", "es": "..."}
+  description String?  @db.Text // JSON string: {"en": "...", "es": "..."}
+  icon        String?
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  modules     Module[]
+
+  @@map("tb_products")
+}
+
+model Module {
+  id          String    @id @default(uuid())
+  product_id  String
+  product     Product   @relation(fields: [product_id], references: [id])
+  name        String    @db.Text // JSON string
+  description String?   @db.Text // JSON string
+  icon        String?
+  is_active   Boolean   @default(true)
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  features    Feature[]
+
+  @@map("tb_modules")
+}
+
+model Feature {
+  id            String   @id @default(uuid())
+  module_id     String
+  module        Module   @relation(fields: [module_id], references: [id])
+  name          String   @db.Text // JSON string
+  description   String?  @db.Text // JSON string
+  icon          String?
+  is_active     Boolean  @default(true)
+  allowed_roles String   @db.Text // JSON string array of role names
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  actions       Action[]
+
+  @@map("tb_features")
+}
+
+model Action {
+  id            String   @id @default(uuid())
+  feature_id    String
+  feature       Feature  @relation(fields: [feature_id], references: [id])
+  name          String   @db.Text // JSON string
+  description   String?  @db.Text // JSON string
+  icon          String?
+  is_active     Boolean  @default(true)
+  allowed_roles String   @db.Text // JSON string array of role names
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  @@map("tb_actions")
+}
+
+// --- Migrated Existing Models ---
+
 model Manufacturer {
-  id        String   @id @default(uuid())
-  name      String
-  website   String?
-  logo      String?
-  brands    Brand[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(uuid())
+  name       String
+  website    String?
+  logo       String?
+  brands     Brand[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("tb_manufacturers")
 }
 
 model Brand {
-  id             String        @id @default(uuid())
-  name           String
-  description    String?       @db.Text
-  image          String?
-  tags           String?       @db.VarChar(500)
-  manufacturerId String
-  manufacturer   Manufacturer  @relation(fields: [manufacturerId], references: [id])
-  deviceModels   DeviceModel[]
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  id              String        @id @default(uuid())
+  name            String
+  description     String?       @db.Text
+  image           String?
+  tags            String?       @db.VarChar(500)
+  manufacturer_id String
+  manufacturer    Manufacturer  @relation(fields: [manufacturer_id], references: [id])
+  device_models   DeviceModel[]
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+
+  @@map("tb_brands")
 }
 
 model DeviceModel {
-  id          String     @id @default(uuid())
+  id          String    @id @default(uuid())
   name        String
-  description String?    @db.Text
-  brandId     String
-  brand       Brand      @relation(fields: [brandId], references: [id])
-  protocolId  String?
-  protocol    Protocol?  @relation(fields: [protocolId], references: [id])
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  description String?   @db.Text
+  brand_id    String
+  brand       Brand     @relation(fields: [brand_id], references: [id])
+  protocol_id String?
+  protocol    Protocol? @relation(fields: [protocol_id], references: [id])
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  @@map("tb_device_models")
 }
 
 model Protocol {
   id            String            @id @default(uuid())
   name          String
   description   String?           @db.Text
-  deviceModels  DeviceModel[]
+  device_models DeviceModel[]
   versions      ProtocolVersion[]
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
+  created_at    DateTime          @default(now())
+  updated_at    DateTime          @updatedAt
+
+  @@map("tb_protocols")
 }
 
 model ProtocolVersion {
-  id                 String              @id @default(uuid())
-  version            String
-  description        String?             @db.Text
-  status             String              @default("DRAFT") // DRAFT, APPROVED, PUBLISHED
-  protocolId         String
-  protocol           Protocol            @relation(fields: [protocolId], references: [id])
-  visualModels       ProtocolFrameModel[]
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
+  id            String               @id @default(uuid())
+  version       String
+  description   String?              @db.Text
+  status        String               @default("DRAFT")
+  protocol_id   String
+  protocol      Protocol             @relation(fields: [protocol_id], references: [id])
+  visual_models ProtocolFrameModel[]
+  created_at    DateTime             @default(now())
+  updated_at    DateTime             @updatedAt
+
+  @@map("tb_protocol_versions")
 }
 
 model ProtocolFrameModel {
-  id                String          @id @default(uuid())
-  protocolVersionId String
-  protocolVersion   ProtocolVersion @relation(fields: [protocolVersionId], references: [id])
-  
-  // Stored as text for MySQL 5.6 compatibility
-  designJson        String          @db.LongText
-  
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
+  id                  String          @id @default(uuid())
+  protocol_version_id String
+  protocol_version    ProtocolVersion @relation(fields: [protocol_version_id], references: [id])
+  design_json         String          @db.LongText
+  created_at          DateTime        @default(now())
+  updated_at          DateTime        @updatedAt
+
+  @@map("tb_protocol_frame_models")
 }
 
 model Tenant {
-  id               Int      @id @default(autoincrement())
-  name             String
-  status           String   @default("ACTIVE")
-  subscriptionPlan String
-  brandingJson     String?  @db.LongText
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  createdBy        String?
-  modifiedBy       String?
+  id                String   @id @default(uuid())
+  name              String
+  status            String   @default("ACTIVE")
+  subscription_plan String
+  branding_json     String?  @db.LongText
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+  created_by        String?
+  modified_by       String?
+
+  @@map("tb_tenants")
 }
 
 model DataSource {
-  id               String   @id @default(uuid())
-  name             String
-  type             String   // cube, sql, api
-  connectionString String   @db.Text // Sensitive info
-  status           String   @default("active") // active, inactive
-  lastSync         String?
-  configJson       String?  @db.LongText
-  reports          Report[]
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  id                String   @id @default(uuid())
+  name              String
+  type              String
+  connection_string String   @db.Text
+  status            String   @default("active")
+  last_sync         String?
+  config_json       String?  @db.LongText
+  reports           Report[]
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  @@map("tb_data_sources")
 }
 
 model Report {
-  id           String     @id @default(uuid())
-  name         String
-  cubeName     String
-  dataSourceId String?
-  dataSource   DataSource? @relation(fields: [dataSourceId], references: [id])
-  measures     String?    @db.Text // JSON string array
-  dimensions   String?    @db.Text // JSON string array
-  filters      String?    @db.Text // JSON string
-  format       String     @default("xlsx")
-  deliveryJson String?    @db.Text // JSON for channel/destination
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  id              String            @id @default(uuid())
+  name            String
+  cube_name       String
+  data_source_id  String?
+  data_source     DataSource?       @relation(fields: [data_source_id], references: [id])
+  measures        String?           @db.Text
+  dimensions      String?           @db.Text
+  filters         String?           @db.Text
+  format          String            @default("xlsx")
+  delivery_json   String?           @db.Text
+  scheduled_tasks ScheduledTask[]
+  executions      ReportExecution[]
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+
+  @@map("tb_reports")
+}
+
+model ScheduledTask {
+  id         String   @id @default(uuid())
+  report_id  String
+  report     Report   @relation(fields: [report_id], references: [id])
+  cron       String
+  enabled    Boolean  @default(true)
+  last_run   String?
+  next_run   String?
+  status     String   @default("pending")
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("tb_scheduled_tasks")
+}
+
+model ReportExecution {
+  id            String   @id @default(uuid())
+  report_id     String
+  report        Report   @relation(fields: [report_id], references: [id])
+  origin        String
+  status        String
+  error_message String?  @db.Text
+  download_url  String?  @db.Text
+  executed_at   DateTime @default(now())
+
+  @@map("tb_report_executions")
 }

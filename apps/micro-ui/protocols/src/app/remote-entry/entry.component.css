@@ -133,7 +133,16 @@
   box-shadow: 0 6px 16px var(--primary-red-alpha);
 }
 
-.btn-secondary { background: var(--surface-highest); color: var(--inverse-surface); }
+.btn-secondary { 
+  background: var(--surface-highest); 
+  color: var(--inverse-surface); 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.btn-secondary:hover {
+  background: var(--surface-container);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
 .btn-tertiary { background: transparent; color: var(--primary-red); }
 .btn-danger { background: #dc3545; color: white; }
 

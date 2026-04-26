@@ -1,0 +1,51 @@
+<div class="modal-overlay">
+  <div class="modal-content cloud-shadow">
+    <div class="modal-header">
+      <h3>{{ title() }}</h3>
+      <button class="btn-close" (click)="onCancel()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <table class="translation-table">
+        <thead>
+          <tr>
+            <th>Language</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (lang of languages(); track lang.id) {
+            <tr>
+              <td class="lang-col">
+                <span class="iso-badge">{{ lang.iso_code | uppercase }}</span>
+                {{ lang.name }}
+              </td>
+              <td class="value-col">
+                <input 
+                  type="text" 
+                  [ngModel]="localData()[lang.iso_code]"
+                  (ngModelChange)="updateValue(lang.iso_code, $event)"
+                  placeholder="Enter translation..."
+                  class="inline-input"
+                >
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="modal-footer">
+      <cgo-button variant="secondary" (click)="onCancel()">
+        <span class="material-symbols-outlined">close</span>
+        Cancel
+      </cgo-button>
+      <cgo-button variant="primary" (click)="onSave()">
+        <span class="material-symbols-outlined">check</span>
+        Apply Changes
+      </cgo-button>
+    </div>
+  </div>
+</div>

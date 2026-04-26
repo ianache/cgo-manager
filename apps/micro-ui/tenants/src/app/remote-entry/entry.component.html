@@ -40,7 +40,10 @@
         <span class="crumb">{{ selectedTenantForBranding?.name }} Branding</span>
       </div>
       <div class="view-actions">
-        <button class="btn btn-secondary" (click)="closeBranding()">Cancel</button>
+        <button class="btn btn-secondary" (click)="closeBranding()">
+          <span class="material-symbols-outlined">close</span>
+          Cancel
+        </button>
         <button class="btn btn-primary" (click)="saveBranding()">Save Configuration</button>
       </div>
     </div>
@@ -235,7 +238,7 @@
 
         <div class="form-group">
           <label for="t-plan">Subscription Plan</label>
-          <select id="t-plan" [(ngModel)]="editingTenant.subscriptionPlan">
+          <select id="t-plan" [(ngModel)]="editingTenant.subscription_plan">
             @for (plan of plans; track plan.id) {
               <option [value]="plan.id">{{ plan.name }}</option>
             }
@@ -243,7 +246,10 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+        <button class="btn btn-secondary" (click)="closeModal()">
+          <span class="material-symbols-outlined">close</span>
+          Cancel
+        </button>
         <button class="btn btn-primary" (click)="saveTenant()">Save</button>
       </div>
     </div>

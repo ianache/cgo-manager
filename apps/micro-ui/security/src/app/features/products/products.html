@@ -1,0 +1,112 @@
+<div class="products-container">
+  <!-- Header -->
+  <cgo-form-header
+    title="Product Management"
+    description="Define and manage application products available in the C-GO ecosystem.">
+    <div actions>
+      <cgo-button variant="primary" (click)="openCreate()">
+        <span class="material-symbols-outlined">add</span>
+        New Product
+      </cgo-button>
+    </div>
+  </cgo-form-header>
+
+  <!-- List View -->
+  @if (!showForm()) {
+    <div class="table-card cloud-shadow">
+      <cgo-paginated-table
+        [columns]="columns"
+        [data]="products()"
+        [pageSize]="10"
+        [showActions]="true"
+        [customTemplates]="customTemplates">
+        <ng-template #nameCellTpl let-value>
+          <div class="translated-cell">
+            <span class="main-val">{{ value['es'] || value['en'] }}</span>
+            <span class="sub-val">{{ value['en'] ? 'EN: ' + value['en'] : '' }}</span>
+          </div>
+        </ng-template>
+        <ng-template #iconCellTpl let-value>
+          <span class="material-symbols-outlined icon-display" *ngIf="value">{{ value }}</span>
+          <span class="empty-hint" *ngIf="!value">-</span>
+        </ng-template>
+        <ng-template #statusCellTpl let-value>
+          <span class="status-pill" [ngClass]="value ? 'status-active' : 'status-inactive'">
+            {{ value ? 'Active' : 'Inactive' }}
+          </span>
+        </ng-template>
+        <ng-template #actionsTemplate let-product>
+          <div class="actions-group">
+            <button class="action-btn" (click)="viewModules(product)" title="Details">
+              <span class="material-symbols-outlined">visibility</span>
+            </button>
+            <button class="action-btn" (click)="openEdit(product)" title="Edit">
+              <span class="material-symbols-outlined">edit</span>
+            </button>
+          </div>
+        </ng-template>
+      </cgo-paginated-table>
+    </div>
+  }
+
+  <!-- Form View (Side-panel style mockup or simple block) -->
+  @if (showForm()) {
+    <div class="form-overlay" (click)="closeForm()">
+      <div class="form-drawer cloud-shadow" (click)="$event.stopPropagation()">
+        <div class="drawer-header">
+          <h3>{{ isEdit() ? 'Edit Product' : 'New Product' }}</h3>
+          <button class="btn-close" (click)="closeForm()">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+
+        <form [formGroup]="productForm" class="drawer-body">
+          <div class="form-field">
+            <label>Name (Multi-language)</label>
+            <div class="translation-trigger" (click)="openTranslation('name')">
+              <span class="preview-text">{{ getTranslationPreview('name') }}</span>
+              <span class="material-symbols-outlined">translate</span>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Description (Multi-language)</label>
+            <div class="translation-trigger" (click)="openTranslation('description')">
+              <span class="preview-text">{{ getTranslationPreview('description') }}</span>
+              <span class="material-symbols-outlined">translate</span>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Icon Identifier</label>
+            <input type="text" formControlName="icon" placeholder="e.g. dashboard, settings">
+          </div>
+
+          <div class="form-field">
+            <label class="checkbox-label">
+              <input type="checkbox" formControlName="is_active">
+              Active Product
+            </label>
+          </div>
+        </form>
+
+        <div class="drawer-footer">
+          <cgo-button variant="secondary" (click)="closeForm()">Cancel</cgo-button>
+          <cgo-button variant="primary" (click)="saveProduct()" [disabled]="!productForm.valid">
+            {{ isEdit() ? 'Update Product' : 'Create Product' }}
+          </cgo-button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Translation Modal -->
+  @if (showTranslationModal()) {
+    <cgo-translation-modal
+      [title]="'Edit ' + (translationTarget === 'name' ? 'Product Name' : 'Description')"
+      [data]="productForm.get(translationTarget)?.value"
+      (save)="saveTranslations($event)"
+      (close)="showTranslationModal.set(false)"
+    ></cgo-translation-modal>
+  }
+</div>

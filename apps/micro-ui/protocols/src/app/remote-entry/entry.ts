@@ -51,7 +51,7 @@ export class RemoteEntryComponent implements OnInit {
     { key: 'id', label: 'ID' }, 
     { key: 'name', label: 'Protocol Name' }
   ];
-  versionColumns = [{ key: 'version', label: 'Version' }, { key: 'status', label: 'Status' }, { key: 'updatedAt', label: 'Updated' }];
+  versionColumns = [{ key: 'version', label: 'Version' }, { key: 'status', label: 'Status' }, { key: 'updated_at', label: 'Updated' }];
 
   // Modal State
   showManufacturerModal = false;
@@ -91,8 +91,6 @@ export class RemoteEntryComponent implements OnInit {
     this.selectedModel = model;
     this.activeTab = 'protocols';
     this.api.getProtocols().subscribe(all => {
-      // In the new schema, we might filter protocols that ARE associated with this model if we want
-      // or just show the protocols list. For now let's show all protocols.
       this.protocols = all;
     });
   }
@@ -152,7 +150,7 @@ export class RemoteEntryComponent implements OnInit {
   // Brand Actions
   addBrand(): void {
     if (!this.selectedManufacturer) return;
-    this.editingBrand = { name: '', description: '', image: '', manufacturerId: this.selectedManufacturer.id };
+    this.editingBrand = { name: '', description: '', image: '', manufacturer_id: this.selectedManufacturer.id };
     this.showBrandModal = true;
   }
 
@@ -162,11 +160,11 @@ export class RemoteEntryComponent implements OnInit {
   }
 
   saveBrand(): void {
-    if (!this.editingBrand || !this.editingBrand.name || !this.editingBrand.manufacturerId) return;
+    if (!this.editingBrand || !this.editingBrand.name || !this.editingBrand.manufacturer_id) return;
     
     const obs = this.editingBrand.id
       ? this.api.updateBrand(this.editingBrand.id, this.editingBrand)
-      : this.api.createBrand(this.editingBrand.manufacturerId, this.editingBrand);
+      : this.api.createBrand(this.editingBrand.manufacturer_id, this.editingBrand);
       
     obs.subscribe(() => {
       if (this.selectedManufacturer) this.viewBrands(this.selectedManufacturer);
@@ -185,7 +183,7 @@ export class RemoteEntryComponent implements OnInit {
   // Model Actions
   addModel(): void {
     if (!this.selectedBrand) return;
-    this.editingModel = { name: '', description: '', brandId: this.selectedBrand.id, protocolId: '' };
+    this.editingModel = { name: '', description: '', brand_id: this.selectedBrand.id, protocol_id: '' };
     this.showModelModal = true;
   }
 
@@ -195,11 +193,11 @@ export class RemoteEntryComponent implements OnInit {
   }
 
   saveModel(): void {
-    if (!this.editingModel || !this.editingModel.name || !this.editingModel.brandId) return;
+    if (!this.editingModel || !this.editingModel.name || !this.editingModel.brand_id) return;
     
     const obs = this.editingModel.id
       ? this.api.updateModel(this.editingModel.id, this.editingModel)
-      : this.api.createModel(this.editingModel.brandId, this.editingModel);
+      : this.api.createModel(this.editingModel.brand_id, this.editingModel);
       
     obs.subscribe(() => {
       if (this.selectedBrand) this.viewModels(this.selectedBrand);

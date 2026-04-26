@@ -1,0 +1,104 @@
+<div class="modal-overlay" (click)="close.emit()">
+  <div class="modal-content cloud-shadow" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Account Settings & Permissions</h3>
+      <button class="btn-close" (click)="close.emit()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <div class="modal-body settings-layout">
+      <!-- Left Panel: Profile & Password -->
+      <aside class="settings-sidebar">
+        <section class="settings-section">
+          <h4 class="section-title">Change Password</h4>
+          <div class="form-group">
+            <label>New Password</label>
+            <input type="password" [(ngModel)]="newPassword" placeholder="Min 8 characters" class="cgo-input">
+          </div>
+          <div class="form-group">
+            <label>Confirm Password</label>
+            <input type="password" [(ngModel)]="confirmPassword" placeholder="Repeat password" class="cgo-input">
+          </div>
+          <cgo-button variant="primary" (click)="changePassword()" [disabled]="isChangingPassword() || !newPassword()">
+            {{ isChangingPassword() ? 'Updating...' : 'Update Password' }}
+          </cgo-button>
+        </section>
+
+        <div class="divider"></div>
+
+        <section class="settings-section">
+          <h4 class="section-title">Assigned Roles</h4>
+          <div class="roles-list">
+             @for (role of user()?.roles; track role) {
+               <span class="role-badge">{{ role }}</span>
+             }
+             @if (!user()?.roles?.length) {
+               <span class="empty-hint">No roles assigned</span>
+             }
+          </div>
+        </section>
+      </aside>
+
+      <!-- Right Panel: Permissions Tree -->
+      <main class="settings-main">
+        <h4 class="section-title">Your Access Hierarchy</h4>
+        
+        <div class="loading-state" *ngIf="isLoading()">
+           <span class="material-symbols-outlined spinning">sync</span>
+           <p>Loading permissions...</p>
+        </div>
+
+        <div class="permissions-tree" *ngIf="!isLoading()">
+          @for (prod of permissions(); track prod.id) {
+            <div class="product-item">
+              <h5 class="product-name">
+                <span class="material-symbols-outlined">inventory_2</span>
+                {{ getLocalizedValue(prod.name) }}
+              </h5>
+              
+              <div class="modules-list">
+                @for (mod of prod.modules; track mod.id) {
+                  <div class="module-item">
+                    <div class="module-header">
+                      <span class="material-symbols-outlined">grid_view</span>
+                      <span class="module-name">{{ getLocalizedValue(mod.name) }}</span>
+                    </div>
+                    
+                    <div class="features-list">
+                      @for (feat of mod.features; track feat.id) {
+                        <div class="feature-item">
+                           <div class="feature-header">
+                              <span class="feature-name">{{ getLocalizedValue(feat.name) }}</span>
+                              <div class="actions-badges">
+                                 @for (act of feat.actions; track act.id) {
+                                   <span class="action-label">{{ getLocalizedValue(act.name) }}</span>
+                                 }
+                              </div>
+                           </div>
+                           <p class="feature-desc" *ngIf="feat.description">
+                             {{ getLocalizedValue(feat.description) }}
+                           </p>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+          @if (!isLoading() && permissions().length === 0) {
+            <div class="empty-state">
+              <span class="material-symbols-outlined">lock</span>
+              <p>You don't have any features assigned based on your current roles.</p>
+            </div>
+          }
+        </div>
+      </main>
+    </div>
+
+    <div class="modal-footer">
+      <cgo-button variant="secondary" (click)="close.emit()">Close</cgo-button>
+    </div>
+  </div>
+</div>

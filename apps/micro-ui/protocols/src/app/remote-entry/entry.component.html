@@ -174,7 +174,10 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="closeModals()">Cancel</button>
+        <button class="btn btn-secondary" (click)="closeModals()">
+          <span class="material-symbols-outlined">close</span>
+          Cancel
+        </button>
         <button class="btn btn-primary" (click)="saveManufacturer()">Save</button>
       </div>
     </div>
@@ -202,7 +205,10 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="closeModals()">Cancel</button>
+        <button class="btn btn-secondary" (click)="closeModals()">
+          <span class="material-symbols-outlined">close</span>
+          Cancel
+        </button>
         <button class="btn btn-primary" (click)="saveBrand()">Save</button>
       </div>
     </div>
@@ -225,9 +231,9 @@
           <textarea id="mo-desc" [(ngModel)]="editingModel.description" placeholder="Description"></textarea>
         </div>
         <div class="form-group">
-          <label for="mo-proto">Protocol</label>
-          <select id="mo-proto" [(ngModel)]="editingModel.protocolId">
-            <option value="">No Protocol</option>
+          <label for="mo-proto">Default Protocol</label>
+          <select id="mo-proto" [(ngModel)]="editingModel.protocol_id">
+            <option value="">None</option>
             @for (p of protocols; track p.id) {
               <option [value]="p.id">{{ p.name }}</option>
             }
@@ -235,7 +241,10 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="closeModals()">Cancel</button>
+        <button class="btn btn-secondary" (click)="closeModals()">
+          <span class="material-symbols-outlined">close</span>
+          Cancel
+        </button>
         <button class="btn btn-primary" (click)="saveModel()">Save</button>
       </div>
     </div>
@@ -259,7 +268,10 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="closeModals()">Cancel</button>
+        <button class="btn btn-secondary" (click)="closeModals()">
+          <span class="material-symbols-outlined">close</span>
+          Cancel
+        </button>
         <button class="btn btn-primary" (click)="saveProtocol()">Save</button>
       </div>
     </div>

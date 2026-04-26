@@ -40,6 +40,7 @@
     "@nx/webpack": "22.6.5",
     "@oxc-project/runtime": "^0.115.0",
     "@playwright/test": "^1.36.0",
+    "@prisma/client": "^7.7.0",
     "@schematics/angular": "~21.2.0",
     "@storybook/angular": "10.3.5",
     "@swc-node/register": "~1.11.1",
@@ -68,6 +69,9 @@
     "webpack-cli": "^5.1.4"
   },
   "nx": {},
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "dependencies": {
     "@angular/animations": "~21.2.0",
     "@angular/common": "~21.2.0",
@@ -81,7 +85,6 @@
     "@nestjs/platform-express": "^11.0.0",
     "@nx/angular": "^22.6.5",
     "@prisma/adapter-mariadb": "^7.7.0",
-    "@prisma/client": "^7.7.0",
     "axios": "^1.6.0",
     "cookie-parser": "^1.4.7",
     "express-session": "^1.19.0",

@@ -29,6 +29,7 @@ As of the initial analysis, the directory contains:
 
 - **Styling:** TBD (Recommendation: Vanilla CSS for web prototypes).
 - **Tooling:** Leverage Gemini CLI for iterative development and Stitch for UI-first workflows.
+- **UX/UI Directive:** Always obtain UX/UI information and designs through the **Stitch MCP** server. **NEVER** use Playwright for visual research or design analysis.
 
 
 <!-- nx configuration start-->
